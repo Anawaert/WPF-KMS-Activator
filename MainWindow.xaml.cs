@@ -51,6 +51,16 @@ namespace KMS_Activator
         private void activate_Button_Click(object sender, RoutedEventArgs e)
         {
 
+
+        }
+
+        private void deleteServerName_Button_Click(object sender, RoutedEventArgs e)
+        {
+            selectServer_ComboBox.Items.Remove(selectServer_ComboBox.SelectedItem);
+        }
+
+        private void activate_Button_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
             TranslateTransform translateTransform = new TranslateTransform();
             mainGrid.RenderTransform = translateTransform;
 
@@ -75,8 +85,8 @@ namespace KMS_Activator
                         Win_Activator activator = new Win_Activator();
                         activator.ActWin
                         (
-                            (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ? 
-                            "anawaert.tech"                                                                            : 
+                            (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
+                            "anawaert.tech" :
                             (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content
                         );
                         IsWinActivated();
@@ -93,17 +103,12 @@ namespace KMS_Activator
                         activator.ActOffice
                         (
                             (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
-                            "anawaert.tech"                                                                            :
+                            "anawaert.tech" :
                             (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content
                         );
                     }
                 );
             }
-        }
-
-        private void deleteServerName_Button_Click(object sender, RoutedEventArgs e)
-        {
-            selectServer_ComboBox.Items.Remove(selectServer_ComboBox.SelectedItem);
         }
     }
 }
