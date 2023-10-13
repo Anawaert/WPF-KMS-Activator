@@ -14,10 +14,10 @@ namespace KMS_Activator
     {
         internal void ActOffice(string kmsServerName)
         {
-            ProcessStartInfo startSetServerInfo = new ProcessStartInfo
+        /*  ProcessStartInfo startSetServerInfo = new ProcessStartInfo
             {
                 FileName = CSCRIPT,
-            /*  WorkingDirectory = string.Empty,  */
+            /*  WorkingDirectory = string.Empty,  
                 Arguments = "//Nologo ospp.vbs /sethst:" + kmsServerName,
                 CreateNoWindow = true,
                 UseShellExecute = false,
@@ -27,17 +27,18 @@ namespace KMS_Activator
             ProcessStartInfo startApplyInfo = new ProcessStartInfo
             {
                 FileName = CSCRIPT,
-            /*  WorkingDirectory = string.Empty,  */
+            /*  WorkingDirectory = string.Empty,  
                 Arguments = "//Nologo ospp.vbs /act",
                 CreateNoWindow = true,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 WindowStyle = ProcessWindowStyle.Hidden
-            };
+            };  */
 
-            string ospp_root;
-            if (IsOfficePathFound(out ospp_root))
+            string ospp_root, office_ver; 
+            if (IsOfficePathFound(out ospp_root, out office_ver))
             {
+                mainWindow.Dispatcher.Invoke(() => { mainWindow.officeVersion_Label.Content = office_ver; });
                 MessageBox.Show
                 (
                     "无法推断Office核心配置库的路径，请检查您的Office的完整性或正确安装Office",
@@ -65,17 +66,31 @@ namespace KMS_Activator
             {
                 try
                 {
-                    startSetServerInfo.WorkingDirectory = ospp_root;
+                /*  startSetServerInfo.WorkingDirectory = ospp_root;
                     Process startSetServer = new Process { StartInfo = startSetServerInfo };
                     startSetServer.Start();
-                    /* 可以考虑读取一下输出信息 */
-                    startSetServer.WaitForExit();
+                    /* 可以考虑读取一下输出信息 
+                    startSetServer.WaitForExit();  */
+                    RunProcess
+                    (
+                        CSCRIPT,
+                        @"//Nologo ospp.vbs /sethst:" + kmsServerName,
+                        ospp_root,
+                        true
+                    );
 
-                    startApplyInfo.WorkingDirectory = ospp_root;
-                    Process startApply = new Process { StartInfo = startApplyInfo };
-                    startApply.Start();
-                    /*同理*/
-                    startApply.WaitForExit();
+                    /*  startApplyInfo.WorkingDirectory = ospp_root;
+                        Process startApply = new Process { StartInfo = startApplyInfo };
+                        startApply.Start();
+                        /*同理
+                        startApply.WaitForExit(); */
+                    RunProcess
+                    (
+                        CSCRIPT,
+                        @"//Nologo ospp.vbs /act",
+                        ospp_root,
+                        true
+                    );
                 }
                 catch (Exception ActOffice_Error)
                 {

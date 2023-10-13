@@ -102,7 +102,7 @@ namespace KMS_Activator
         ///         A <see langword="bool"/> value, true indicates that it was retrieved correctly
         ///     </para>
         /// </returns>
-        public static bool IsOfficePathFound(out string osppPath)
+        public static bool IsOfficePathFound(out string osppPath, out string officeVersion)
         {
             try
             {
@@ -141,12 +141,13 @@ namespace KMS_Activator
                     if (officePath.Contains("root"))
                     {
                         officePath = officePath.Replace("\\root", string.Empty);
+                        officeVersion = "Office 2019/2021";
                         /* 待补充其他关于版本判断的操作 */
                         /* 版本为Office 2019或2021 */
                     }
                     else
                     {
-
+                        officeVersion = "Office 2016";
                         /* 待补充其他关于版本判断的操作 */
                         /* 版本为Office 2016 */
                     }
@@ -154,16 +155,19 @@ namespace KMS_Activator
                 else if (officeBaseKey.OpenSubKey("15.0") != null)
                 {
                     officePath = officeBaseKey.OpenSubKey("15.0\\Word\\InstallRoot")?.GetValue("Path")?.ToString() ?? string.Empty;
+                    officeVersion = "Office 2013";
                     /* 版本为Office 2013 */
                 }
                 else if (officeBaseKey.OpenSubKey("14.0") != null)
                 {
                     officePath = officeBaseKey.OpenSubKey("14.0\\Word\\InstallRoot")?.GetValue("Path")?.ToString() ?? string.Empty;
+                    officeVersion = "Office 2010";
                     /* 版本为Office 2010 */
                 }
                 else
                 {
-                    /* Office 2017或更低,不支持 */
+                    officeVersion = "Office 2007 or lower";
+                    /* Office 2007或更低,不支持 */
                 }
                 osppPath = officePath;
                 return true;
@@ -172,6 +176,7 @@ namespace KMS_Activator
             {
                 /* 有可能是未安装或安装出现错误导致的,可以建议重新安装 */
                 osppPath = "Not_Found";
+                officeVersion = "Not_Found";
                 return false;
             }
         }

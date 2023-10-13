@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
 using Microsoft.Win32;
-using System.Windows;
+using WPF = System.Windows;
+using System.Net.Http;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Threading;
 
 namespace KMS_Activator
 {
@@ -50,11 +54,11 @@ namespace KMS_Activator
                 FileName = execname,
                 WorkingDirectory = workdir == string.Empty ? SYS32_PATH : workdir,
                 Arguments = args,
-            };  
+            };
             // 如果需要静默运行
             // If it needs to run silently
-            if (is_silent) 
-            {               
+            if (is_silent)
+            {
                 // 将startInfo对象的“使用外壳程序”、“无新窗口创建”、“窗口类型”和“程序的标准输出流重抓取”属性进行设置
                 // Set the "UseShellExecute", "CreateNoWindow", "WindowStyle" and "RedirectStandardOutput" properties of the startInfo object
                 startInfo.UseShellExecute = false;
@@ -65,10 +69,11 @@ namespace KMS_Activator
 
             // 开始执行进程并使用try...catch块处理异常
             // Start the execution process and use try... The catch block handles exceptions
-            Process process = new Process{ StartInfo = startInfo };
+            Process process = new Process { StartInfo = startInfo };
             try
             {
                 process.Start();
+                process.WaitForExit();
             }
             catch (Exception ex)
             {
@@ -79,9 +84,8 @@ namespace KMS_Activator
             // 获取输出并且等待进程的自动完成
             // Get the output and wait for the process to complete automatically
             string output = process.StandardOutput.ReadToEnd();
-            process.WaitForExit();
             return output;
-        }       
+        }
 
         /// <summary>
         ///     <para>
@@ -108,7 +112,7 @@ namespace KMS_Activator
             // If the output contains the following keywords, it is activated
             return slmgr_output.Contains("license status: licensed") || slmgr_output.Contains("已授权");
         }
-    
+
         /// <summary>
         ///     <para>
         ///         该函数用于验证当前登陆的账户是否为管理员账户
@@ -130,7 +134,7 @@ namespace KMS_Activator
             // 获取当前用户身份凭证并验证是否符合管理员规则
             // Get the current user's credentials and verify compliance with administrator rules
             return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
-        }   
+        }
 
         public static void AutoRenewSign(bool isAutoRenew)
         {
@@ -143,6 +147,46 @@ namespace KMS_Activator
                 RunProcess(exeName, args, string.Empty, false);
             }
             return;
+        }
+
+        public static async void AutoCheckUpdate(bool isAutoUpdate)
+        {
+            try
+            {
+                HttpClient NewClient = new HttpClient();
+                HttpResponseMessage httpResponse = await NewClient.GetAsync("https://github.com/Anawaert/WPF-KMS-Activator");  // 连接至GitHub上USBHDDSpy的主页
+                httpResponse.EnsureSuccessStatusCode();  // 确保Http正确相响应
+                string ResponseBody = await httpResponse.Content.ReadAsStringAsync();  // 将相应返回的主页内容从字节码转为字符串
+
+                Regex GetTitleRegex = new Regex(@"<title>.+?</title>");  // 匹配<title>与</title>标签之间的全部内容
+                Regex GetDateFromTitleRegex = new Regex("");  // 匹配<title>与</title>标签之间以xxxx-xx为格式的日期字符串。此处为什么要使用两次正则呢，因为经实测如果仅使用本行代码的正则规则匹配，可能导致匹配到非希望的结果。
+                if (GetDateFromTitleRegex.Match(GetTitleRegex.Match(ResponseBody).Value).Value != "2023-05")
+                {
+                    DialogResult result = MessageBox.Show("当前更新可用，是否现在进行更新并导航至下载界面？", "USBHDDSpy Update", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);  // 弹出对话框
+                    if (result == DialogResult.Yes)  // 单击“是”
+                    {
+                        try
+                        {
+                            Process ShellCmd = new Process();
+                            ShellCmd.StartInfo.FileName = "cmd.exe";
+                            ShellCmd.StartInfo.RedirectStandardInput = true; ShellCmd.StartInfo.UseShellExecute = false; ShellCmd.StartInfo.CreateNoWindow = true;  // 隐式调用cmd.exe
+                            ShellCmd.Start();
+                            ShellCmd.StandardInput.WriteLine("EXPLORER \"https://github.com/Anawaert-Download/USBHDDSpy_Download/archive/refs/heads/main.zip\" & EXIT");  // 使用cmd语句访问下载链接。由于Anawaert无条件建立一个24小时开放的直链下载服务，突发奇想把Github作为下载源，经实践暂且认为可行。
+                            ShellCmd.Dispose();  // 释放内存
+                        }
+                        catch { MessageBox.Show("连接至GitHub时发生错误，更新已取消", "USBHDDSpy 消息", MessageBoxButtons.OK); }  // 当网络连接不通畅或者无网络连接时
+                    }
+                    else if (result == DialogResult.Cancel)  // 单击“取消”时
+                    {
+                        if (MessageBox.Show("是否取消更新？\n\n若单击“是”，则将屏蔽自动更新，您需要手动访问GitHub以获取更新；若单击“否”，则将取消本次更新，但不会屏蔽", "USBHHDDSpy 消息", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.OK)
+                        {
+                            // MainConsole.UpdateOrNot = "0";  // 将MainConsole中UpdateOrNot静态变量改为"0"，这样以后就不检查更新
+
+                        }
+                    }
+                }
+            }
+            catch { }
         }
 
         #region 全局静态变量与常量区
@@ -185,7 +229,11 @@ namespace KMS_Activator
 
         public static string USER_DOC_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\";
 
-        public static MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+        public static MainWindow mainWindow = (MainWindow)WPF::Application.Current.MainWindow;
+
+        public static ThreadStart threadStart = new ThreadStart(() => { });
+
+        public static Thread subThread = new Thread(threadStart);
         #endregion
     }
 }

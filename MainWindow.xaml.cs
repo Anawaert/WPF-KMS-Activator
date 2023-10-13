@@ -30,6 +30,7 @@ namespace KMS_Activator
             {
                 addServerName_TextBox.Visibility = Visibility.Visible;
                 addServerName_Button.Content = "√";
+                deleteServerName_Button.Visibility = Visibility.Hidden;
             }
             else
             {
@@ -44,19 +45,19 @@ namespace KMS_Activator
                 }
                 addServerName_TextBox.Text = string.Empty;
                 addServerName_TextBox.Visibility = Visibility.Hidden;
+                deleteServerName_Button.Visibility = Visibility.Visible;
                 addServerName_Button.Content = "+";
             }
         }
 
-        private void activate_Button_Click(object sender, RoutedEventArgs e)
-        {
-
-
-        }
-
         private void deleteServerName_Button_Click(object sender, RoutedEventArgs e)
         {
-            selectServer_ComboBox.Items.Remove(selectServer_ComboBox.SelectedItem);
+            selectServer_ComboBox.Items.Remove
+            (
+                (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ? 
+                null                                                                                        :
+                selectServer_ComboBox.SelectedItem
+            );
         }
 
         private void activate_Button_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -68,7 +69,7 @@ namespace KMS_Activator
             DoubleAnimation animation = new DoubleAnimation();
             animation.From = 0; // 起始位置（左侧屏幕外）
             animation.To = -this.Width;     // 终止位置（屏幕中央）
-            animation.Duration = TimeSpan.FromSeconds(1); // 动画持续时间
+            animation.Duration = TimeSpan.FromSeconds(0.75); // 动画持续时间
 
             // 添加慢入慢出的缓动函数
             animation.EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut };
@@ -109,6 +110,11 @@ namespace KMS_Activator
                     }
                 );
             }
+        }
+
+        private void autoRenew_CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            //AutoRenewSign(autoRenew_CheckBox.IsChecked == true);
         }
     }
 }

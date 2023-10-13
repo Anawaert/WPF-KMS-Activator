@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Windows;
-using WinForms = System.Windows.Forms;
+using Wpf = System.Windows;
+using Fms = System.Windows.Forms;
 using Microsoft.Win32;  // 配合注册表读写操作  Works with registry read and write operations
 using static KMS_Activator.Shared;  // 使用共享的功能代码  Use shared functional code blocks
 
@@ -38,40 +38,31 @@ namespace KMS_Activator
                         // If the output of dism.exe is an empty string, the conversion fails
                         if (dism_output == string.Empty)
                         {
-                            WinForms::MessageBox.Show
+                            Fms::MessageBox.Show
                             (
                                 "您的Windows产品\"" + WIN_VERSION + "\"在转换为正式版时发生错误，请您手动转换为正式版后再试\n\n点击“确定“以退出程序",
                                 "抱歉",
-                                WinForms::MessageBoxButtons.OK,
-                                WinForms::MessageBoxIcon.Error
+                                Fms::MessageBoxButtons.OK,
+                                Fms::MessageBoxIcon.Error
                             );
-                            Application.Current.Shutdown();
+                            Wpf::Application.Current.Shutdown();
                             return;
                             ///// 待补充 /////
                             ///// 可以考虑退出应用程序或进行其他引导 /////
                         }
 
                         /* 可补充GUI相关的一些行为操作 */
-                        MessageBoxResult msg = MessageBox.Show
+                        Fms::DialogResult msg = Fms::MessageBox.Show
                         (
                             "您的Windows产品\"" + WIN_VERSION + "\"已成功转换为正式版，请重新启动以保留更改\n\n是否现在重启？",
                             "提示",
-                            MessageBoxButton.YesNo,
-                            MessageBoxImage.Information
+                            Fms::MessageBoxButtons.YesNo,
+                            Fms::MessageBoxIcon.Information
                         );
-                        if (msg == MessageBoxResult.Yes)
+                        if (msg == Fms::DialogResult.Yes)
                         {
-                            ProcessStartInfo startRestartInfo = new ProcessStartInfo
-                            {
-                                FileName = "shutdown",
-                                Arguments = "/r /t 0",
-                                CreateNoWindow = true,
-                                UseShellExecute = false,
-                                RedirectStandardOutput = true,
-                                WindowStyle = ProcessWindowStyle.Hidden
-                            };
-                            Process.Start(startRestartInfo);
-                            Application.Current.Shutdown();
+                            RunProcess("shutdown.exe", "/r /t 0", string.Empty, true);
+                            Wpf::Application.Current.Shutdown();
                             return;
                             ///// 待补充 /////
                             ///// 可以考虑提示重启或者其他操作 /////
@@ -87,12 +78,12 @@ namespace KMS_Activator
             // After traversing the dictionary, if no corresponding version exists, activation is not supported
             if (key == string.Empty)
             {
-                WinForms::MessageBox.Show
+                Fms::MessageBox.Show
                 (
                     "您的Windows产品\"" + WIN_VERSION + "\"不受支持，请更换Windows版本或使用其他开发者的（KMS）激活器\n\n点击“确定“以退出程序",
                     "抱歉",
-                    WinForms::MessageBoxButtons.OK,
-                    WinForms::MessageBoxIcon.Error
+                    Fms::MessageBoxButtons.OK,
+                    Fms::MessageBoxIcon.Error
                 );
                 return;
                 /* 待补充或与GUI相关的行为与操作 */
@@ -104,45 +95,33 @@ namespace KMS_Activator
 
             // 首先写入VOL密钥
             // The VOL key is written first
-            ProcessStartInfo startSetVOLInfo = new ProcessStartInfo
-            {
-                FileName = CSCRIPT,
-                WorkingDirectory = SYS32_PATH,
-                Arguments = @"//Nologo slmgr.vbs /ipk " + key,
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                WindowStyle = ProcessWindowStyle.Hidden
-            };
-            Process startSetVOL = new Process{ StartInfo = startSetVOLInfo };
             try
             {
-                startSetVOL.Start();
+                RunProcess
+                (
+                    CSCRIPT,
+                    @"//Nologo slmgr.vbs /ipk " + key,
+                    SYS32_PATH,
+                    true
+                );
             }
             catch (Exception setVOL_Error)
             {
                 /* 待补充操作 */
                 return;
             }
-            startSetVOL.WaitForExit();
 
             // 开始配置连接KMS服务器
             // The configuration starts to connect to the KMS server
-            ProcessStartInfo startSetServerInfo = new ProcessStartInfo
-            {
-                FileName = CSCRIPT,
-                WorkingDirectory = SYS32_PATH,
-                Arguments = @"//Nologo slmgr.vbs /skms "+ kmsServerName,
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                WindowStyle = ProcessWindowStyle.Hidden
-            };
-            Process startSetServer = new Process { StartInfo = startSetServerInfo };
             try
             {
-                startSetServer.Start();
-                startSetServer.WaitForExit();
+                RunProcess
+                (
+                    CSCRIPT,
+                    @"//Nologo slmgr.vbs /skms " + kmsServerName,
+                    SYS32_PATH,
+                    true
+                );
             }
             catch (Exception setServer_Error)
             {
@@ -152,22 +131,22 @@ namespace KMS_Activator
 
             // 应用到系统激活
             // Apply to system activation
-            ProcessStartInfo startApplyInfo = new ProcessStartInfo
-            {
-                FileName = CSCRIPT,
-                WorkingDirectory = SYS32_PATH,
-                Arguments = @"//Nologo slmgr.vbs /ato",
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                WindowStyle = ProcessWindowStyle.Hidden
-            };
-            Process startApply = new Process { StartInfo = startApplyInfo };
             try
             {
-                startApply.Start();
-                startApply.WaitForExit();
-                MessageBox.Show("Done!", "Congratulation", MessageBoxButton.OK, MessageBoxImage.Information);
+                RunProcess
+                (
+                    CSCRIPT,
+                    @"//Nologo slmgr.vbs /ato",
+                    SYS32_PATH,
+                    true
+                );
+                Fms::MessageBox.Show
+                (
+                    "已完成对 "+ WIN_VERSION + " 产品的激活！",
+                    "恭喜",
+                    Fms::MessageBoxButtons.OK,
+                    Fms::MessageBoxIcon.Information
+                );
             }
             catch (Exception apply_Error)
             {
