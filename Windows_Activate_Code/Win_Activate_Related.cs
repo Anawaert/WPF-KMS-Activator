@@ -33,7 +33,7 @@ namespace KMS_Activator
                         // 设置dism.exe使用的命令行参数，然后传递给它并获取输出（dism.exe用以将Evaluation版本转换为其他正式版）
                         // Set the command-line arguments used by dism.exe, then pass them to it and get the output (dism.exe is used to convert the Evaluation version to another standard version)
                         string target_args = "/online /set-edition:Server" + target_edition + " /productkey:" + key + " /accepteula";
-                        string dism_output = RunProcess("dism.exe", target_args, string.Empty, false);
+                        string dism_output = RunProcess("dism.exe", target_args, SYS32_PATH, false);
                         // 当dism.exe的输出为空字符串时，说明转换失败
                         // If the output of dism.exe is an empty string, the conversion fails
                         if (dism_output == string.Empty)
@@ -61,7 +61,7 @@ namespace KMS_Activator
                         );
                         if (msg == Fms::DialogResult.Yes)
                         {
-                            RunProcess("shutdown.exe", "/r /t 0", string.Empty, true);
+                            RunProcess("shutdown.exe", "/r /t 0", SYS32_PATH, true);
                             Wpf::Application.Current.Shutdown();
                             return;
                             ///// 待补充 /////
@@ -71,6 +71,7 @@ namespace KMS_Activator
                         // If it is successfully executed, it can end the running of the function now
                         break;
                     }
+                    break;
                 }
             }
 
@@ -153,6 +154,14 @@ namespace KMS_Activator
                 /* 待补充的操作 */
                 return;
             }
+
+            mainWindow.Dispatcher.Invoke
+            (
+                () =>
+                {
+                    Animations_Related.MainW_SlideBack(mainWindow.mainGrid);
+                }
+            );
         }
 
     #region 静态变量与常量区  Region for static variable and constant

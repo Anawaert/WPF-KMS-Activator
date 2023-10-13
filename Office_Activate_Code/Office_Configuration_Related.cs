@@ -1,10 +1,7 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Windows;
-using System.IO;
 using Microsoft.Win32;  // 配合注册表读写操作  Works with registry read and write operations
 using static KMS_Activator.Shared;  // 使用共享的功能代码  Use shared functional code blocks
 
@@ -46,7 +43,7 @@ namespace KMS_Activator
         /// </returns>
         public static bool IsOfficeActivated(string osppDirectory)
         {
-            ProcessStartInfo startCheckInfo = new ProcessStartInfo
+        /*  ProcessStartInfo startCheckInfo = new ProcessStartInfo
             {
                 FileName = "cscript.exe",
                 WorkingDirectory = osppDirectory,
@@ -60,12 +57,11 @@ namespace KMS_Activator
             // 通过读取返回的输出来判断是否正确激活
             // The returned output is read to determine whether the activation is correct
             Process startCheck = new Process { StartInfo = startCheckInfo };
+        */
             string checkInfo = string.Empty;
             try
             {
-                startCheck.Start();
-                checkInfo = startCheck.StandardOutput.ReadToEnd();
-                startCheck.WaitForExit();
+                checkInfo = RunProcess(CSCRIPT, @"//Nologo ospp.vbs /dstatus", osppDirectory, true);
             }
             catch (Exception check_Error)
             {
@@ -217,7 +213,7 @@ namespace KMS_Activator
             // 首先通过OSPP.vbs读取对Office信息的查询结果
             // Firstly, the query results of Office information are read through OSPP.vbs
             string checkOutput = string.Empty;
-            ProcessStartInfo startCheckLicenseInfo = new ProcessStartInfo
+        /*  ProcessStartInfo startCheckLicenseInfo = new ProcessStartInfo
             {
                     FileName = "cscript.exe",
                     WorkingDirectory = osppDirectory,
@@ -228,11 +224,10 @@ namespace KMS_Activator
                     WindowStyle = ProcessWindowStyle.Hidden
             };
             Process startCheckLicense = new Process { StartInfo = startCheckLicenseInfo };
+        */
             try
             {
-                startCheckLicense.Start();
-                checkOutput = startCheckLicense.StandardOutput.ReadToEnd();
-                startCheckLicense.WaitForExit();
+                checkOutput = RunProcess(CSCRIPT, @"//Nologo ospp.vbs /dstatus", osppDirectory, true);
             }
             catch (Exception checkLicense_Error)
             {

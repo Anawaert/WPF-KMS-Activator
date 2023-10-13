@@ -3,9 +3,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using static KMS_Activator.Shared;
+using Fms = System.Windows.Forms;
 using static KMS_Activator.Office_Configurator;
 using static KMS_Activator.Animations_Related;
 using System.Windows.Media.Animation;
+using System.Threading;
 
 namespace KMS_Activator
 {
@@ -22,6 +24,7 @@ namespace KMS_Activator
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             winVersion_Label.Content = WIN_VERSION;
+            Fms::Application.EnableVisualStyles();
         }
 
         private void addServerName_Button_Click(object sender, RoutedEventArgs e)
@@ -62,53 +65,53 @@ namespace KMS_Activator
 
         private void activate_Button_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            TranslateTransform translateTransform = new TranslateTransform();
-            mainGrid.RenderTransform = translateTransform;
-
-            // 创建平移动画
-            DoubleAnimation animation = new DoubleAnimation();
-            animation.From = 0; // 起始位置（左侧屏幕外）
-            animation.To = -this.Width;     // 终止位置（屏幕中央）
-            animation.Duration = TimeSpan.FromSeconds(0.75); // 动画持续时间
-
-            // 添加慢入慢出的缓动函数
-            animation.EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut };
-
-            // 启动动画
-            translateTransform.BeginAnimation(TranslateTransform.XProperty, animation);
-
+            MainW_Slide(mainGrid);
             if (actWin_RadioButton.IsChecked == true)
             {
-                this.Dispatcher.Invoke
+                Thread subThread = new Thread
                 (
                     () =>
                     {
-                        Win_Activator activator = new Win_Activator();
-                        activator.ActWin
+                        Thread.Sleep(1000);
+                        string selectedContent = "anawaert.tech";
+                        this.Dispatcher.Invoke
                         (
-                            (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
-                            "anawaert.tech" :
-                            (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content
+                            () =>
+                            {
+                                selectedContent = (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
+                                                  "anawaert.tech"                                                                             :
+                                                  (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content                          ;
+                            }
                         );
+                        Win_Activator activator = new Win_Activator();
+                        activator.ActWin(selectedContent);
                         IsWinActivated();
                     }
                 );
+                subThread.Start();
             }
             else if (actOffice_RadioButton.IsChecked == true)
             {
-                this.Dispatcher.Invoke
-                (
-                    () =>
-                    {
-                        Office_Activator activator = new Office_Activator();
-                        activator.ActOffice
+                //Thread subThread = new Thread
+                //(
+                //    () =>
+                //    {
+                        Thread.Sleep(1000);
+                        string selectedContent = "anawaert.tech";
+                        this.Dispatcher.Invoke
                         (
-                            (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
-                            "anawaert.tech" :
-                            (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content
+                            () =>
+                            {
+                                selectedContent = (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
+                                                  "anawaert.tech" :
+                                                  (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content;
+                                Office_Activator activator = new Office_Activator();
+                                activator.ActOffice(selectedContent);
+                            }
                         );
-                    }
-                );
+
+                    //}
+                //);
             }
         }
 

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
+using Fms = System.Windows.Forms;
 using Microsoft.Win32;  // 配合注册表读写操作  Works with registry read and write operations
 using static KMS_Activator.Shared;  // 使用共享的功能代码  Use shared functional code blocks
 using static KMS_Activator.Office_Configurator;
@@ -14,10 +15,11 @@ namespace KMS_Activator
     {
         internal void ActOffice(string kmsServerName)
         {
+
         /*  ProcessStartInfo startSetServerInfo = new ProcessStartInfo
             {
                 FileName = CSCRIPT,
-            /*  WorkingDirectory = string.Empty,  
+                WorkingDirectory = string.Empty,  
                 Arguments = "//Nologo ospp.vbs /sethst:" + kmsServerName,
                 CreateNoWindow = true,
                 UseShellExecute = false,
@@ -27,7 +29,7 @@ namespace KMS_Activator
             ProcessStartInfo startApplyInfo = new ProcessStartInfo
             {
                 FileName = CSCRIPT,
-            /*  WorkingDirectory = string.Empty,  
+                WorkingDirectory = string.Empty,  
                 Arguments = "//Nologo ospp.vbs /act",
                 CreateNoWindow = true,
                 UseShellExecute = false,
@@ -36,27 +38,27 @@ namespace KMS_Activator
             };  */
 
             string ospp_root, office_ver; 
-            if (IsOfficePathFound(out ospp_root, out office_ver))
+            if (!IsOfficePathFound(out ospp_root, out office_ver))
             {
                 mainWindow.Dispatcher.Invoke(() => { mainWindow.officeVersion_Label.Content = office_ver; });
-                MessageBox.Show
+                Fms::MessageBox.Show
                 (
                     "无法推断Office核心配置库的路径，请检查您的Office的完整性或正确安装Office",
                     "抱歉",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
+                    Fms::MessageBoxButtons.OK,
+                    Fms::MessageBoxIcon.Information
                 );
                 return;
             }
 
             if (IsOfficeActivated(ospp_root))
             {
-                MessageBox.Show
+                Fms::MessageBox.Show
                 (
                     "您的Office已激活，无需再次激活",
                     "提示",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
+                    Fms::MessageBoxButtons.OK,
+                    Fms::MessageBoxIcon.Information
                 );
             }
 
@@ -100,24 +102,32 @@ namespace KMS_Activator
             }
             if (IsOfficeActivated(ospp_root))
             {
-                MessageBox.Show
+                Fms::MessageBox.Show
                 (
                     "您的Office已成功激活，请重启计算机以应用更改",
                     "恭喜",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
+                    Fms::MessageBoxButtons.OK,
+                    Fms::MessageBoxIcon.Information
                 );
             }
             else
             {
-                MessageBox.Show
+                Fms::MessageBox.Show
                 (
                     "您的Office未能即时激活，请重试",
                     "抱歉",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
+                    Fms::MessageBoxButtons.OK,
+                    Fms::MessageBoxIcon.Information
                 );
             }
+
+            mainWindow.Dispatcher.Invoke
+            (
+                () =>
+                {
+                    Animations_Related.MainW_SlideBack(mainWindow.mainGrid);
+                }
+            );
         }
 
         #region 静态变量与常量区

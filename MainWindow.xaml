@@ -7,18 +7,19 @@
         xmlns:local="clr-namespace:KMS_Activator"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="Anawaert KMS Activator" Height="360" Width="640"
+        Title="Anawaert KMS Activator" Height="320" Width="640"
         ResizeMode="NoResize"
         Loaded="Window_Loaded"
-    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+        xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <System:Boolean x:Key="IsTrue">True</System:Boolean>
         <System:Boolean x:Key="IsFalse">False</System:Boolean>
         
         <!--`重新创建一个ComboBOx的样式 -->
         <LinearGradientBrush x:Key="ComboBox.Static.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#FFFFFFFF" Offset="0.0"/>
-            <GradientStop Color="#FFFFFFFF" Offset="1.0"/>
+            <GradientStop Color="#e9e9e9" Offset="0.0"/>
+            <GradientStop Color="#e9e9e9" Offset="1.0"/>
         </LinearGradientBrush>
         <SolidColorBrush x:Key="ComboBox.Static.Border" Color="LightGreen"/>
         <SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="#FF606060"/>
@@ -208,8 +209,8 @@
         </Style>
         
         <!-- 重新创建一个新的Button样式 -->
-        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="Button.Static.Border" Color="LightGreen"/>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#e9e9e9"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#e9e9e9"/>
         <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
         <SolidColorBrush x:Key="Button.MouseOver.Border" Color="SkyBlue"/>
         <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
@@ -259,12 +260,12 @@
     <!-- 主题UI的XAML部分 --> 
     <Grid x:Name="mainGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="75"></ColumnDefinition>
-            <ColumnDefinition MinWidth="75"></ColumnDefinition>
-            <ColumnDefinition MinWidth="75"></ColumnDefinition>
-            <ColumnDefinition MinWidth="75"></ColumnDefinition>
-            <ColumnDefinition MinWidth="75"></ColumnDefinition>
-            <ColumnDefinition Width="1.75*" MinWidth="120"></ColumnDefinition>
+            <ColumnDefinition MinWidth="70"></ColumnDefinition>
+            <ColumnDefinition MinWidth="70"></ColumnDefinition>
+            <ColumnDefinition MinWidth="70"></ColumnDefinition>
+            <ColumnDefinition MinWidth="70"></ColumnDefinition>
+            <ColumnDefinition MinWidth="70"></ColumnDefinition>
+            <ColumnDefinition Width="1.65*" MinWidth="130"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -300,14 +301,14 @@
         </ComboBox>-->
         <!--<Button x:Name="activate_Button" Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" Grid.RowSpan="3" Margin="15" Content="一键激活" FontFamily="等线 Light" FontSize="20" Click="activate_Button_Click"></Button>-->
         
-        <Label x:Name="activate_Button" Grid.Row="4" Grid.Column="5" Grid.ColumnSpan="1" Grid.RowSpan="2" Margin="5,15,5,10" Content="一键激活" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="#07c160" FontFamily="等线 Light" FontSize="20" MouseLeftButtonUp="activate_Button_MouseLeftButtonUp" Foreground="White" Cursor="Hand">
+        <Label x:Name="activate_Button" Grid.Row="4" Grid.Column="5" Grid.ColumnSpan="1" Grid.RowSpan="2" Margin="10,15,10,10" Content="一键激活" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="#07c160" FontFamily="等线 Light" FontSize="20" MouseLeftButtonUp="activate_Button_MouseLeftButtonUp" Foreground="White" Cursor="Hand">
             <Label.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="5"></Setter>
                 </Style>
             </Label.Resources>
         </Label>
-        <Expander Grid.Row="0" Grid.Column="5" Grid.ColumnSpan="4" Grid.RowSpan="4" Header="附加选项" FontFamily="等线 Light" FontSize="15" Margin="5" BorderBrush="LightGreen" BorderThickness="1.5" >
+        <Expander Grid.Row="0" Grid.Column="5" Grid.ColumnSpan="4" Grid.RowSpan="4" Header="附加选项" FontFamily="等线 Light" FontSize="15" Margin="10,5,10,5" BorderBrush="LightGreen" BorderThickness="1.5" IsExpanded="True">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
@@ -320,8 +321,8 @@
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
-                <RibbonCheckBox x:Name="autoRenew_CheckBox" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Label="自动续签" KeyTip="A" Cursor="Hand" FontFamily="等线 Light" FontSize="12" IsChecked="True" Checked="autoRenew_CheckBox_Checked"></RibbonCheckBox>
-                <RibbonCheckBox x:Name="autoUpdate_CheckBox" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Label="自动检查更新" KeyTip="A" Cursor="Hand" FontFamily="等线 Light" FontSize="12"></RibbonCheckBox>
+                <RibbonCheckBox x:Name="autoRenew_CheckBox" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Label="自动续签" KeyTip="A" Cursor="Hand" FontFamily="等线 Light" FontSize="12" IsChecked="True" Checked="autoRenew_CheckBox_Checked" BorderBrush="LightGreen" BorderThickness="1.5"></RibbonCheckBox>
+                <RibbonCheckBox x:Name="autoUpdate_CheckBox" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Label="自动检查更新" KeyTip="A" Cursor="Hand" FontFamily="等线 Light" FontSize="12" BorderBrush="LightGreen" BorderThickness="1.5"></RibbonCheckBox>
             </Grid>
             <Expander.Resources>
                 <Style TargetType="{x:Type Border}">
@@ -329,7 +330,7 @@
                 </Style>
             </Expander.Resources>
         </Expander>
-        <GroupBox Header="激活模式选项" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="4" FontFamily="等线 Light" FontSize="12" Margin="5" BorderThickness="1.5" BorderBrush="LightGreen">
+        <GroupBox Header="激活模式选项" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="4" FontFamily="等线 Light" FontSize="12" Margin="10,5,10,5" BorderThickness="1.5" BorderBrush="LightGreen">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
@@ -343,7 +344,7 @@
                 <RibbonRadioButton x:Name="actOffice_RadioButton" Grid.Column="1" Grid.RowSpan="2" Label="激活 Office" SmallImageSource="/Images/Office19_Logo.png" FontFamily="等线 Light" FontSize="20" Foreground="Orange" Cursor="Hand" CornerRadius="3">></RibbonRadioButton>
             </Grid>
         </GroupBox>
-        <GroupBox Header="服务器选择" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="4" Grid.RowSpan="2" Margin="5" BorderBrush="LightGreen" BorderThickness="1.5" FontFamily="等线 Light" FontSize="12">
+        <GroupBox Header="服务器选择" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="4" Grid.RowSpan="2" Margin="10,5,10,5" BorderBrush="LightGreen" BorderThickness="1.5" FontFamily="等线 Light" FontSize="12">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
@@ -380,7 +381,7 @@
                 </Button>
             </Grid>
         </GroupBox>
-        <GroupBox Header="系统信息" Grid.Column="1" Grid.Row="4" Grid.RowSpan="2" Grid.ColumnSpan="4" FontFamily="等线 Light" FontSize="12" Margin="5,5,5,10" BorderThickness="1.5" BorderBrush="LightGreen" Cursor="">
+        <GroupBox Header="系统信息" Grid.Column="1" Grid.Row="4" Grid.RowSpan="2" Grid.ColumnSpan="4" FontFamily="等线 Light" FontSize="12" Margin="10,5,10,10" BorderThickness="1.5" BorderBrush="LightGreen" Cursor="">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
