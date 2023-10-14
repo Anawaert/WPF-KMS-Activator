@@ -108,32 +108,31 @@ namespace KMS_Activator
                                      RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64):
                                      RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
                 string officePath = string.Empty;
-                RegistryKey? officeBaseKey = regKey.OpenSubKey("SOFTWARE\\Microsoft\\Office");
+                RegistryKey? officeBaseKey64 = regKey.OpenSubKey("SOFTWARE\\Microsoft\\Office");
+                RegistryKey? officeBaseKey32 = regKey.OpenSubKey("SOFTWARE\\WOW6432Node\\Microsoft\\Office");
 
-                if (officeBaseKey == null)
+                if (officeBaseKey64 == null && officeBaseKey32 == null)
                 {
-                    throw new Exception("Office is not installed yet!");
+                    throw new Exception("Office尚未安装");
                 }
 
                 // 以下为具体的Office版本判断与从Office在注册表中提供的安装目录转化为OSPP.vbs所在目录的过程
                 // The following is the specific Office version determination and the process of converting the installation directory provided by Office in the registry to the directory where OSPP.vbs is located
-                if (officeBaseKey.OpenSubKey("16.0") != null)
+                if (officeBaseKey64?.OpenSubKey("16.0") != null || officeBaseKey32?.OpenSubKey("16.0") != null)
                 {
-                    RegistryKey? proofKey = officeBaseKey.OpenSubKey("16.0\\Word\\InstallRoot");
-                    if (proofKey == null)
+                    RegistryKey? assumedKey64 = officeBaseKey64?.OpenSubKey("16.0\\Word\\InstallRoot");
+                    RegistryKey? assumedKey32 = officeBaseKey32?.OpenSubKey("16.0\\Word\\InstallRoot");
+
+                    if (assumedKey64?.GetValue("Path") == null && assumedKey32?.GetValue("Path") == null)
                     {
-                        throw new Exception("Office is not installed or is corrupted!");
-                    }
-                    if (proofKey.GetValue("Path") == null)
-                    {
-                        throw new Exception("Office installation corrupted!");
+                        throw new Exception("Office已损坏");
                     }
 
                     // 从注册表中读取Office的安装路径，并用路径中是否有root字段来判断版本是否为Office 2019或Office 2021
                     // Read the Office installation path from the registry and use the root field in the path to determine whether the version is Office 2019 or Office 2021
                     // 当然，OSPP.vbs一般仍然在C:\Program Files\Microsoft Office\Office16\下
                     // Of course, OSPP.vbs is still generally under C:\Program Files\Microsoft Office\Office16\
-                    officePath = proofKey.GetValue("Path")?.ToString() ?? string.Empty;
+                    officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
                     if (officePath.Contains("root"))
                     {
                         officePath = officePath.Replace("\\root", string.Empty);
@@ -148,15 +147,29 @@ namespace KMS_Activator
                         /* 版本为Office 2016 */
                     }
                 }
-                else if (officeBaseKey.OpenSubKey("15.0") != null)
+                else if (officeBaseKey64?.OpenSubKey("15.0") != null || officeBaseKey32?.OpenSubKey("15.0") != null)
                 {
-                    officePath = officeBaseKey.OpenSubKey("15.0\\Word\\InstallRoot")?.GetValue("Path")?.ToString() ?? string.Empty;
+                    RegistryKey? assumedKey64 = officeBaseKey64?.OpenSubKey("15.0\\Word\\InstallRoot");
+                    RegistryKey? assumedKey32 = officeBaseKey32?.OpenSubKey("15.0\\Word\\InstallRoot");
+
+                    if (assumedKey64?.GetValue("Path") == null || assumedKey32?.GetValue("Path") == null)
+                    {
+                        throw new Exception("Office已损坏");
+                    }
+                    officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
                     officeVersion = "Office 2013";
                     /* 版本为Office 2013 */
                 }
-                else if (officeBaseKey.OpenSubKey("14.0") != null)
+                else if (officeBaseKey64?.OpenSubKey("14.0") != null || officeBaseKey32?.OpenSubKey("14.0") != null)
                 {
-                    officePath = officeBaseKey.OpenSubKey("14.0\\Word\\InstallRoot")?.GetValue("Path")?.ToString() ?? string.Empty;
+                    RegistryKey? assumedKey64 = officeBaseKey64?.OpenSubKey("14.0\\Word\\InstallRoot");
+                    RegistryKey? assumedKey32 = officeBaseKey32?.OpenSubKey("14.0\\Word\\InstallRoot");
+
+                    if (assumedKey64?.GetValue("Path") == null || assumedKey32?.GetValue("Path") == null)
+                    {
+                        throw new Exception("Office已损坏");
+                    }
+                    officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
                     officeVersion = "Office 2010";
                     /* 版本为Office 2010 */
                 }

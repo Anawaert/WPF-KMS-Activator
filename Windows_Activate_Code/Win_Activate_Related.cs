@@ -154,14 +154,6 @@ namespace KMS_Activator
                 /* 待补充的操作 */
                 return;
             }
-
-            mainWindow.Dispatcher.Invoke
-            (
-                () =>
-                {
-                    Animations_Related.MainW_SlideBack(mainWindow.mainGrid);
-                }
-            );
         }
 
     #region 静态变量与常量区  Region for static variable and constant

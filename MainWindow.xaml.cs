@@ -24,6 +24,7 @@ namespace KMS_Activator
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             winVersion_Label.Content = WIN_VERSION;
+            officeVersion_Label.Content = "在运行时确定";
             Fms::Application.EnableVisualStyles();
         }
 
@@ -72,31 +73,7 @@ namespace KMS_Activator
                 (
                     () =>
                     {
-                        Thread.Sleep(1000);
-                        string selectedContent = "anawaert.tech";
-                        this.Dispatcher.Invoke
-                        (
-                            () =>
-                            {
-                                selectedContent = (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
-                                                  "anawaert.tech"                                                                             :
-                                                  (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content                          ;
-                            }
-                        );
-                        Win_Activator activator = new Win_Activator();
-                        activator.ActWin(selectedContent);
-                        IsWinActivated();
-                    }
-                );
-                subThread.Start();
-            }
-            else if (actOffice_RadioButton.IsChecked == true)
-            {
-                //Thread subThread = new Thread
-                //(
-                //    () =>
-                //    {
-                        Thread.Sleep(1000);
+                        Thread.Sleep(750);
                         string selectedContent = "anawaert.tech";
                         this.Dispatcher.Invoke
                         (
@@ -105,13 +82,51 @@ namespace KMS_Activator
                                 selectedContent = (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
                                                   "anawaert.tech" :
                                                   (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content;
-                                Office_Activator activator = new Office_Activator();
-                                activator.ActOffice(selectedContent);
                             }
                         );
-
-                    //}
-                //);
+                        Win_Activator activator = new Win_Activator();
+                        activator.ActWin(selectedContent);
+                        IsWinActivated();
+                        this.Dispatcher.Invoke
+                        (
+                            () =>
+                            {
+                                MainW_SlideBack(mainGrid);
+                            }
+                        );
+                    }
+                );
+                subThread.Start();
+            }
+            else if (actOffice_RadioButton.IsChecked == true)
+            {
+                Thread subThread = new Thread
+                (
+                    () =>
+                    {
+                        Thread.Sleep(750);
+                        string selectedContent = "anawaert.tech";
+                        this.Dispatcher.Invoke
+                        (
+                            () =>
+                            {
+                                selectedContent = (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
+                                                  "anawaert.tech" :
+                                                  (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content;
+                            }
+                        );
+                        Office_Activator activator = new Office_Activator();
+                        activator.ActOffice(selectedContent);
+                        this.Dispatcher.Invoke
+                        (
+                            () =>
+                            {
+                                MainW_SlideBack(mainGrid);
+                            }
+                        );
+                    }
+                );
+                subThread.Start();
             }
         }
 

@@ -40,7 +40,6 @@ namespace KMS_Activator
             string ospp_root, office_ver; 
             if (!IsOfficePathFound(out ospp_root, out office_ver))
             {
-                mainWindow.Dispatcher.Invoke(() => { mainWindow.officeVersion_Label.Content = office_ver; });
                 Fms::MessageBox.Show
                 (
                     "无法推断Office核心配置库的路径，请检查您的Office的完整性或正确安装Office",
@@ -51,6 +50,14 @@ namespace KMS_Activator
                 return;
             }
 
+            mainWindow.Dispatcher.Invoke
+            (
+                () => 
+                { 
+                    mainWindow.officeVersion_Label.Content = office_ver; 
+                }
+            );
+
             if (IsOfficeActivated(ospp_root))
             {
                 Fms::MessageBox.Show
@@ -60,6 +67,7 @@ namespace KMS_Activator
                     Fms::MessageBoxButtons.OK,
                     Fms::MessageBoxIcon.Information
                 );
+                return;
             }
 
             ConvertStatus status;

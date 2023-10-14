@@ -22,7 +22,7 @@ namespace KMS_Activator
             DoubleAnimation animation = new DoubleAnimation();
             animation.From = 0; // 起始位置（左侧屏幕外）
             animation.To = -mainWindow.Width;     // 终止位置（屏幕中央）
-            animation.Duration = TimeSpan.FromSeconds(0.66); // 动画持续时间
+            animation.Duration = TimeSpan.FromSeconds(0.5); // 动画持续时间
 
             // 添加慢入慢出的缓动函数
             animation.EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut };
@@ -40,7 +40,7 @@ namespace KMS_Activator
             DoubleAnimation animation = new DoubleAnimation();
             animation.From = -mainWindow.Width; // 起始位置（左侧屏幕外）
             animation.To = 0;     // 终止位置（屏幕中央）
-            animation.Duration = TimeSpan.FromSeconds(0.66); // 动画持续时间
+            animation.Duration = TimeSpan.FromSeconds(0.5); // 动画持续时间
 
             // 添加慢入慢出的缓动函数
             animation.EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut };
