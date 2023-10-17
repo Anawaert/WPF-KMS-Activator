@@ -11,7 +11,8 @@
         ResizeMode="NoResize"
         Loaded="Window_Loaded"
         xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        CornerRadius="5">
     <Window.Resources>
         <System:Boolean x:Key="IsTrue">True</System:Boolean>
         <System:Boolean x:Key="IsFalse">False</System:Boolean>

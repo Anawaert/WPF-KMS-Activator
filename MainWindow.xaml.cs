@@ -24,7 +24,7 @@ namespace KMS_Activator
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             winVersion_Label.Content = WIN_VERSION;
-            officeVersion_Label.Content = "在运行时确定";
+            officeVersion_Label.Content = officeProduct;
             Fms::Application.EnableVisualStyles();
         }
 

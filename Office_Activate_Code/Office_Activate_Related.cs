@@ -8,6 +8,7 @@ using Fms = System.Windows.Forms;
 using Microsoft.Win32;  // 配合注册表读写操作  Works with registry read and write operations
 using static KMS_Activator.Shared;  // 使用共享的功能代码  Use shared functional code blocks
 using static KMS_Activator.Office_Configurator;
+using System.Windows.Forms;
 
 namespace KMS_Activator
 {
@@ -15,30 +16,7 @@ namespace KMS_Activator
     {
         internal void ActOffice(string kmsServerName)
         {
-
-        /*  ProcessStartInfo startSetServerInfo = new ProcessStartInfo
-            {
-                FileName = CSCRIPT,
-                WorkingDirectory = string.Empty,  
-                Arguments = "//Nologo ospp.vbs /sethst:" + kmsServerName,
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                WindowStyle = ProcessWindowStyle.Hidden
-            };
-            ProcessStartInfo startApplyInfo = new ProcessStartInfo
-            {
-                FileName = CSCRIPT,
-                WorkingDirectory = string.Empty,  
-                Arguments = "//Nologo ospp.vbs /act",
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                WindowStyle = ProcessWindowStyle.Hidden
-            };  */
-
-            string ospp_root, office_ver; 
-            if (!IsOfficePathFound(out ospp_root, out office_ver))
+            if (!isOfficeCoreFound)
             {
                 Fms::MessageBox.Show
                 (
@@ -58,7 +36,8 @@ namespace KMS_Activator
                 }
             );
 
-            if (IsOfficeActivated(ospp_root))
+            bool isNoInstalledKey, activationCondition = IsOfficeActivated(osppPosition, out isNoInstalledKey);
+            if (activationCondition)
             {
                 Fms::MessageBox.Show
                 (
@@ -69,23 +48,51 @@ namespace KMS_Activator
                 );
                 return;
             }
+            else
+            {
+                if (isNoInstalledKey)
+                {
+                    DialogResult result = Fms::MessageBox.Show
+                    (
+                        "您的Office尚未安装密钥，请检查您的Office是否已与Microsoft账户绑定激活。若是，请点击“是”退出；若不是，请单机“否”以继续",
+                        "提示",
+                        Fms::MessageBoxButtons.YesNo,
+                        Fms::MessageBoxIcon.Information
+                    );
+                    if (result == DialogResult.Yes)
+                    {
+                        return;
+                    }
+
+                }
+                else
+                {
+                    DialogResult result = Fms::MessageBox.Show
+                    (
+                        "您的Office已经安装了密钥，是否继续？",
+                        "提示",
+                        Fms::MessageBoxButtons.YesNo,
+                        Fms::MessageBoxIcon.Information
+                    );
+                    if (result == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+            }
 
             ConvertStatus status;
-            bool isSuccess = ConvertToVOL(ospp_root, out status);
+            bool isSuccess = ConvertToVOL(osppPosition, out status);
+            bool is_NoInstalledKey;
             if (isSuccess && (status == ConvertStatus.RetailVersion || status == ConvertStatus.AlreadyVOL))
             {
                 try
                 {
-                /*  startSetServerInfo.WorkingDirectory = ospp_root;
-                    Process startSetServer = new Process { StartInfo = startSetServerInfo };
-                    startSetServer.Start();
-                    /* 可以考虑读取一下输出信息 
-                    startSetServer.WaitForExit();  */
                     RunProcess
                     (
                         CSCRIPT,
                         @"//Nologo ospp.vbs /sethst:" + kmsServerName,
-                        ospp_root,
+                        osppPosition,
                         true
                     );
 
@@ -98,7 +105,7 @@ namespace KMS_Activator
                     (
                         CSCRIPT,
                         @"//Nologo ospp.vbs /act",
-                        ospp_root,
+                        osppPosition,
                         true
                     );
                 }
@@ -108,7 +115,7 @@ namespace KMS_Activator
                     return;
                 }
             }
-            if (IsOfficeActivated(ospp_root))
+            if (IsOfficeActivated(osppPosition, out is_NoInstalledKey))
             {
                 Fms::MessageBox.Show
                 (
@@ -120,13 +127,27 @@ namespace KMS_Activator
             }
             else
             {
-                Fms::MessageBox.Show
-                (
-                    "您的Office未能即时激活，请重试",
-                    "抱歉",
-                    Fms::MessageBoxButtons.OK,
-                    Fms::MessageBoxIcon.Information
-                );
+                if (is_NoInstalledKey)
+                {
+                    Fms::MessageBox.Show
+                    (
+                        "您的Office应已与Microsoft账户绑定，并且由Office自己完成了数字激活。如情况不属实，请联系Microsoft或在Github上提交Issue",
+                        "抱歉",
+                        Fms::MessageBoxButtons.OK,
+                        Fms::MessageBoxIcon.Information
+                    );
+
+                }
+                else
+                {
+                    Fms::MessageBox.Show
+                    (
+                        "您的Office未能即时激活，这可能是外部程序打断造成的，请重试",
+                        "抱歉",
+                        Fms::MessageBoxButtons.OK,
+                        Fms::MessageBoxIcon.Information
+                    );
+                }
             }
 
             mainWindow.Dispatcher.Invoke

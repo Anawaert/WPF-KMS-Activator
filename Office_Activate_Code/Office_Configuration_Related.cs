@@ -41,7 +41,7 @@ namespace KMS_Activator
         ///         A Boolean value, true indicates active
         ///     </para>
         /// </returns>
-        public static bool IsOfficeActivated(string osppDirectory)
+        public static bool IsOfficeActivated(string osppDirectory, out bool isStillNoInstalledKey)
         {
         /*  ProcessStartInfo startCheckInfo = new ProcessStartInfo
             {
@@ -65,23 +65,18 @@ namespace KMS_Activator
             }
             catch (Exception check_Error)
             {
-                /* 待补充的操作与行为 */
+                isStillNoInstalledKey = false;
                 return false;
             }
 
-            if (checkInfo.Contains("activation successful")        ||
-                checkInfo.Contains("0xC004F009")                   || 
-                checkInfo.Contains("LICENSE STATUS:  ---LICENSED---"))
-            {
-                /* 待补充 */
-                return true;
-            }
-            else
-            {
-                /* 待补充 */
-                return false;
-            }
+            bool activationState = checkInfo.Contains("activation successful")         ||
+                                   checkInfo.Contains("0xC004F009")                    || 
+                                   checkInfo.Contains("LICENSE STATUS:  ---LICENSED---");
+            isStillNoInstalledKey = checkInfo.Contains("No installed product keys detected");
+
+            return activationState;    
         }
+   
         /// <summary>
         ///     <para>
         ///       该函数用以判断Office或OSPP.vbs所在路径或目录是否已经被查找到  
@@ -108,12 +103,14 @@ namespace KMS_Activator
                                      RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64):
                                      RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
                 string officePath = string.Empty;
+                // 由于在安装时可能会出现在64位系统中安装了32位的情况，所以使用officeBaseKey__来区分32位与64位在注册表中的位置
+                // officeBaseKey__ is used to distinguish the location of 32 bits from 64 bits in the registry because it may happen that 32 bits are installed on 64-bit systems at installation time
                 RegistryKey? officeBaseKey64 = regKey.OpenSubKey("SOFTWARE\\Microsoft\\Office");
                 RegistryKey? officeBaseKey32 = regKey.OpenSubKey("SOFTWARE\\WOW6432Node\\Microsoft\\Office");
 
                 if (officeBaseKey64 == null && officeBaseKey32 == null)
                 {
-                    throw new Exception("Office尚未安装");
+                    throw new Exception("Office is not installed yet");
                 }
 
                 // 以下为具体的Office版本判断与从Office在注册表中提供的安装目录转化为OSPP.vbs所在目录的过程
@@ -142,7 +139,7 @@ namespace KMS_Activator
                     }
                     else
                     {
-                        officeVersion = "Office 2016";
+                        officeVersion = officePath != string.Empty ? "Office 2016" : "Not_Found";
                         /* 待补充其他关于版本判断的操作 */
                         /* 版本为Office 2016 */
                     }
@@ -157,7 +154,7 @@ namespace KMS_Activator
                         throw new Exception("Office已损坏");
                     }
                     officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
-                    officeVersion = "Office 2013";
+                    officeVersion = officePath != string.Empty ? "Office 2013" : "Not_Found";
                     /* 版本为Office 2013 */
                 }
                 else if (officeBaseKey64?.OpenSubKey("14.0") != null || officeBaseKey32?.OpenSubKey("14.0") != null)
@@ -170,15 +167,15 @@ namespace KMS_Activator
                         throw new Exception("Office已损坏");
                     }
                     officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
-                    officeVersion = "Office 2010";
+                    officeVersion = officePath != string.Empty ? "Office 2010" : "Not_Found";
                     /* 版本为Office 2010 */
                 }
                 else
                 {
-                    officeVersion = "Office 2007 or lower";
+                    officeVersion = officePath != string.Empty ? "Office 2013" : "Not_Found";
                     /* Office 2007或更低,不支持 */
                 }
-                osppPath = officePath;
+                osppPath = officePath != string.Empty ? officePath : "Not_Found";
                 return true;
             }
             catch (Exception found_Error)
@@ -189,6 +186,7 @@ namespace KMS_Activator
                 return false;
             }
         }
+
         /// <summary>
         ///     <para>
         ///         该函数用于将Retail版本的Office转换为Volume版本，并输出一些相关信息
@@ -226,18 +224,6 @@ namespace KMS_Activator
             // 首先通过OSPP.vbs读取对Office信息的查询结果
             // Firstly, the query results of Office information are read through OSPP.vbs
             string checkOutput = string.Empty;
-        /*  ProcessStartInfo startCheckLicenseInfo = new ProcessStartInfo
-            {
-                    FileName = "cscript.exe",
-                    WorkingDirectory = osppDirectory,
-                    Arguments = @"//Nologo ospp.vbs /dstatus",
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    WindowStyle = ProcessWindowStyle.Hidden
-            };
-            Process startCheckLicense = new Process { StartInfo = startCheckLicenseInfo };
-        */
             try
             {
                 checkOutput = RunProcess(CSCRIPT, @"//Nologo ospp.vbs /dstatus", osppDirectory, true);
@@ -273,10 +259,10 @@ namespace KMS_Activator
                 licenseDirectory += "root\\License";
 
                 string officeversion = string.Empty, officekey = string.Empty, visiokey = string.Empty;
-                if (osppDirectory.EndsWith("Office16"))
+                if (osppDirectory.EndsWith("Office16\\"))
                 {
                     licenseDirectory += "16\\";
-                    if (checkOutput.Contains("Office 19"))
+                    if (checkOutput.Contains("Office 19\\"))
                     {
                         officeversion = "2019";
                         officekey = officeKeys["Office 2019"]; visiokey = visioKeys["Visio 2019"];
@@ -287,13 +273,13 @@ namespace KMS_Activator
                         officekey = officeKeys["Office 2016"]; visiokey = visioKeys["Visio 2016"];
                     }
                 }
-                else if (osppDirectory.EndsWith("Office15"))
+                else if (osppDirectory.EndsWith("Office15\\"))
                 {
                     licenseDirectory += "15\\";
                     officeversion = "2013";
                     officekey = officeKeys["Office 2013"]; visiokey = visioKeys["Visio 2013"];
                 }
-                else if (osppDirectory.EndsWith("Office14"))
+                else if (osppDirectory.EndsWith("Office14\\"))
                 {
                     licenseDirectory += "14\\";
                     officeversion = "2010";
@@ -307,15 +293,15 @@ namespace KMS_Activator
                 }
                 // 调用Shared类的RunProcess函数以安装所有的Pro Plus VL版本证书
                 // Call the RunProcess function of the Shared class to install all the Pro Plus VL certificates
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "ProPlusVL_KMS_Client-ppd.xrm-ms", osppDirectory, false);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "ProPlusVL_KMS_Client-ul.xrm-ms", osppDirectory, false);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "ProPlusVL_KMS_Client-ul-oob.xrm-ms", osppDirectory, false);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "VisioProVL_KMS_Client-ppd.xrm-ms", osppDirectory, false);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "VisioProVL_KMS_Client-ul.xrm-ms", osppDirectory, false);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "VisioProVL_KMS_Client-ul-oob.xrm-ms", osppDirectory, false);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "pkeyconfig-office.xrm-ms", osppDirectory, false);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + officekey, osppDirectory, false);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + visiokey, osppDirectory, false);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "ProPlusVL_KMS_Client-ppd.xrm-ms", osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "ProPlusVL_KMS_Client-ul.xrm-ms", osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "ProPlusVL_KMS_Client-ul-oob.xrm-ms", osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "VisioProVL_KMS_Client-ppd.xrm-ms", osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "VisioProVL_KMS_Client-ul.xrm-ms", osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "VisioProVL_KMS_Client-ul-oob.xrm-ms", osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "pkeyconfig-office.xrm-ms", osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + officekey, osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + visiokey, osppDirectory, true);
                 
                 /* 可编写一些告诉用户发生了什么的操作 */
                 convertStatus = ConvertStatus.AlreadyVOL;
@@ -346,6 +332,9 @@ namespace KMS_Activator
             {"Visio 2013", "C2FG9-N6J68-H8BTJ-BW3QX-RM3B3"},
             {"Visio 2010", "7MCW8-VRQVK-G677T-PDJCM-Q8TCP"}
         };
+
+        public static string osppPosition;  public static string officeProduct;
+        public static bool isOfficeCoreFound = IsOfficePathFound(out osppPosition, out officeProduct);
         #endregion
     }
 
@@ -354,5 +343,15 @@ namespace KMS_Activator
         ConvertError = 0x00,
         AlreadyVOL = 0x02,
         RetailVersion = 0x04
+    }
+
+    public enum OfficeVersion
+    {
+        Office2021 = 16,
+        Office2019 = 16,
+        Office2016 = 16,
+        Office2013 = 15,
+        Office2010 = 14,
+        Office2007 = 13
     }
 }
