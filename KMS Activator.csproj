@@ -28,10 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="HandyControl" Version="3.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Images\Office19_Logo.png">
       <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>

@@ -43,21 +43,6 @@ namespace KMS_Activator
         /// </returns>
         public static bool IsOfficeActivated(string osppDirectory, out bool isStillNoInstalledKey)
         {
-        /*  ProcessStartInfo startCheckInfo = new ProcessStartInfo
-            {
-                FileName = "cscript.exe",
-                WorkingDirectory = osppDirectory,
-                Arguments = @"//Nologo ospp.vbs /dstatus",
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                WindowStyle = ProcessWindowStyle.Hidden
-            };
-
-            // 通过读取返回的输出来判断是否正确激活
-            // The returned output is read to determine whether the activation is correct
-            Process startCheck = new Process { StartInfo = startCheckInfo };
-        */
             string checkInfo = string.Empty;
             try
             {
@@ -237,7 +222,8 @@ namespace KMS_Activator
 
             // 若读取的输出中已经有Volume字样，则代表已经是VOL版本了
             // If the output already contains the word Volume, it is already the VOL version
-            if (checkOutput.ToUpper().Contains("VOLUME"))
+            bool a;
+            if (a = checkOutput.ToUpper().Contains("VOLUME"))
             {
 
                 convertStatus = ConvertStatus.AlreadyVOL;
@@ -256,7 +242,7 @@ namespace KMS_Activator
                 {
                     licenseDirectory += osppDirectory_Array[i] + "\\";
                 }
-                licenseDirectory += "root\\License";
+                licenseDirectory += "root\\Licenses";
 
                 string officeversion = string.Empty, officekey = string.Empty, visiokey = string.Empty;
                 if (osppDirectory.EndsWith("Office16\\"))
@@ -293,13 +279,13 @@ namespace KMS_Activator
                 }
                 // 调用Shared类的RunProcess函数以安装所有的Pro Plus VL版本证书
                 // Call the RunProcess function of the Shared class to install all the Pro Plus VL certificates
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "ProPlusVL_KMS_Client-ppd.xrm-ms", osppDirectory, true);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "ProPlusVL_KMS_Client-ul.xrm-ms", osppDirectory, true);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "ProPlusVL_KMS_Client-ul-oob.xrm-ms", osppDirectory, true);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "VisioProVL_KMS_Client-ppd.xrm-ms", osppDirectory, true);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "VisioProVL_KMS_Client-ul.xrm-ms", osppDirectory, true);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "VisioProVL_KMS_Client-ul-oob.xrm-ms", osppDirectory, true);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + licenseDirectory + "pkeyconfig-office.xrm-ms", osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDirectory + "ProPlusVL_KMS_Client-ppd.xrm-ms\"", osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDirectory + "ProPlusVL_KMS_Client-ul.xrm-ms\"", osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDirectory + "ProPlusVL_KMS_Client-ul-oob.xrm-ms\"", osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDirectory + "VisioProVL_KMS_Client-ppd.xrm-ms\"", osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDirectory + "VisioProVL_KMS_Client-ul.xrm-ms\"", osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDirectory + "VisioProVL_KMS_Client-ul-oob.xrm-ms\"", osppDirectory, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDirectory + "pkeyconfig-office.xrm-ms\"", osppDirectory, true);
                 RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + officekey, osppDirectory, true);
                 RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + visiokey, osppDirectory, true);
                 
@@ -314,6 +300,7 @@ namespace KMS_Activator
                 return false;
             }
         }
+
         #region 静态变量与常量区
         public static Dictionary<string, string> officeKeys = new Dictionary<string, string>()
         {
@@ -343,15 +330,5 @@ namespace KMS_Activator
         ConvertError = 0x00,
         AlreadyVOL = 0x02,
         RetailVersion = 0x04
-    }
-
-    public enum OfficeVersion
-    {
-        Office2021 = 16,
-        Office2019 = 16,
-        Office2016 = 16,
-        Office2013 = 15,
-        Office2010 = 14,
-        Office2007 = 13
     }
 }

@@ -28,14 +28,6 @@ namespace KMS_Activator
                 return;
             }
 
-            mainWindow.Dispatcher.Invoke
-            (
-                () => 
-                { 
-                    mainWindow.officeVersion_Label.Content = office_ver; 
-                }
-            );
-
             bool isNoInstalledKey, activationCondition = IsOfficeActivated(osppPosition, out isNoInstalledKey);
             if (activationCondition)
             {

@@ -5,14 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:System="clr-namespace:System;assembly=mscorlib" 
         xmlns:local="clr-namespace:KMS_Activator"
-        xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
         Title="Anawaert KMS Activator" Height="320" Width="640"
         ResizeMode="NoResize"
         Loaded="Window_Loaded"
         xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
-        WindowStartupLocation="CenterScreen"
-        CornerRadius="5">
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <System:Boolean x:Key="IsTrue">True</System:Boolean>
         <System:Boolean x:Key="IsFalse">False</System:Boolean>
