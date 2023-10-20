@@ -5,30 +5,31 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:System="clr-namespace:System;assembly=mscorlib" 
-        xmlns:local="clr-namespace:KMS_Activator"
         mc:Ignorable="d"
         Title="Anawaert KMS Activator" Height="320" Width="640"
-
         Loaded="Window_Loaded"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize">
 
+    <!--引入外部的资源字典-->
     <Window.Resources>
         <ResourceDictionary>
             <System:Boolean x:Key="IsTrue">True</System:Boolean>
             <System:Boolean x:Key="IsFalse">False</System:Boolean>
-            <local:EnlargeGridSize x:Key="Enlarger"></local:EnlargeGridSize>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="./UI_Style_Code/UI_Style_Related.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
+    <!--主窗口的UI布局部分-->
+    <!--主容器-->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition Width="5.65*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-
+        <!--盖在下面的加载界面的Grid-->
         <Grid x:Name="awaitingGrid" Grid.ColumnSpan="2" Background="White">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
@@ -55,9 +56,8 @@
                 </ProgressBar.Resources>
             </ProgressBar>
             <Label Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="2" Content="正在执行激活" FontFamily="等线 Light" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
-
         </Grid>
-        
+        <!--未来的菜单栏区域的Grid-->
         <Grid x:Name="menuGrid" Grid.Column="0" Background="White">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
@@ -68,6 +68,8 @@
             </Grid.RowDefinitions>
             <GridSplitter Grid.Column="0" Grid.RowSpan="5" BorderBrush="LightGray" BorderThickness="1.5" Margin="0,5,0,5"/>
         </Grid>
+        
+        <!--主页面的Grid-->
         <Grid Grid.Column="1" x:Name="page1_Grid" Background="White">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
@@ -104,8 +106,8 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <RibbonCheckBox x:Name="autoRenew_CheckBox" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Label="自动续签" KeyTip="A" Cursor="Hand" FontFamily="等线 Light" FontSize="12" IsChecked="True" Checked="autoRenew_CheckBox_Checked" BorderBrush="LightGreen" BorderThickness="1.5"></RibbonCheckBox>
-                    <RibbonCheckBox x:Name="autoUpdate_CheckBox" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Label="自动检查更新" KeyTip="A" Cursor="Hand" FontFamily="等线 Light" FontSize="12" BorderBrush="LightGreen" BorderThickness="1.5"></RibbonCheckBox>
+                    <RibbonCheckBox x:Name="autoRenew_CheckBox" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Label="自动续签" KeyTip="A" Cursor="Hand" FontFamily="等线 Light" FontSize="12" IsChecked="True" BorderBrush="LightGreen" BorderThickness="1.5"></RibbonCheckBox>
+                    <!--<RibbonCheckBox x:Name="autoUpdate_CheckBox" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Label="自动检查更新" KeyTip="A" Cursor="Hand" FontFamily="等线 Light" FontSize="12" BorderBrush="LightGreen" BorderThickness="1.5"></RibbonCheckBox>-->
                 </Grid>
                 <Expander.Resources>
                     <Style TargetType="{x:Type Border}">
@@ -139,6 +141,7 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
+                    <!--应用了自定义的UI样式-->
                     <ComboBox Template="{DynamicResource ComboBox_NewStyle1}" x:Name="selectServer_ComboBox" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="2" VerticalAlignment="Center" Margin="5" FontSize="16" FontFamily="等线 Light" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                         <ComboBoxItem Content="Anawaert KMS 服务器" IsSelected="True"></ComboBoxItem>
                         <ComboBox.Resources>
@@ -148,6 +151,7 @@
                         </ComboBox.Resources>
                     </ComboBox>
                     <TextBox x:Name="addServerName_TextBox" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="2" VerticalAlignment="Center" Margin="5" FontSize="16" FontFamily="等线 Light" VerticalContentAlignment="Center" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Visibility="Hidden"></TextBox>
+                    <!--应用了自定义的UI样式-->
                     <Button Style="{DynamicResource Button_NewStyle1}" x:Name="addServerName_Button" Grid.Row="0" Grid.Column="4" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Width="25" Margin="10" Content="+" FontFamily="楷体" FontSize="16" Cursor="Hand" Click="addServerName_Button_Click">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">

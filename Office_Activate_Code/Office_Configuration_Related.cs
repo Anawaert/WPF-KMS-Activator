@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.Win32;  // 配合注册表读写操作  Works with registry read and write operations
 using static KMS_Activator.Shared;  // 使用共享的功能代码  Use shared functional code blocks
+using System.IO;  // 用于判断文件是否存在  Used to determine if a file exists
 
 namespace KMS_Activator
 {
@@ -35,33 +34,42 @@ namespace KMS_Activator
         /// </param>
         /// <returns>
         ///     <para>
-        ///         一个<see langword="bool"/>值，true表示已激活
+        ///         一个<see langword="bool"/>值，<see langword="true"/>表示已激活
         ///     </para>
         ///     <para>
-        ///         A Boolean value, true indicates active
+        ///         A <see langword="bool"/> value, <see langword="true"/> indicates active
         ///     </para>
         /// </returns>
         public static bool IsOfficeActivated(string osppDirectory, out bool isStillNoInstalledKey)
         {
+            // 从OSPP.vbs获取Office的信息
+            // Get information about Office from OSPP.vbs
             string checkInfo = string.Empty;
             try
             {
                 checkInfo = RunProcess(CSCRIPT, @"//Nologo ospp.vbs /dstatus", osppDirectory, true);
             }
-            catch (Exception check_Error)
+            catch
             {
+                // 若出现异常，则认为Office并未激活，同时也未安装密钥
+                // If an exception occurs, Office is not active and the key is not installed
                 isStillNoInstalledKey = false;
                 return false;
             }
 
+            // 当checkInfo中包含以下字段，则说明已激活
+            // checkInfo is activated when it contains the following fields
             bool activationState = checkInfo.Contains("activation successful")         ||
                                    checkInfo.Contains("0xC004F009")                    || 
                                    checkInfo.Contains("LICENSE STATUS:  ---LICENSED---");
+
+            // 检查是否为未安装密钥
+            // Check if the key is not installed
             isStillNoInstalledKey = checkInfo.Contains("No installed product keys detected");
 
             return activationState;    
         }
-   
+
         /// <summary>
         ///     <para>
         ///       该函数用以判断Office或OSPP.vbs所在路径或目录是否已经被查找到  
@@ -72,12 +80,28 @@ namespace KMS_Activator
         /// </summary>
         /// <returns>
         ///     <para>
-        ///         一个<see langword="bool"/>值,true即代表已被正确获取 
+        ///         一个 <see langword="bool"/> 值，<see langword="true"/> 即代表已被正确获取 
         ///     </para>
         ///     <para>
-        ///         A <see langword="bool"/> value, true indicates that it was retrieved correctly
+        ///         A <see langword="bool"/> value, <see langword="true"/> indicates that it was retrieved correctly
         ///     </para>
         /// </returns>
+        /// <param name="osppPath">
+        ///     <para>
+        ///         一个 <see langword="out"/> 参数，用以向外传参指示OSPP.vbs的所在路径
+        ///     </para>
+        ///     <para>
+        ///         A <see langword="out"/> parameter to pass out indicating the path of OSPP.vbs
+        ///     </para>
+        /// </param>
+        /// <param name="officeVersion">
+        ///     <para>
+        ///         一个 <see langword="out"/> 参数，用来向外传参以指示当前已安装在本计算机上最高版本的Office
+        ///     </para>
+        ///     <para>
+        ///         A <see langword="out"/> parameter to pass parameters indicating the highest version of Office currently installed on the computer
+        ///     </para>
+        /// </param>
         public static bool IsOfficePathFound(out string osppPath, out string officeVersion)
         {
             try
@@ -92,7 +116,8 @@ namespace KMS_Activator
                 // officeBaseKey__ is used to distinguish the location of 32 bits from 64 bits in the registry because it may happen that 32 bits are installed on 64-bit systems at installation time
                 RegistryKey? officeBaseKey64 = regKey.OpenSubKey("SOFTWARE\\Microsoft\\Office");
                 RegistryKey? officeBaseKey32 = regKey.OpenSubKey("SOFTWARE\\WOW6432Node\\Microsoft\\Office");
-
+                // 若两者都为空，那么说明该计算机上并未安装Office（至少未在注册表中注册）
+                // If both are empty, Office is not installed on the machine (at least not registered in the registry)
                 if (officeBaseKey64 == null && officeBaseKey32 == null)
                 {
                     throw new Exception("Office is not installed yet");
@@ -100,8 +125,12 @@ namespace KMS_Activator
 
                 // 以下为具体的Office版本判断与从Office在注册表中提供的安装目录转化为OSPP.vbs所在目录的过程
                 // The following is the specific Office version determination and the process of converting the installation directory provided by Office in the registry to the directory where OSPP.vbs is located
+                // 当两处的注册表键值至少存在一个时候
+                // When at least one of the two registry keys exists
                 if (officeBaseKey64?.OpenSubKey("16.0") != null || officeBaseKey32?.OpenSubKey("16.0") != null)
                 {
+                    // 读取Word键下InstallRoot键的Path键值以获取Office完整安装路径（若安装了Office，Word一定是必装的）
+                    // Read the Path key of the InstallRoot key under the Word key to get the full Office installation path (if you already have Office installed, Word is definitely required)
                     RegistryKey? assumedKey64 = officeBaseKey64?.OpenSubKey("16.0\\Word\\InstallRoot");
                     RegistryKey? assumedKey32 = officeBaseKey32?.OpenSubKey("16.0\\Word\\InstallRoot");
 
@@ -112,25 +141,25 @@ namespace KMS_Activator
 
                     // 从注册表中读取Office的安装路径，并用路径中是否有root字段来判断版本是否为Office 2019或Office 2021
                     // Read the Office installation path from the registry and use the root field in the path to determine whether the version is Office 2019 or Office 2021
-                    // 当然，OSPP.vbs一般仍然在C:\Program Files\Microsoft Office\Office16\下
-                    // Of course, OSPP.vbs is still generally under C:\Program Files\Microsoft Office\Office16\
+                    // OSPP.vbs一般仍然在C:\Program Files\Microsoft Office\Office1X\下
+                    // OSPP.vbs is still generally under C:\Program Files\Microsoft Office\Office1X\
                     officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
                     if (officePath.Contains("root"))
                     {
+                        // 把\root给”Trim“掉，就是OSPP.vbs的所在目录了
+                        // Remove the \root from the path, and you now have the OSPP.vbs directory
                         officePath = officePath.Replace("\\root", string.Empty);
                         officeVersion = "Office 2019/2021";
-                        /* 待补充其他关于版本判断的操作 */
-                        /* 版本为Office 2019或2021 */
                     }
                     else
                     {
                         officeVersion = officePath != string.Empty ? "Office 2016" : "Not_Found";
-                        /* 待补充其他关于版本判断的操作 */
-                        /* 版本为Office 2016 */
                     }
                 }
                 else if (officeBaseKey64?.OpenSubKey("15.0") != null || officeBaseKey32?.OpenSubKey("15.0") != null)
                 {
+                    // 如果找到的子键为15.0，那么说明安装的为Office 2013
+                    // If the subkey found is 15.0, Office 2013 is installed
                     RegistryKey? assumedKey64 = officeBaseKey64?.OpenSubKey("15.0\\Word\\InstallRoot");
                     RegistryKey? assumedKey32 = officeBaseKey32?.OpenSubKey("15.0\\Word\\InstallRoot");
 
@@ -140,7 +169,6 @@ namespace KMS_Activator
                     }
                     officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
                     officeVersion = officePath != string.Empty ? "Office 2013" : "Not_Found";
-                    /* 版本为Office 2013 */
                 }
                 else if (officeBaseKey64?.OpenSubKey("14.0") != null || officeBaseKey32?.OpenSubKey("14.0") != null)
                 {
@@ -153,19 +181,20 @@ namespace KMS_Activator
                     }
                     officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
                     officeVersion = officePath != string.Empty ? "Office 2010" : "Not_Found";
-                    /* 版本为Office 2010 */
                 }
                 else
                 {
-                    officeVersion = officePath != string.Empty ? "Office 2013" : "Not_Found";
-                    /* Office 2007或更低,不支持 */
+                    // 如果都没有，说明要么键都存在，但是子键值都不存在（卸载了）；要么说明键都是null，也就是未安装或安装损坏
+                    // If neither is present, either both keys are present, but neither child key value is present (unloaded). Either the keys are null, which means that they are not installed or that the installation is broken
+                    officeVersion = "Not_Found";
                 }
                 osppPath = officePath != string.Empty ? officePath : "Not_Found";
                 return true;
             }
-            catch (Exception found_Error)
+            catch
             {
-                /* 有可能是未安装或安装出现错误导致的,可以建议重新安装 */
+                // 以上任何一个环节出现错误，则说明要么注册表出现问题，要么Office安装出现问题，那么显然OSPP.vbs的位置和Office的版本都是未定义
+                // If any of the above links is wrong, it means that there is either a problem with the registry, or there is a problem with the Office installation, then obviously the location of OSPP.vbs and the version of Office are undefined
                 osppPath = "Not_Found";
                 officeVersion = "Not_Found";
                 return false;
@@ -182,7 +211,7 @@ namespace KMS_Activator
         /// </summary>
         /// <param name="osppDirectory">
         ///     <para>
-        ///         一个<see langword="string"/>值，应传入OSPP.vbs所在的目录 
+        ///         一个 <see langword="string"/> 值，应传入OSPP.vbs所在的目录 
         ///     </para>
         ///     <para>
         ///         A <see langword="string"/> value should be passed in the directory where OSPP.vbs is located
@@ -198,7 +227,7 @@ namespace KMS_Activator
         /// </param>
         /// <returns>
         ///     <para>
-        ///         一个<see langword="bool"/>值，<see langword="true"/>则代表转换成功  
+        ///         一个 <see langword="bool"/> 值，<see langword="true"/> 则代表转换成功  
         ///     </para>
         ///     <para>
         ///         A <see langword="bool"/> value, and <see langword="true"/> represents a successful conversion
@@ -213,96 +242,197 @@ namespace KMS_Activator
             {
                 checkOutput = RunProcess(CSCRIPT, @"//Nologo ospp.vbs /dstatus", osppDirectory, true);
             }
-            catch (Exception checkLicense_Error)
+            catch
             {
-                /* 待补充的操作 */
+                // 出现错误，则将convertStatus枚举赋以转换错误“ConvertStatus.ConvertError”
+                // There is an error, then transform convertStatus enumeration with as errors "convertStatus.ConvertError"
                 convertStatus = ConvertStatus.ConvertError;
                 return false;
             }
 
-            // 若读取的输出中已经有Volume字样，则代表已经是VOL版本了
-            // If the output already contains the word Volume, it is already the VOL version
-            bool a;
-            if (a = checkOutput.ToUpper().Contains("VOLUME"))
-            {
-
-                convertStatus = ConvertStatus.AlreadyVOL;
-                return true;
-            }
 
             // 由OPSS.vbs路径推导获取各版本Office Pro Plus的KMS证书
             // Derive KMS certificates for each version of Office Pro Plus from OPSS.vbs path
             try
             {
-                // 截取"\Office1X"前的所有内容，并修改为"..\root\LicenseXX"作为KMS证书的正确目录
-                // Truncate everything before "\Office1X" and change it to ".. \root\LicenseXX" as the correct directory for the KMS certificate
+                // 截取"\Office1X"前的所有内容，并修改为"..\root\LicensesXX"作为KMS证书的正确目录
+                // Truncate everything before "\Office1X" and change it to "..\root\LicensesXX" as the correct directory for the KMS certificate
                 string[] osppDirectory_Array = osppDirectory.Split('\\');
                 string licenseDirectory = string.Empty;
-                for (int i = 0; i < osppDirectory_Array.Length - 2; i++)
+                for (int i = 0; i < osppDirectory_Array.Length - 1; i++)
                 {
-                    licenseDirectory += osppDirectory_Array[i] + "\\";
+                    licenseDirectory += i < osppDirectory_Array.Length - 2 ? osppDirectory_Array[i] + "\\" : osppDirectory_Array[i];
                 }
-                licenseDirectory += "root\\Licenses";
+                licenseDirectory += "\\Licenses";
 
-                string officeversion = string.Empty, officekey = string.Empty, visiokey = string.Empty;
+                bool is2021LicenseExisted = File.Exists(licenseDirectory + "ProPlus2021VL_KMS_Client_AE-ppd.xrm-ms"), is2019LicenseExisted = File.Exists(licenseDirectory + "ProPlus2019VL_KMS_Client_AE-ppd.xrm-ms");
+                string officeVer = string.Empty, officekey = string.Empty, visiokey = string.Empty;
+
+                // OSPP.vbs如果是在“...\Mircrosoft Office\Office1X\”下，那么其证书就在“..\Microsoft Office\root\Licenses1X\”下
                 if (osppDirectory.EndsWith("Office16\\"))
                 {
                     licenseDirectory += "16\\";
-                    if (checkOutput.Contains("Office 19\\"))
+                    // 当证书文件夹中出现有Office Pro Plus 2021 VL的证书时，则默认用户下载安装的是2021版本的Office
+                    // When the certificate of Office Pro Plus 2021 VL appears in the certificate folder, the default user downloads and installs the 2021 version of Office
+                    if (checkOutput.Contains("Office 19\\") && File.Exists(licenseDirectory + "ProPlus2021VL_KMS_Client_AE-ppd.xrm-ms"))
                     {
-                        officeversion = "2019";
+                        officeVer = "2021";
+                        officeProduct = "Office 2021";
+                        officekey = officeKeys["Office 2021"]; visiokey = visioKeys["Visio 2021"];
+                    }
+                    // 当证书文件夹中没有2021的证书，但有2019的证书时，则默认用户下载安装的是2019版本的Office
+                    // When there is no certificate for 2021 in the certificates folder, but there is a certificate for 2019, the default user downloads and installs the 2019 version of Office
+                    else if (checkOutput.Contains("Office 19\\")                                       && 
+                             !File.Exists(licenseDirectory + "ProPlus2021VL_KMS_Client_AE-ppd.xrm-ms") && 
+                             File.Exists(licenseDirectory + "ProPlus2019VL_KMS_Client_AE-ppd.xrm-ms"))
+                    {
+                        officeVer = "2019";
+                        officeProduct = "Office 2019";
                         officekey = officeKeys["Office 2019"]; visiokey = visioKeys["Visio 2019"];
                     }
+                    // 不然就是2016版的Office
+                    // Or the 2016 version of Office
                     else
                     {
-                        officeversion = "2016";
+                        officeVer = "2016";
                         officekey = officeKeys["Office 2016"]; visiokey = visioKeys["Visio 2016"];
                     }
                 }
+                // 同理上述
+                // Same to the upon parts
                 else if (osppDirectory.EndsWith("Office15\\"))
                 {
                     licenseDirectory += "15\\";
-                    officeversion = "2013";
+                    officeVer = "2013";
                     officekey = officeKeys["Office 2013"]; visiokey = visioKeys["Visio 2013"];
                 }
                 else if (osppDirectory.EndsWith("Office14\\"))
                 {
                     licenseDirectory += "14\\";
-                    officeversion = "2010";
+                    officeVer = "2010";
                     officekey = officeKeys["Office 2010"]; visiokey = visioKeys["Visio 2010"];
                 }
                 else
                 {
-                    /* 不受支持的版本 */
+                    // 如果都没有，那么发生了错误，要么是Office 2007或更低版本，那么不受支持
+                    // If neither is available, then an error has occurred and either Office 2007 or lower is not supported
                     convertStatus = ConvertStatus.ConvertError;
                     return false;
                 }
-                // 调用Shared类的RunProcess函数以安装所有的Pro Plus VL版本证书
-                // Call the RunProcess function of the Shared class to install all the Pro Plus VL certificates
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDirectory + "ProPlusVL_KMS_Client-ppd.xrm-ms\"", osppDirectory, true);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDirectory + "ProPlusVL_KMS_Client-ul.xrm-ms\"", osppDirectory, true);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDirectory + "ProPlusVL_KMS_Client-ul-oob.xrm-ms\"", osppDirectory, true);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDirectory + "VisioProVL_KMS_Client-ppd.xrm-ms\"", osppDirectory, true);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDirectory + "VisioProVL_KMS_Client-ul.xrm-ms\"", osppDirectory, true);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDirectory + "VisioProVL_KMS_Client-ul-oob.xrm-ms\"", osppDirectory, true);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDirectory + "pkeyconfig-office.xrm-ms\"", osppDirectory, true);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + officekey, osppDirectory, true);
-                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + visiokey, osppDirectory, true);
-                
-                /* 可编写一些告诉用户发生了什么的操作 */
+
+                // 通过InstallVolumeLicense函数来完成VL证书的安装，这是一个极其耗时的操作
+                // The installation of the VL certificate is done via the InstallVolumeLicense function, which is an extremely time-consuming operation
+                InstallVolumeLicense(licenseDirectory, osppDirectory, officekey, visiokey);
+
+                // 执行完成
+                // Completed
                 convertStatus = ConvertStatus.AlreadyVOL;
                 return true;
             }
-            catch (Exception ConvertError)
+            catch
             {
-                /* 待补充的操作和行为 */
                 convertStatus = ConvertStatus.ConvertError;
                 return false;
             }
         }
 
+        /// <summary>
+        ///     <para>
+        ///         该函数用以执行对Office的Pro Plus VL证书的安装
+        ///     </para>
+        ///     <para>
+        ///         This function performs the installation of the Office Pro Plus VL Licenses
+        ///     </para>
+        /// </summary>
+        /// <param name="licenseDir">
+        ///     <para>
+        ///         一个 <see langword="string"> 类型值，需要传入Pro Plus VL证书所在的目录（带反斜杠“\”）
+        ///     </para>
+        ///     <para>
+        ///         A <see langword="string"> value that requires the directory of the Pro Plus VL certificate (with a backslash "\")
+        ///     </para>
+        /// </param>
+        /// <param name="osppDir">
+        ///     <para>
+        ///         一个 <see langword="string"/> 类型值，需要传入OSPP.vbs所在的目录（带反斜杠“\”）
+        ///     </para>
+        ///     <para>
+        ///         A <see langword="string"/> value, passing in the directory of OSPP.vbs (with a backslash "\")
+        ///     </para>
+        /// </param>
+        /// <param name="o_Key">
+        ///     <para>
+        ///         一个 <see langword="string"/> 类型值，需要传入对应的Office的KMS密钥
+        ///     </para>
+        ///     <para>
+        ///         A <see langword="string"/> type value that requires passing in the corresponding Office KMS key
+        ///     </para>
+        /// </param>
+        /// <param name="v_Key">
+        ///     <para>
+        ///         一个 <see langword="string"/> 类型值，需要传入对应的Visio的KMS密钥
+        ///     </para>
+        ///     <para>
+        ///         A <see langword="string"/> value that requires the corresponding Visio KMS key
+        ///     </para>
+        /// </param>
+        private static void InstallVolumeLicense(string licenseDir, string osppDir, string o_Key, string v_Key)
+        {
+            // 调用Shared类的RunProcess函数以安装所有的Pro Plus VL版本证书
+            // Call the RunProcess function of the Shared class to install all the Pro Plus VL certificates
+
+            // 当public静态变量officeProduct为"Office 2021"时，安装Pro Plus 2021 VL的KMS证书
+            // When the public static variable officeProduct is "Office 2021", install the KMS certificate of the Pro Plus 2021 VL
+            if (officeProduct == "Office 2021")
+            {
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "ProPlus2021VL_KMS_Client_AE-ppd.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "ProPlus2021VL_KMS_Client_AE-ul.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "ProPlus2021VL_KMS_Client_AE-ul-oob.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "VisioPro2021VL_KMS_Client_AE-ppd.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "VisioPro2021VL_KMS_Client_AE-ul.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "VisioPro2021VL_KMS_Client_AE-ul-oob.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "pkeyconfig-office.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + o_Key, osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + v_Key, osppDir, true);
+            }
+            else if (officeProduct == "Office 2019")
+            {
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "ProPlus2019VL_KMS_Client_AE-ppd.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "ProPlus2019VL_KMS_Client_AE-ul.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "ProPlus2019VL_KMS_Client_AE-ul-oob.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "VisioPro2019VL_KMS_Client_AE-ppd.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "VisioPro2019VL_KMS_Client_AE-ul.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "VisioPro2019VL_KMS_Client_AE-ul-oob.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "pkeyconfig-office.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + o_Key, osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + v_Key, osppDir, true);
+            }
+            // 都不是，则安装ProPlusVL_KMS_XXXXX的证书，在自己的证书目录下，Office 2010至Office 2016都是这个名称
+            // If not, install the ProPlusVL_KMS_XXXXX certificate under the same name as Office 2010 through Office 2016 in your certificate directory
+            else
+            {
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "ProPlusVL_KMS_Client-ppd.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "ProPlusVL_KMS_Client-ul.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "ProPlusVL_KMS_Client-ul-oob.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "VisioProVL_KMS_Client-ppd.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "VisioProVL_KMS_Client-ul.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "VisioProVL_KMS_Client-ul-oob.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "pkeyconfig-office.xrm-ms\"", osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + o_Key, osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + v_Key, osppDir, true);
+            }
+        }
+
         #region 静态变量与常量区
-        public static Dictionary<string, string> officeKeys = new Dictionary<string, string>()
+        /// <summary>
+        ///     <para>
+        ///         一个由 <see langword="string"/> 对应 <see langword="string"/> 类型的字典，用于存储对应Office版本的密钥
+        ///     </para>
+        ///     <para>
+        ///         A dictionary of type <see langword="string"/> to store the corresponding version of the Office key
+        ///     </para>
+        /// </summary>
+        private static Dictionary<string, string> officeKeys = new Dictionary<string, string>()
         {
             {"Office 2021", "NMMKJ-6RK4F-KMJVX-8D9MJ-6MWKP"},
             {"Office 2019", "NMMKJ-6RK4F-KMJVX-8D9MJ-6MWKP"},
@@ -311,7 +441,15 @@ namespace KMS_Activator
             {"Office 2010", "VYBBJ-TRJPB-QFQRF-QFT4D-H3GVB"}
         };
 
-        public static Dictionary<string, string> visioKeys = new Dictionary<string, string>()
+        /// <summary>
+        ///     <para>
+        ///         一个由 <see langword="string"/> 对应 <see langword="string"/> 类型的字典，用于存储对应Visio版本的密钥
+        ///     </para>
+        ///     <para>
+        ///         A dictionary of type <see langword="string"/> to store the corresponding Visio version of the key
+        ///     </para>
+        /// </summary>
+        private static Dictionary<string, string> visioKeys = new Dictionary<string, string>()
         {
             {"Visio 2021", "9BGNQ-K37YR-RQHF2-38RQ3-7VCBB"},
             {"Visio 2019", "9BGNQ-K37YR-RQHF2-38RQ3-7VCBB"},
@@ -320,15 +458,71 @@ namespace KMS_Activator
             {"Visio 2010", "7MCW8-VRQVK-G677T-PDJCM-Q8TCP"}
         };
 
-        public static string osppPosition;  public static string officeProduct;
+        /// <summary>
+        ///     <para>
+        ///         一个 <see langword="string"/> 类型的静态值，用以存储OSPP.vbs所在的目录
+        ///     </para>
+        ///     <para>
+        ///         A static value of type <see langword="string"/> to store the directory where OSPP.vbs is located
+        ///     </para>
+        /// </summary>
+        public static string osppPosition;
+        /// <summary>
+        ///     <para>
+        ///         一个 <see langword="string"/> 类型的静态值，用以存储Office产品的版本名
+        ///     </para>
+        ///     <para>
+        ///         A static value of type <see langword="string"/> to store the version name of the Office product
+        ///     </para>
+        /// </summary>
+        public static string officeProduct;
+        /// <summary>
+        ///     <para>
+        ///         一个 <see langword="bool"/> 类型的静态值，用以指示Office安装的核心位置是否已经被找到
+        ///     </para>
+        ///     <para>
+        ///         A static value of type <see langword="bool"/> indicating whether the core location of the Office installation has been found
+        ///     </para>
+        /// </summary>
         public static bool isOfficeCoreFound = IsOfficePathFound(out osppPosition, out officeProduct);
         #endregion
     }
-
+    /// <summary>
+    ///     <para>
+    ///         该 <see langword="enum"/> 类型用于指示在将Office版本转换为Volume过程中的转换情况
+    ///     </para>
+    ///     <para>
+    ///         The <see langword="enum"/> type is used to indicate the conversion during the conversion of the Office version to Volume
+    ///     </para>
+    /// </summary>
     public enum ConvertStatus
     {
+        /// <summary>
+        ///     <para>
+        ///         该值表示转换失败
+        ///     </para>
+        ///     <para>
+        ///         This value indicates that the conversion failed
+        ///     </para>
+        /// </summary>
         ConvertError = 0x00,
+        /// <summary>
+        ///     <para>
+        ///         该值表示（Office）已经为Volume版本
+        ///     </para>
+        ///     <para>
+        ///         This value indicates that (Office) is already the Volume version
+        ///     </para>
+        /// </summary>
         AlreadyVOL = 0x02,
+        /// <summary>
+        ///     <para>
+        ///         该值表示（Office）为零售版本
+        ///     </para>
+        ///     <para>
+        ///         This value indicates that (Office) is the retail version
+        ///     </para>
+        /// </summary>
         RetailVersion = 0x04
     }
 }

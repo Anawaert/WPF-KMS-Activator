@@ -16,12 +16,12 @@ using System.Threading;
 namespace KMS_Activator
 {
     /// <summary>
-    /// <para>
-    /// 该静态类主要用于实现程序内需要共享复用的代码，如进程执行、判断等
-    /// </para>
-    /// <para>
-    /// The static class is mainly used to realize the code that needs to be shared and reused in the program, such as process execution and judgment
-    /// </para>
+    ///     <para>
+    ///         该静态类主要用于实现程序内需要共享复用的代码，如进程执行、判断等
+    ///     </para>
+    ///     <para>
+    ///         The static class is mainly used to realize the code that needs to be shared and reused in the program, such as process execution and judgment
+    ///     </para>
     /// </summary>
     public static class Shared
     {
@@ -33,16 +33,44 @@ namespace KMS_Activator
         ///         This static function is used to launch some important system built-in programs located in the specific directory to implement certain functions
         ///     </para>
         /// </summary>
-        /// <param name="execname">可执行程序名称 <br/> Name of an executable program</param>
-        /// <param name="args">需要传入的参数 <br/> Parameters that need to be passed in</param>
-        /// <param name="workdir">工作目录，若置空则认为是System32 <br/> The working directory, if empty, is considered System32</param>
-        /// <param name="is_silent">是否静默执行 <br/> Silent execution or not</param>
-        /// <returns>
+        /// <param name="execname">
         ///     <para>
-        ///         被调用程序的输出值 
+        ///         可执行程序名称
         ///     </para>
         ///     <para>
-        ///         The output value of the called program
+        ///         Name of an executable program
+        ///     </para>
+        /// </param>
+        /// <param name="args">
+        ///     <para>
+        ///         需要传入的参数
+        ///     </para>
+        ///     <para>
+        ///         Parameters that need to be passed in
+        ///     </para>
+        /// </param>
+        /// <param name="workdir">
+        ///     <para>
+        ///         工作目录，若置空则认为是System32
+        ///     </para>
+        ///     <para>
+        ///         The working directory, if empty, is considered System32
+        ///     </para>
+        /// </param>
+        /// <param name="is_silent">
+        ///     <para>
+        ///         是否静默执行
+        ///     </para>
+        ///     <para>
+        ///         Silent execution or not
+        ///     </para>
+        /// </param>
+        /// <returns>
+        ///     <para>
+        ///         一个 <see langword="string"/> 类型值，即被调用程序的输出值 
+        ///     </para>
+        ///     <para>
+        ///         A <see langword="string"/> value, which is the output of the called program
         ///     </para>
         /// </returns>
         public static string RunProcess(string execname, string args, string workdir, bool is_silent)
@@ -75,9 +103,8 @@ namespace KMS_Activator
                 process.Start();
                 process.WaitForExit();
             }
-            catch (Exception ex)
+            catch
             {
-                /*****待补充*****/
                 return "FATAL_ERROR";
             }
 
@@ -97,10 +124,10 @@ namespace KMS_Activator
         /// </summary>
         /// <returns>
         ///     <para>
-        ///         一个<see langword="bool"/>，true代表已激活，false代表未激活  
+        ///         一个 <see langword="bool"/> 类型值，<see langword="true"/> 代表已激活，<see langword="false"/> 代表未激活  
         ///     </para>
         ///     <para>
-        ///         A Boolean value that true indicates activated and false indicates inactivated
+        ///         A <see langword="bool"/> value where <see langword="true"/> means activated and <see langword="false"/> means not activated
         ///     </para>
         /// </returns>
         public static bool IsWinActivated()
@@ -123,10 +150,10 @@ namespace KMS_Activator
         /// </summary>
         /// <returns>
         ///     <para>
-        ///         一个<see langword="bool"/>，true则表示这是管理员账户
+        ///         一个 <see langword="bool"/>，<see langword="true"/> 则表示这是管理员账户
         ///     </para>
         ///     <para>
-        ///         A Boolean value, and true indicates that this is an administrator account
+        ///         A <see langword="bool"/> and <see langword="true"/> means this is an administrator account
         ///     </para>
         /// </returns>
         public static bool IsAdministrators()
@@ -136,28 +163,95 @@ namespace KMS_Activator
             return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static void AutoRenewSign()
+        /// <summary>
+        ///     <para>
+        ///         该函数用于向schtasks.exe传递命令，以设定在180天后自动启动程序进行激活
+        ///     </para>
+        ///     <para>
+        ///         This function is used to pass a command to schtasks.exe to set the program to start automatically for activation after 180 days
+        ///     </para>
+        /// </summary>
+        /// <param name="renewTarget">
+        ///     <para>
+        ///         一个 <see langword="string"> 类型值，需要传入续签的类型（Windows或Office）
+        ///     </para>
+        ///     <para>
+        ///         A <see langword="string"> value with the type to renew (Windows or Office)
+        ///     </para>
+        /// </param>
+        public static void AutoRenewSign(string renewTarget)
         {
             Assembly? assembly = Assembly.GetEntryAssembly();
             if (assembly != null)
             {
+                // 将自生拷贝到“C:\Users\%username%\KMS Activator\”下后利用schtasks.exe设定定时任务，在180天后再次启动
+                // 
                 DirectoryInfo info = Directory.CreateDirectory(USER_DOC_PATH + "KMS Activator");
                 File.Copy(assembly.Location, info.FullName + "\\Anawaert KMS Activator.exe", true);
                 string exeName = "schtasks.exe";
-                string args = "/create /tn \"KMS_Renew\" /tr " + "\"" + info.FullName + "\\Anawaert KMS Activator.exe\" /sm renew " + " /sc ONLOGON /mo 180";
+                // "/sm"开关为"StartMode"的缩写，"renew"指示这次启动程序是以续签的身份启动，renew后面的参数"win"或"office"指示将续签什么类型的激活
+                // The "/sm" switch is short for "StartMode", "renew" indicates that this time the boot program is started as a renewal, and the parameter "Windows" or "Office" after renew indicates what type of activation will be renewed
+                string args;
+                if (renewTarget == "Windows")
+                {
+                    args = "/create /tn \"KMS_Renew_Windows\" /tr " + "\"" + info.FullName + "\\Anawaert KMS Activator.exe\" /sm renew " + renewTarget + " /sc ONLOGON /mo 180";
+                }
+                else
+                {
+                    args = "/create /tn \"KMS_Renew_Office\" /tr " + "\"" + info.FullName + "\\Anawaert KMS Activator.exe\" /sm renew " + renewTarget + " /sc ONLOGON /mo 180";
+                }
                 RunProcess(exeName, args, string.Empty, false);
             }
-            
         }
 
-        public static void CancelAutoRenew()
+        /// <summary>
+        ///     <para>
+        ///         该函数用于向schtasks.exe传递命令，取消已经设定的启动任务
+        ///     </para>
+        ///     <para>
+        ///         This function is used to pass a command to schtasks.exe to cancel a startup task that has already been set
+        ///     </para>
+        /// </summary>
+        /// <param name="cancelRenewTarget">
+        ///     <para>
+        ///         一个 <see langword="string"> 类型值，需要传入取消续签的类型（Windows或Office）
+        ///     </para>
+        ///     <para>
+        ///         A <see langword="string"> value that requires the type of cancellation (Windows or Office)
+        ///     </para>
+        /// </param>
+        public static void CancelAutoRenew(string cancelRenewTarget)
         {
             string exeName = "schtasks.exe";
-            string args = "schtasks /delete /tn \"KMS_RENEW\" /f";
+            string args;
+            if (cancelRenewTarget == "Windows")
+            {
+                args = "schtasks /delete /tn \"KMS_RENEW_Windows\" /f";
+            }
+            else
+            {
+                args = "schtasks /delete /tn \"KMS_RENEW_Office\" /f";
+            }
             RunProcess(exeName, args, string.Empty, false);
         }
 
-        public static async Task AutoCheckUpdate(bool isAutoUpdate)
+        /// <summary>
+        ///     <para>
+        ///         该函数用于通过异步的方法检查Github上最新的Release版本号，以提示用户是否更新。该函数来自Anawaert USBHDDSpy。
+        ///     </para>
+        ///     <para>
+        ///         This function is used to asynchronously check the latest Release number on Github to prompt the user for an update. This function is from Anawaert USBHDDSpy
+        ///     </para>
+        /// </summary>
+        /// <returns>
+        ///     <para>
+        ///         一个 <see cref="Task"> 类型，指示NewClient.GetAsync()的执行情况
+        ///     </para>
+        ///     <para>
+        ///         A <see cref="Task"> indicating how NewClient.GetAsync() is performing
+        ///     </para>
+        /// </returns>
+        public static async Task AutoCheckUpdate()
         {
             try
             {

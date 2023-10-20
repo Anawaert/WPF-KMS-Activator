@@ -1,20 +1,38 @@
-using System.Runtime.ExceptionServices;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows;
 using Fms = System.Windows.Forms;
-using Microsoft.Win32;  // 配合注册表读写操作  Works with registry read and write operations
 using static KMS_Activator.Shared;  // 使用共享的功能代码  Use shared functional code blocks
-using static KMS_Activator.Office_Configurator;
-using System.Windows.Forms;
+using static KMS_Activator.Office_Configurator;  // 使用与Office信息与配置相关的功能代码
 
 namespace KMS_Activator
 {
-    internal class Office_Activator
+    /// <summary>
+    ///     <para>
+    ///         该类主要用于执行激活Office的操作
+    ///     </para>
+    ///     <para>
+    ///         This class is primarily used to perform actions that activate Office
+    ///     </para>
+    /// </summary>
+    public class Office_Activator
     {
-        internal void ActOffice(string kmsServerName)
+        /// <summary>
+        ///     <para>
+        ///         该函数用以激活Office
+        ///     </para>
+        ///     <para>
+        ///         This function activates Office
+        ///     </para>
+        /// </summary>
+        /// <param name="kmsServerName">
+        ///     <para>
+        ///         一个 <see langword="string"> 类型值，需要传入目标KMS服务器的地址
+        ///     </para>
+        ///     <para>
+        ///         A <see langword="string"> value that requires passing the address of the destination KMS server
+        ///     </para>
+        /// </param>
+        public void ActOffice(string kmsServerName)
         {
             if (!isOfficeCoreFound)
             {
@@ -28,6 +46,8 @@ namespace KMS_Activator
                 return;
             }
 
+            // 获取Office的密钥安装情况与激活情况
+            // Get Office key installation and activation
             bool isNoInstalledKey, activationCondition = IsOfficeActivated(osppPosition, out isNoInstalledKey);
             if (activationCondition)
             {
@@ -42,16 +62,18 @@ namespace KMS_Activator
             }
             else
             {
+                // 读取到没有安装密钥时
+                // When no installation key is read
                 if (isNoInstalledKey)
                 {
-                    DialogResult result = Fms::MessageBox.Show
+                    Fms::DialogResult result = Fms::MessageBox.Show
                     (
                         "您的Office尚未安装密钥，请检查您的Office是否已与Microsoft账户绑定激活。若是，请点击“是”退出；若不是，请单机“否”以继续",
                         "提示",
                         Fms::MessageBoxButtons.YesNo,
                         Fms::MessageBoxIcon.Information
                     );
-                    if (result == DialogResult.Yes)
+                    if (result == Fms::DialogResult.Yes)
                     {
                         return;
                     }
@@ -59,27 +81,30 @@ namespace KMS_Activator
                 }
                 else
                 {
-                    DialogResult result = Fms::MessageBox.Show
+                    Fms::DialogResult result = Fms::MessageBox.Show
                     (
                         "您的Office已经安装了密钥，是否继续？",
                         "提示",
                         Fms::MessageBoxButtons.YesNo,
                         Fms::MessageBoxIcon.Information
                     );
-                    if (result == DialogResult.No)
+                    if (result == Fms::DialogResult.No)
                     {
                         return;
                     }
                 }
             }
 
+            // 尝试将Office转为Volume版本
+            // Try converting Office to the Volume version
             ConvertStatus status;
             bool isSuccess = ConvertToVOL(osppPosition, out status);
-            bool is_NoInstalledKey;
             if (isSuccess && (status == ConvertStatus.RetailVersion || status == ConvertStatus.AlreadyVOL))
             {
                 try
                 {
+                    // 指定KMS服务器
+                    // Specifying a KMS server
                     RunProcess
                     (
                         CSCRIPT,
@@ -88,11 +113,8 @@ namespace KMS_Activator
                         true
                     );
 
-                    /*  startApplyInfo.WorkingDirectory = ospp_root;
-                        Process startApply = new Process { StartInfo = startApplyInfo };
-                        startApply.Start();
-                        /*同理
-                        startApply.WaitForExit(); */
+                    // 执行激活命令
+                    // Execute the activation command
                     RunProcess
                     (
                         CSCRIPT,
@@ -103,11 +125,19 @@ namespace KMS_Activator
                 }
                 catch (Exception ActOffice_Error)
                 {
-                    /* 待补充 */
+                    Fms::MessageBox.Show
+                    (
+                        $"激活过程中出现错误。错误原因：{ActOffice_Error.Message}。若重复出现错误，请检查系统配置或在该项目的Github主页的Issue页中提交您的问题",
+                        "抱歉",
+                        Fms::MessageBoxButtons.OK,
+                        Fms::MessageBoxIcon.Information
+                    );
                     return;
                 }
             }
-            if (IsOfficeActivated(osppPosition, out is_NoInstalledKey))
+            // 再次读取输出信息以检查Office的激活情况
+            // Read the output again to check Office activation
+            if (IsOfficeActivated(osppPosition, out bool is_NoInstalledKey))
             {
                 Fms::MessageBox.Show
                 (
@@ -119,11 +149,13 @@ namespace KMS_Activator
             }
             else
             {
+                // 若输出信息中还显示没有安装密钥，则大概率表明Office已经自动完成了数字激活
+                // If the output also shows no installation key, chances are that Office has automatically completed digital activation
                 if (is_NoInstalledKey)
                 {
                     Fms::MessageBox.Show
                     (
-                        "您的Office应已与Microsoft账户绑定，并且由Office自己完成了数字激活。如情况不属实，请联系Microsoft或在Github上提交Issue",
+                        "您的Office应已与Microsoft账户绑定，并且已自动完成了数字激活。如情况不属实，请联系Microsoft或在该项目的Github主页的Issue页中提交您的问题",
                         "抱歉",
                         Fms::MessageBoxButtons.OK,
                         Fms::MessageBoxIcon.Information
@@ -134,7 +166,7 @@ namespace KMS_Activator
                 {
                     Fms::MessageBox.Show
                     (
-                        "您的Office未能即时激活，这可能是外部程序打断造成的，请重试",
+                        "您的Office未能即时激活，这可能是外部程序打断造成的，请重启程序或重启计算机后重试",
                         "抱歉",
                         Fms::MessageBoxButtons.OK,
                         Fms::MessageBoxIcon.Information

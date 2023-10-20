@@ -8,9 +8,33 @@ using static KMS_Activator.Shared;  // 使用共享的功能代码  Use shared f
 
 namespace KMS_Activator
 {
-    internal class Win_Activator
+    /// <summary>
+    ///     <para>
+    ///         该类主要用于实现激活Windows的功能
+    ///     </para>
+    ///     <para>
+    ///         This class is mainly used to realize the function of activating Windows
+    ///     </para>
+    /// </summary>
+    public class Win_Activator
     {
-        internal void ActWin(string kmsServerName)
+        /// <summary>
+        ///     <para>
+        ///         该函数主要用于激活Windows
+        ///     </para>
+        ///     <para>
+        ///         This function is primarily used to activate Windows
+        ///     </para>
+        /// </summary>
+        /// <param name="kmsServerName">
+        ///     <para>
+        ///         一个 <see langword="string"> 类型值，需要传入目标KMS服务器的地址
+        ///     </para>
+        ///     <para>
+        ///         A <see langword="string"> value that requires passing the address of the destination KMS server
+        ///     </para>
+        /// </param>
+        public void ActWin(string kmsServerName)
         {
             string key = string.Empty;               
             foreach (string version in volKeys.Keys)
@@ -40,18 +64,16 @@ namespace KMS_Activator
                         {
                             Fms::MessageBox.Show
                             (
-                                "您的Windows产品\"" + WIN_VERSION + "\"在转换为正式版时发生错误，请您手动转换为正式版后再试\n\n点击“确定“以退出程序",
+                                "您的Windows产品\"" + WIN_VERSION + "\"在转换为正式版时发生错误，请您手动转换为正式版后再试\n\n点击“确定“以返回主页面",
                                 "抱歉",
                                 Fms::MessageBoxButtons.OK,
                                 Fms::MessageBoxIcon.Error
                             );
-                            Wpf::Application.Current.Shutdown();
                             return;
-                            ///// 待补充 /////
-                            ///// 可以考虑退出应用程序或进行其他引导 /////
                         }
 
-                        /* 可补充GUI相关的一些行为操作 */
+                        // 当转换成功时
+                        // When the conversion is successful
                         Fms::DialogResult msg = Fms::MessageBox.Show
                         (
                             "您的Windows产品\"" + WIN_VERSION + "\"已成功转换为正式版，请重新启动以保留更改\n\n是否现在重启？",
@@ -64,12 +86,11 @@ namespace KMS_Activator
                             RunProcess("shutdown.exe", "/r /t 0", SYS32_PATH, true);
                             Wpf::Application.Current.Shutdown();
                             return;
-                            ///// 待补充 /////
-                            ///// 可以考虑提示重启或者其他操作 /////
                         }
-                        // 顺利执行下来的话就可以先结束该函数的运行
-                        // If it is successfully executed, it can end the running of the function now
-                        break;
+                        else
+                        {
+                            return;
+                        }
                     }
                     break;
                 }
@@ -87,7 +108,6 @@ namespace KMS_Activator
                     Fms::MessageBoxIcon.Error
                 );
                 return;
-                /* 待补充或与GUI相关的行为与操作 */
             }
 
 
@@ -108,7 +128,13 @@ namespace KMS_Activator
             }
             catch (Exception setVOL_Error)
             {
-                /* 待补充操作 */
+                Fms::MessageBox.Show
+                (
+                    $"装载密钥：{key}时发生错误。错误原因：{setVOL_Error.Message}。若您反复看到该消息，请联系Microsoft或在该项目的Github主页的Issue页中提交您的问题",
+                    "抱歉",
+                    Fms::MessageBoxButtons.OK,
+                    Fms::MessageBoxIcon.Error
+                );
                 return;
             }
 
@@ -126,7 +152,13 @@ namespace KMS_Activator
             }
             catch (Exception setServer_Error)
             {
-                /* 待补充的操作 */
+                Fms::MessageBox.Show
+                (
+                    $"连接KMS服务器时发生错误。错误原因：{setServer_Error.Message}。若您反复看到该消息，请检查网络设置或在该项目的Github主页的Issue页中提交您的问题",
+                    "抱歉",
+                    Fms::MessageBoxButtons.OK,
+                    Fms::MessageBoxIcon.Error
+                );
                 return;
             }
 
@@ -151,47 +183,56 @@ namespace KMS_Activator
             }
             catch (Exception apply_Error)
             {
-                /* 待补充的操作 */
+                Fms::MessageBox.Show
+                (
+                    $"执行激活Windows发生错误。错误原因：{apply_Error.Message}。若您反复看到该消息，请检查系统设置或在该项目的Github主页的Issue页中提交您的问题",
+                    "抱歉",
+                    Fms::MessageBoxButtons.OK,
+                    Fms::MessageBoxIcon.Error
+                );
                 return;
             }
         }
 
-    #region 静态变量与常量区  Region for static variable and constant
-    /// <summary>
-    ///     <para>
-    ///         该泛型字典用以将VOL Key与版本号对应联系起来
-    ///     </para>
-    ///     <para>
-    ///         This generic dictionary is used to associate VOL Key with version number correspondence
-    ///     </para>
-    /// </summary>
-    /// <typeparam name="string">Windows版本名或产品名</typeparam>
-    /// <typeparam name="string">VOL Keys</typeparam>
-    /// <returns>一个<see langword="string"/>值，即密钥<br/>A string value, which is a VOL key</returns>
-    internal static Dictionary<string, string> volKeys = new Dictionary<string, string>()
-    {
-        {"Windows 11 Professional", "W269N-WFGWX-YVC9B-4J6C9-T83GX" },
-        {"Windows 11 Enterprise", "NPPR9-FWDCX-D2C8J-H872K-2YT43" },
-        {"Windows 10 Professional", "W269N-WFGWX-YVC9B-4J6C9-T83GX" },
-        {"Windows 10 Enterprise", "NPPR9-FWDCX-D2C8J-H872K-2YT43" },
-        {"Windows 8.1 Professional", "GCRJD-8NW9H-F2CDX-CCM8D-9D6T9" },
-        {"Windows 8.1 Enterprise", "MHF9N-XY6XB-WVXMC-BTDCT-MKKG7" },
-        {"Windows 7 Professional", "FJ82H-XT6CR-J8D7P-XQJJ2-GPDD4" },
-        {"Windows 7 Enterprise", "33PXH-7Y6KF-2VJC9-XBBR8-HVTHH" },
-        {"Windows Server 2022 Standard", "VDYBN-27WPP-V4HQT-9VMD4-VMK7H" },
-        {"Windows Server 2022 Datacenter", "WX4NM-KYWYW-QJJR4-XV3QB-6VM33" },
-        {"Windows Server 2019 Standard", "N69G4-B89J2-4G8F4-WWYCC-J464C" },
-        {"Windows Server 2019 Datacenter", "WMDGN-G9PQG-XVVXX-R3X43-63DFG" },
-        {"Windows Server 2016 Standard", "WC2BQ-8NRM3-FDDYY-2BFGV-KHKQY" },
-        {"Windows Server 2016 Datacenter", "CB7KF-BWN84-R7R2Y-793K2-8XDDG" },
-        {"Windows Server 2012 R2 Server Standard", "D2N9P-3P6X9-2R39C-7RTCD-MDVJX" },
-        {"Windows Server 2012 R2 Datacenter", "W3GGN-FT8W3-Y4M27-J84CP-Q3VJ9"},
-        {"Windows Server 2008 R2 Standard", "YC6KT-GKW9T-YTKYR-T4X34-R7VHC" },
-        {"Windows Server 2008 R2 Datacenter", "74YFP-3QFB3-KQT8W-PMXWJ-7M648" },
-        {"Windows Server 2008 R2 Enterprise", "489J6-VHDMP-X63PK-3K798-CPX3Y" }
-    };
-        // Use the dictionary generic class to associate VOL Key with the version number
-    #endregion
-
+        #region 静态变量与常量区  Region for static variable and constant
+        /// <summary>
+        ///     <para>
+        ///         该泛型字典用以将VOL Key与版本号对应联系起来
+        ///     </para>
+        ///     <para>
+        ///         This generic dictionary is used to associate VOL Key with version number correspondence
+        ///     </para>
+        /// </summary>
+        /// <returns>
+        ///     <para>
+        ///         一个 <see langword="string"/> 类型值，即密钥
+        ///     </para>
+        ///     <para>
+        ///         A <see langword="string"/> value, which is a VOL key
+        ///     </para>
+        /// </returns>
+        private static Dictionary<string, string> volKeys = new Dictionary<string, string>()
+        {
+            {"Windows 11 Professional", "W269N-WFGWX-YVC9B-4J6C9-T83GX" },
+            {"Windows 11 Enterprise", "NPPR9-FWDCX-D2C8J-H872K-2YT43" },
+            {"Windows 10 Professional", "W269N-WFGWX-YVC9B-4J6C9-T83GX" },
+            {"Windows 10 Enterprise", "NPPR9-FWDCX-D2C8J-H872K-2YT43" },
+            {"Windows 8.1 Professional", "GCRJD-8NW9H-F2CDX-CCM8D-9D6T9" },
+            {"Windows 8.1 Enterprise", "MHF9N-XY6XB-WVXMC-BTDCT-MKKG7" },
+            {"Windows 7 Professional", "FJ82H-XT6CR-J8D7P-XQJJ2-GPDD4" },
+            {"Windows 7 Enterprise", "33PXH-7Y6KF-2VJC9-XBBR8-HVTHH" },
+            {"Windows Server 2022 Standard", "VDYBN-27WPP-V4HQT-9VMD4-VMK7H" },
+            {"Windows Server 2022 Datacenter", "WX4NM-KYWYW-QJJR4-XV3QB-6VM33" },
+            {"Windows Server 2019 Standard", "N69G4-B89J2-4G8F4-WWYCC-J464C" },
+            {"Windows Server 2019 Datacenter", "WMDGN-G9PQG-XVVXX-R3X43-63DFG" },
+            {"Windows Server 2016 Standard", "WC2BQ-8NRM3-FDDYY-2BFGV-KHKQY" },
+            {"Windows Server 2016 Datacenter", "CB7KF-BWN84-R7R2Y-793K2-8XDDG" },
+            {"Windows Server 2012 R2 Server Standard", "D2N9P-3P6X9-2R39C-7RTCD-MDVJX" },
+            {"Windows Server 2012 R2 Datacenter", "W3GGN-FT8W3-Y4M27-J84CP-Q3VJ9"},
+            {"Windows Server 2008 R2 Standard", "YC6KT-GKW9T-YTKYR-T4X34-R7VHC" },
+            {"Windows Server 2008 R2 Datacenter", "74YFP-3QFB3-KQT8W-PMXWJ-7M648" },
+            {"Windows Server 2008 R2 Enterprise", "489J6-VHDMP-X63PK-3K798-CPX3Y" }
+        };
+        #endregion
     }
 }

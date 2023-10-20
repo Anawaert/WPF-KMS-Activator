@@ -13,7 +13,9 @@ using System.Collections.Generic;
 namespace KMS_Activator
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// <para>Interaction logic for MainWindow.xaml</para>
+    /// <para>将不会为该类的所有函数编写XML文档</para>
+    /// <para>XML documents will not be written for all functions of this class</para>
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -24,11 +26,15 @@ namespace KMS_Activator
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            // 设置几个Label
+            // Set the content of Labels in MainWindow
             winVersion_Label.Content = WIN_VERSION;
             officeVersion_Label.Content = officeProduct;
             Fms::Application.EnableVisualStyles();
         }
 
+        // 当“+”号Label按钮按下的时候
+        // When the "+" Label button is pressed
         private void addServerName_Button_Click(object sender, RoutedEventArgs e)
         {
             if (addServerName_TextBox.Visibility == Visibility.Hidden)
@@ -55,6 +61,8 @@ namespace KMS_Activator
             }
         }
 
+        // 当“-”号Label按钮按下的时候
+        // When the "-" Label button is pressed
         private void deleteServerName_Button_Click(object sender, RoutedEventArgs e)
         {
             selectServer_ComboBox.Items.Remove
@@ -65,18 +73,29 @@ namespace KMS_Activator
             );
         }
 
+        // 当“激活”Label按钮按下的时候
+        // When the “激活” Label button is pressed
         private void activate_Button_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            // 执行动画
+            // Begin the animation
             MainW_Slide(new List<Grid> { menuGrid, page1_Grid });
             awaiting_ProgressBar.IsIndeterminate = true;
+            // 当awaiting_ProgressBar被选中时
+            // When awaiting_ProgressBar was selected
             if (actWin_RadioButton.IsChecked == true)
             {
+                // 使用另一个线程
+                // Use another thread to run the functions for activating
                 Thread subThread = new Thread
                 (
                     () =>
                     {
                         Thread.Sleep(650);
                         string selectedContent = "anawaert.tech";
+                        bool isAutoRenewChecked = true;
+                        // 通过UI线程拿到KMS服务器的选择
+                        // Get the KMS server selection through the UI thread
                         this.Dispatcher.Invoke
                         (
                             () =>
@@ -84,11 +103,24 @@ namespace KMS_Activator
                                 selectedContent = (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
                                                   "anawaert.tech" :
                                                   (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content;
+                                isAutoRenewChecked = autoRenew_CheckBox.IsChecked == true;
                             }
                         );
                         Win_Activator activator = new Win_Activator();
                         activator.ActWin(selectedContent);
                         IsWinActivated();
+                        // 若“自动续签”被选中，那么就设定一下计划任务；否则，就取消自动续签
+                        // If Auto-renew is selected, set the scheduled tasks; Otherwise, the auto-renewal is canceled
+                        if (isAutoRenewChecked)
+                        {
+                            AutoRenewSign("Windows");
+                        }
+                        else
+                        {
+                            CancelAutoRenew("Windows");
+                        }
+                        // 执行完后再返回UI线程执行剩下的动画
+                        //When you're done, return to the UI thread to execute the rest of the animation
                         this.Dispatcher.Invoke
                         (
                             () =>
@@ -101,6 +133,8 @@ namespace KMS_Activator
                 );
                 subThread.Start();
             }
+            // 同理上述
+            // Same thing as above
             else if (actOffice_RadioButton.IsChecked == true)
             {
                 Thread subThread = new Thread
@@ -109,6 +143,7 @@ namespace KMS_Activator
                     {
                         Thread.Sleep(650);
                         string selectedContent = "anawaert.tech";
+                        bool isAutoRenewChecked = true;
                         this.Dispatcher.Invoke
                         (
                             () =>
@@ -116,16 +151,26 @@ namespace KMS_Activator
                                 selectedContent = (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
                                                   "anawaert.tech" :
                                                   (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content;
+                                isAutoRenewChecked = autoRenew_CheckBox.IsChecked == true;
                             }
                         );
                         Office_Activator activator = new Office_Activator();
                         activator.ActOffice(selectedContent);
+                        if (isAutoRenewChecked)
+                        {
+                            AutoRenewSign("Office");
+                        }
+                        else
+                        {
+                            CancelAutoRenew("Office");
+                        }
                         this.Dispatcher.Invoke
                         (
                             () =>
                             {
                                 MainW_SlideBack(new List<Grid> { menuGrid, page1_Grid });
                                 awaiting_ProgressBar.IsIndeterminate = false;
+                                officeVersion_Label.Content = officeProduct;
                             }
                         );
                     }
@@ -134,9 +179,6 @@ namespace KMS_Activator
             }
         }
 
-        private void autoRenew_CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            //AutoRenewSign(autoRenew_CheckBox.IsChecked == true);
-        }
+
     }
 }
