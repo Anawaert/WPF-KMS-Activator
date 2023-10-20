@@ -8,6 +8,7 @@ using static KMS_Activator.Office_Configurator;
 using static KMS_Activator.Animations_Related;
 using System.Windows.Media.Animation;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace KMS_Activator
 {
@@ -66,14 +67,15 @@ namespace KMS_Activator
 
         private void activate_Button_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            MainW_Slide(mainGrid);
+            MainW_Slide(new List<Grid> { menuGrid, page1_Grid });
+            awaiting_ProgressBar.IsIndeterminate = true;
             if (actWin_RadioButton.IsChecked == true)
             {
                 Thread subThread = new Thread
                 (
                     () =>
                     {
-                        Thread.Sleep(750);
+                        Thread.Sleep(650);
                         string selectedContent = "anawaert.tech";
                         this.Dispatcher.Invoke
                         (
@@ -91,7 +93,8 @@ namespace KMS_Activator
                         (
                             () =>
                             {
-                                MainW_SlideBack(mainGrid);
+                                MainW_SlideBack(new List<Grid> { menuGrid, page1_Grid });
+                                awaiting_ProgressBar.IsIndeterminate = false;
                             }
                         );
                     }
@@ -104,7 +107,7 @@ namespace KMS_Activator
                 (
                     () =>
                     {
-                        Thread.Sleep(750);
+                        Thread.Sleep(650);
                         string selectedContent = "anawaert.tech";
                         this.Dispatcher.Invoke
                         (
@@ -121,7 +124,8 @@ namespace KMS_Activator
                         (
                             () =>
                             {
-                                MainW_SlideBack(mainGrid);
+                                MainW_SlideBack(new List<Grid> { menuGrid, page1_Grid });
+                                awaiting_ProgressBar.IsIndeterminate = false;
                             }
                         );
                     }

@@ -136,20 +136,28 @@ namespace KMS_Activator
             return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static void AutoRenewSign(bool isAutoRenew)
+        public static void AutoRenewSign()
         {
-            if (isAutoRenew)
+            Assembly? assembly = Assembly.GetEntryAssembly();
+            if (assembly != null)
             {
                 DirectoryInfo info = Directory.CreateDirectory(USER_DOC_PATH + "KMS Activator");
-                File.Copy(EXEC_PATH + "Renew.exe", info.FullName + "\\Renew.exe");
-                string exeName = @"schtasks.exe";
-                string args = "/create /tn \"KMS_Renew\" /tr " + info.FullName + "\\Renew.exe" + " /sc ONLOGON /mo 180";
+                File.Copy(assembly.Location, info.FullName + "\\Anawaert KMS Activator.exe", true);
+                string exeName = "schtasks.exe";
+                string args = "/create /tn \"KMS_Renew\" /tr " + "\"" + info.FullName + "\\Anawaert KMS Activator.exe\" /sm renew " + " /sc ONLOGON /mo 180";
                 RunProcess(exeName, args, string.Empty, false);
             }
-            return;
+            
         }
 
-        public static async void AutoCheckUpdate(bool isAutoUpdate)
+        public static void CancelAutoRenew()
+        {
+            string exeName = "schtasks.exe";
+            string args = "schtasks /delete /tn \"KMS_RENEW\" /f";
+            RunProcess(exeName, args, string.Empty, false);
+        }
+
+        public static async Task AutoCheckUpdate(bool isAutoUpdate)
         {
             try
             {

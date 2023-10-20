@@ -141,14 +141,6 @@ namespace KMS_Activator
                     );
                 }
             }
-
-            mainWindow.Dispatcher.Invoke
-            (
-                () =>
-                {
-                    Animations_Related.MainW_SlideBack(mainWindow.mainGrid);
-                }
-            );
         }
 
         #region 静态变量与常量区
