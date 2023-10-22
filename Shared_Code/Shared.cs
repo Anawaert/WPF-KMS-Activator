@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
 using Microsoft.Win32;
-using WPF = System.Windows;
+using Wpf = System.Windows;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -94,14 +94,27 @@ namespace KMS_Activator
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 startInfo.RedirectStandardOutput = true;
             }
+            // 如果不需要
+            // if it doesn't need
+            else
+            {
+                // 将startInfo对象的“使用外壳程序”、“无新窗口创建”、“窗口类型”和“程序的标准输出流重抓取”属性进行设置
+                // Set the "UseShellExecute", "CreateNoWindow", "WindowStyle" and "RedirectStandardOutput" properties of the startInfo object
+                startInfo.UseShellExecute = true;
+                startInfo.CreateNoWindow = false;
+                startInfo.WindowStyle = ProcessWindowStyle.Normal;
+                startInfo.RedirectStandardOutput = true;
+            }
 
             // 开始执行进程并使用try...catch块处理异常
             // Start the execution process and use try... The catch block handles exceptions
             Process process = new Process { StartInfo = startInfo };
+            string output = string.Empty;
             try
             {
                 process.Start();
                 process.WaitForExit();
+                output = process.StandardOutput.ReadToEnd();
             }
             catch
             {
@@ -110,7 +123,6 @@ namespace KMS_Activator
 
             // 获取输出并且等待进程的自动完成
             // Get the output and wait for the process to complete automatically
-            string output = process.StandardOutput.ReadToEnd();
             return output;
         }
 
@@ -173,10 +185,10 @@ namespace KMS_Activator
         /// </summary>
         /// <param name="renewTarget">
         ///     <para>
-        ///         一个 <see langword="string"> 类型值，需要传入续签的类型（Windows或Office）
+        ///         一个 <see langword="string"/> 类型值，需要传入续签的类型（Windows或Office）
         ///     </para>
         ///     <para>
-        ///         A <see langword="string"> value with the type to renew (Windows or Office)
+        ///         A <see langword="string"/> value with the type to renew (Windows or Office)
         ///     </para>
         /// </param>
         public static void AutoRenewSign(string renewTarget)
@@ -184,23 +196,15 @@ namespace KMS_Activator
             Assembly? assembly = Assembly.GetEntryAssembly();
             if (assembly != null)
             {
-                // 将自生拷贝到“C:\Users\%username%\KMS Activator\”下后利用schtasks.exe设定定时任务，在180天后再次启动
-                // 
+                // 将自身拷贝到“C:\Users\%username%\KMS Activator\”下后利用schtasks.exe设定定时任务，在180天后再次启动
+                // Copy itself to "C:\Users\%username%\KMS Activator\" and use schtasks.exe to set a scheduled task and start it again after 180 days
                 DirectoryInfo info = Directory.CreateDirectory(USER_DOC_PATH + "KMS Activator");
                 File.Copy(assembly.Location, info.FullName + "\\Anawaert KMS Activator.exe", true);
                 string exeName = "schtasks.exe";
                 // "/sm"开关为"StartMode"的缩写，"renew"指示这次启动程序是以续签的身份启动，renew后面的参数"win"或"office"指示将续签什么类型的激活
                 // The "/sm" switch is short for "StartMode", "renew" indicates that this time the boot program is started as a renewal, and the parameter "Windows" or "Office" after renew indicates what type of activation will be renewed
-                string args;
-                if (renewTarget == "Windows")
-                {
-                    args = "/create /tn \"KMS_Renew_Windows\" /tr " + "\"" + info.FullName + "\\Anawaert KMS Activator.exe\" /sm renew " + renewTarget + " /sc ONLOGON /mo 180";
-                }
-                else
-                {
-                    args = "/create /tn \"KMS_Renew_Office\" /tr " + "\"" + info.FullName + "\\Anawaert KMS Activator.exe\" /sm renew " + renewTarget + " /sc ONLOGON /mo 180";
-                }
-                RunProcess(exeName, args, string.Empty, false);
+                string args = "/create /tn KMS_Renew_" + renewTarget + " /tr " + "\"" + info.FullName + "\\Anawaert KMS Activator.exe /sm renew " + renewTarget + "\" /sc daily /mo 180";
+                RunProcess(exeName, args, string.Empty, true);
             }
         }
 
@@ -214,43 +218,27 @@ namespace KMS_Activator
         /// </summary>
         /// <param name="cancelRenewTarget">
         ///     <para>
-        ///         一个 <see langword="string"> 类型值，需要传入取消续签的类型（Windows或Office）
+        ///         一个 <see langword="string"/> 类型值，需要传入取消续签的类型（Windows或Office）
         ///     </para>
         ///     <para>
-        ///         A <see langword="string"> value that requires the type of cancellation (Windows or Office)
+        ///         A <see langword="string"/> value that requires the type of cancellation (Windows or Office)
         ///     </para>
         /// </param>
         public static void CancelAutoRenew(string cancelRenewTarget)
         {
             string exeName = "schtasks.exe";
-            string args;
-            if (cancelRenewTarget == "Windows")
-            {
-                args = "schtasks /delete /tn \"KMS_RENEW_Windows\" /f";
-            }
-            else
-            {
-                args = "schtasks /delete /tn \"KMS_RENEW_Office\" /f";
-            }
-            RunProcess(exeName, args, string.Empty, false);
+            string args = "schtasks /delete /tn KMS_Renew_" + cancelRenewTarget + " /f";
+            RunProcess(exeName, args, string.Empty, true);
         }
 
         /// <summary>
         ///     <para>
-        ///         该函数用于通过异步的方法检查Github上最新的Release版本号，以提示用户是否更新。该函数来自Anawaert USBHDDSpy。
+        ///         该函数用于通过异步的方法检查Github上最新的Release版本号，以提示用户是否更新。该函数来自Anawaert USBHDDSpy
         ///     </para>
         ///     <para>
         ///         This function is used to asynchronously check the latest Release number on Github to prompt the user for an update. This function is from Anawaert USBHDDSpy
         ///     </para>
         /// </summary>
-        /// <returns>
-        ///     <para>
-        ///         一个 <see cref="Task"> 类型，指示NewClient.GetAsync()的执行情况
-        ///     </para>
-        ///     <para>
-        ///         A <see cref="Task"> indicating how NewClient.GetAsync() is performing
-        ///     </para>
-        /// </returns>
         public static async Task AutoCheckUpdate()
         {
             try
@@ -290,6 +278,28 @@ namespace KMS_Activator
             }
             catch { }
         }
+        
+        //public static void ChangeLabelFontFamily(string targetFontFamily, Wpf::Controls.Label targetLabel)
+        //{
+        //    mainWindow.Dispatcher.Invoke
+        //    (
+        //        () =>
+        //        {
+        //            targetLabel.FontFamily = new Wpf::Media.FontFamily(targetFontFamily);
+        //        }
+        //    );
+        //}
+
+        //public static void ChangeGroupBoxVisibility(Wpf::Visibility visibility, Wpf::Controls.GroupBox targetGroupBox)
+        //{
+        //    mainWindow.Dispatcher.Invoke
+        //    (
+        //        () =>
+        //        {
+        //            targetGroupBox.Visibility = visibility;
+        //        }
+        //    );
+        //}
 
         #region 全局静态变量与常量区
         /// <summary>
@@ -328,14 +338,24 @@ namespace KMS_Activator
         ///     </para>
         /// </summary>
         public static string SYS32_PATH = Environment.GetEnvironmentVariable("SystemRoot") + "\\System32";
-
+        /// <summary>
+        ///     <para>
+        ///         该值指示当前用户的“文档”文件夹
+        ///     </para>
+        ///     <para>
+        ///         This value indicates the current user's Documents folder
+        ///     </para>
+        /// </summary>
         public static string USER_DOC_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\";
-
-        public static MainWindow mainWindow = (MainWindow)WPF::Application.Current.MainWindow;
-
-        public static ThreadStart threadStart = new ThreadStart(() => { });
-
-        public static Thread subThread = new Thread(threadStart);
+        /// <summary>
+        ///     <para>
+        ///         该变量为运行在UI线程上的Window类实例
+        ///     </para>
+        ///     <para>
+        ///         This variable is an instance of the Window class that runs on the UI thread
+        ///     </para>
+        /// </summary>
+        public static MainWindow mainWindow = (MainWindow)Wpf::Application.Current.MainWindow;
         #endregion
     }
 }

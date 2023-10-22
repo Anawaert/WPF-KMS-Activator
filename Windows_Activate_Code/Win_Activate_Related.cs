@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Wpf = System.Windows;
 using Fms = System.Windows.Forms;
 using Microsoft.Win32;  // 配合注册表读写操作  Works with registry read and write operations
 using static KMS_Activator.Shared;  // 使用共享的功能代码  Use shared functional code blocks
+using System.Windows.Media;
 
 namespace KMS_Activator
 {
@@ -28,14 +28,17 @@ namespace KMS_Activator
         /// </summary>
         /// <param name="kmsServerName">
         ///     <para>
-        ///         一个 <see langword="string"> 类型值，需要传入目标KMS服务器的地址
+        ///         一个 <see langword="string"/> 类型值，需要传入目标KMS服务器的地址
         ///     </para>
         ///     <para>
-        ///         A <see langword="string"> value that requires passing the address of the destination KMS server
+        ///         A <see langword="string"/> value that requires passing the address of the destination KMS server
         ///     </para>
         /// </param>
         public void ActWin(string kmsServerName)
         {
+            //ChangeGroupBoxVisibility(Wpf::Visibility.Visible, mainWindow.winSteps_GroupBox);
+            //ChangeLabelFontFamily("等线", mainWindow.winChechVerLabel);
+
             string key = string.Empty;               
             foreach (string version in volKeys.Keys)
             {
@@ -116,6 +119,8 @@ namespace KMS_Activator
 
             // 首先写入VOL密钥
             // The VOL key is written first
+            //ChangeLabelFontFamily("等线 Light", mainWindow.winChechVerLabel);
+            //ChangeLabelFontFamily("等线", mainWindow.winInstallKeyLabel);
             try
             {
                 RunProcess
@@ -140,6 +145,8 @@ namespace KMS_Activator
 
             // 开始配置连接KMS服务器
             // The configuration starts to connect to the KMS server
+            //ChangeLabelFontFamily("等线 Light", mainWindow.winInstallKeyLabel);
+            //ChangeLabelFontFamily("等线", mainWindow.winConnect2ServerLabel);
             try
             {
                 RunProcess
@@ -164,6 +171,8 @@ namespace KMS_Activator
 
             // 应用到系统激活
             // Apply to system activation
+            //ChangeLabelFontFamily("等线 Light", mainWindow.winConnect2ServerLabel);
+            //ChangeLabelFontFamily("等线", mainWindow.winApplyLabel);
             try
             {
                 RunProcess
@@ -192,6 +201,9 @@ namespace KMS_Activator
                 );
                 return;
             }
+
+            //ChangeLabelFontFamily("等线 Light", mainWindow.winApplyLabel);
+            //ChangeGroupBoxVisibility(Wpf::Visibility.Hidden, mainWindow.winSteps_GroupBox);
         }
 
         #region 静态变量与常量区  Region for static variable and constant

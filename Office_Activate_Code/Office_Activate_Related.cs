@@ -26,10 +26,10 @@ namespace KMS_Activator
         /// </summary>
         /// <param name="kmsServerName">
         ///     <para>
-        ///         一个 <see langword="string"> 类型值，需要传入目标KMS服务器的地址
+        ///         一个 <see langword="string"/> 类型值，需要传入目标KMS服务器的地址
         ///     </para>
         ///     <para>
-        ///         A <see langword="string"> value that requires passing the address of the destination KMS server
+        ///         A <see langword="string"/> value that requires passing the address of the destination KMS server
         ///     </para>
         /// </param>
         public void ActOffice(string kmsServerName)

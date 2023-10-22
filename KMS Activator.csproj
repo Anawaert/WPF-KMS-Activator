@@ -8,6 +8,22 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Images\KMS_Activator_LOGO_ICO.ico</ApplicationIcon>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Title>Anawaert KMS Activator</Title>
+    <PackageId>Anawaert KMS Activator</PackageId>
+    <Version>1.0.0.0</Version>
+    <Authors>Anawaert</Authors>
+    <Company>Anawaert Studio</Company>
+    <Product>Anawaert KMS Activator</Product>
+    <Copyright>Copyright (C) 2017-2023 Anawaert Studio</Copyright>
+    <PackageProjectUrl>www.anawaert.tech</PackageProjectUrl>
+    <PackageIcon>KMS_Activator_LOGO.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <AssemblyName>Anawaert KMS Activator</AssemblyName>
+    <NeutralLanguage>zh-CN</NeutralLanguage>
+    <PackageReleaseNotes>一个用于Windows与Office的KMS激活小工具</PackageReleaseNotes>
+    <Description>一个用于Windows与Office的KMS激活小工具</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -19,6 +35,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\KMS_Activator_LOGO.png" />
+    <None Remove="Images\KMS_Activator_LOGO_ICO.ico" />
+    <None Remove="Images\KMS_Mode_PNG.png" />
     <None Remove="Images\Office19_Logo.png" />
     <None Remove="Images\Win10_Logo.png" />
   </ItemGroup>
@@ -26,13 +45,27 @@
   <ItemGroup>
     <Folder Include="Windows_Activate_Code\" />
     <Folder Include="Office_Activate_Code\" />
+    <Folder Include="Documents\" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\KMS_Activator_LOGO.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </Resource>
+    <Resource Include="Images\KMS_Activator_LOGO_ICO.ico" />
+    <Resource Include="Images\KMS_Mode_PNG.png" />
     <Resource Include="Images\Office19_Logo.png">
       <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Win10_Logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

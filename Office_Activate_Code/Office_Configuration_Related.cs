@@ -32,6 +32,14 @@ namespace KMS_Activator
         ///         OSPP.vbs directory of Office
         ///     </para>
         /// </param>
+        /// <param name="isStillNoInstalledKey">
+        ///     <para>
+        ///         一个 <see langword="out"/> 参数，指示当前Office是否仍未安装密钥
+        ///     </para>
+        ///     <para>
+        ///         A <see langword="out"/> parameter indicating whether the current Office key is still not installed
+        ///     </para>
+        /// </param>
         /// <returns>
         ///     <para>
         ///         一个<see langword="bool"/>值，<see langword="true"/>表示已激活
@@ -259,13 +267,12 @@ namespace KMS_Activator
                 // Truncate everything before "\Office1X" and change it to "..\root\LicensesXX" as the correct directory for the KMS certificate
                 string[] osppDirectory_Array = osppDirectory.Split('\\');
                 string licenseDirectory = string.Empty;
-                for (int i = 0; i < osppDirectory_Array.Length - 1; i++)
+                for (int i = 0; i < osppDirectory_Array.Length - 2; i++)
                 {
-                    licenseDirectory += i < osppDirectory_Array.Length - 2 ? osppDirectory_Array[i] + "\\" : osppDirectory_Array[i];
+                    licenseDirectory += osppDirectory_Array[i] + "\\";
                 }
-                licenseDirectory += "\\Licenses";
+                licenseDirectory += "root\\Licenses";
 
-                bool is2021LicenseExisted = File.Exists(licenseDirectory + "ProPlus2021VL_KMS_Client_AE-ppd.xrm-ms"), is2019LicenseExisted = File.Exists(licenseDirectory + "ProPlus2019VL_KMS_Client_AE-ppd.xrm-ms");
                 string officeVer = string.Empty, officekey = string.Empty, visiokey = string.Empty;
 
                 // OSPP.vbs如果是在“...\Mircrosoft Office\Office1X\”下，那么其证书就在“..\Microsoft Office\root\Licenses1X\”下
@@ -346,10 +353,10 @@ namespace KMS_Activator
         /// </summary>
         /// <param name="licenseDir">
         ///     <para>
-        ///         一个 <see langword="string"> 类型值，需要传入Pro Plus VL证书所在的目录（带反斜杠“\”）
+        ///         一个 <see langword="string"/> 类型值，需要传入Pro Plus VL证书所在的目录（带反斜杠“\”）
         ///     </para>
         ///     <para>
-        ///         A <see langword="string"> value that requires the directory of the Pro Plus VL certificate (with a backslash "\")
+        ///         A <see langword="string"/> value that requires the directory of the Pro Plus VL certificate (with a backslash "\")
         ///     </para>
         /// </param>
         /// <param name="osppDir">

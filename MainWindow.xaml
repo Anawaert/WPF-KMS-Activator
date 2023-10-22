@@ -9,7 +9,8 @@
         Title="Anawaert KMS Activator" Height="320" Width="640"
         Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="CanMinimize">
+        ResizeMode="CanMinimize"
+        Icon="/Images/KMS_Activator_LOGO_ICO.ico">
 
     <!--引入外部的资源字典-->
     <Window.Resources>
@@ -48,14 +49,31 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ProgressBar x:Name="awaiting_ProgressBar" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="6" Margin="0,10,0,10" IsIndeterminate="False">
+            <ProgressBar x:Name="awaiting_ProgressBar" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="6" Margin="10" IsIndeterminate="False">
                 <ProgressBar.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius" Value="5"></Setter>
                     </Style>
                 </ProgressBar.Resources>
             </ProgressBar>
-            <Label Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="2" Content="正在执行激活" FontFamily="等线 Light" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
+            <Label Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="2" Content="正在执行激活" FontFamily="等线 Light" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
+            <GroupBox x:Name="winSteps_GroupBox" Grid.RowSpan="5" Grid.ColumnSpan="2" Margin="10" Header="执行步骤" FontFamily="等线 Light" FontSize="15" Visibility="Hidden">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label x:Name="winChechVerLabel" Grid.Row="1" Content="检查Windows版本" FontSize="12" FontFamily="等线 Light" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+                    <Label x:Name="winInstallKeyLabel" Grid.Row="2" Content="安装Windows密钥" FontSize="12" FontFamily="等线 Light" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+                    <Label x:Name="winConnect2ServerLabel" Grid.Row="3" Content="连接至KMS服务器" FontSize="12" FontFamily="等线 Light" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+                    <Label x:Name="winApplyLabel" Grid.Row="4" Content="应用激活更改" FontSize="12" FontFamily="等线 Light" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+                </Grid>
+            </GroupBox>
+            <!--<GridSplitter Grid.Column="1" Grid.RowSpan="5" Margin="0,10,0,10" BorderThickness="1" Background="Gray"></GridSplitter>-->
         </Grid>
         <!--未来的菜单栏区域的Grid-->
         <Grid x:Name="menuGrid" Grid.Column="0" Background="White">
@@ -66,17 +84,18 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition Height="2*"></RowDefinition>
             </Grid.RowDefinitions>
+            <RibbonRadioButton LargeImageSource="/Images/KMS_Mode_PNG.png" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Label="KMS激活模式" FontFamily="等线 Light" FontSize="12" IsChecked="True" BorderBrush="LightGreen" BorderThickness="1" Cursor="Hand"></RibbonRadioButton>
             <GridSplitter Grid.Column="0" Grid.RowSpan="5" BorderBrush="LightGray" BorderThickness="1.5" Margin="0,5,0,5"/>
         </Grid>
         
         <!--主页面的Grid-->
         <Grid Grid.Column="1" x:Name="page1_Grid" Background="White">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition Width="1.65*"></ColumnDefinition>
+                <ColumnDefinition MinWidth="80"></ColumnDefinition>
+                <ColumnDefinition MinWidth="80"></ColumnDefinition>
+                <ColumnDefinition MinWidth="80"></ColumnDefinition>
+                <ColumnDefinition MinWidth="80"></ColumnDefinition>
+                <ColumnDefinition Width="1.65*" MinWidth="130"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
@@ -106,7 +125,7 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <RibbonCheckBox x:Name="autoRenew_CheckBox" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Label="自动续签" KeyTip="A" Cursor="Hand" FontFamily="等线 Light" FontSize="12" IsChecked="True" BorderBrush="LightGreen" BorderThickness="1.5"></RibbonCheckBox>
+                    <RibbonCheckBox x:Name="autoRenew_CheckBox" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Label="自动续签" KeyTip="R" Cursor="Hand" FontFamily="等线 Light" FontSize="12" IsChecked="False" BorderBrush="LightGreen" BorderThickness="1.5"/>
                     <!--<RibbonCheckBox x:Name="autoUpdate_CheckBox" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Label="自动检查更新" KeyTip="A" Cursor="Hand" FontFamily="等线 Light" FontSize="12" BorderBrush="LightGreen" BorderThickness="1.5"></RibbonCheckBox>-->
                 </Grid>
                 <Expander.Resources>
@@ -125,7 +144,9 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <RibbonRadioButton x:Name="actWin_RadioButton" Grid.Column="0" Grid.RowSpan="2" Label="激活 Windows" SmallImageSource="/Images/Win10_Logo.png" FontFamily="等线 Light" FontSize="20" Foreground="SkyBlue" IsChecked="True" Cursor="Hand" CornerRadius="3"></RibbonRadioButton>
+                    <RibbonRadioButton x:Name="actWin_RadioButton" Grid.Column="0" Grid.RowSpan="2" Label="激活 Windows" SmallImageSource="/Images/Win10_Logo.png" FontFamily="等线 Light" FontSize="20" Foreground="SkyBlue" IsChecked="True" Cursor="Hand" CornerRadius="3">
+                        <Border BorderBrush="Black" BorderThickness="1"/>
+                    </RibbonRadioButton>
                     <RibbonRadioButton x:Name="actOffice_RadioButton" Grid.Column="1" Grid.RowSpan="2" Label="激活 Office" SmallImageSource="/Images/Office19_Logo.png" FontFamily="等线 Light" FontSize="20" Foreground="Orange" Cursor="Hand" CornerRadius="3">></RibbonRadioButton>
                 </Grid>
             </GroupBox>

@@ -19,6 +19,9 @@ namespace KMS_Activator
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// 主窗口类构造函数
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -111,14 +114,15 @@ namespace KMS_Activator
                         IsWinActivated();
                         // 若“自动续签”被选中，那么就设定一下计划任务；否则，就取消自动续签
                         // If Auto-renew is selected, set the scheduled tasks; Otherwise, the auto-renewal is canceled
-                        if (isAutoRenewChecked)
-                        {
-                            AutoRenewSign("Windows");
-                        }
-                        else
-                        {
-                            CancelAutoRenew("Windows");
-                        }
+                        //if (isAutoRenewChecked)
+                        //{
+                        //    CancelAutoRenew("Windows");
+                        //    AutoRenewSign("Windows");
+                        //}
+                        //else
+                        //{
+                        //    CancelAutoRenew("Windows");
+                        //}
                         // 执行完后再返回UI线程执行剩下的动画
                         //When you're done, return to the UI thread to execute the rest of the animation
                         this.Dispatcher.Invoke
@@ -156,14 +160,15 @@ namespace KMS_Activator
                         );
                         Office_Activator activator = new Office_Activator();
                         activator.ActOffice(selectedContent);
-                        if (isAutoRenewChecked)
-                        {
-                            AutoRenewSign("Office");
-                        }
-                        else
-                        {
-                            CancelAutoRenew("Office");
-                        }
+                        //if (isAutoRenewChecked)
+                        //{
+                        //    CancelAutoRenew("Office");
+                        //    AutoRenewSign("Office");
+                        //}
+                        //else
+                        //{
+                        //    CancelAutoRenew("Office");
+                        //}
                         this.Dispatcher.Invoke
                         (
                             () =>
