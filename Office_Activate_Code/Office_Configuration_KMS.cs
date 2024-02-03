@@ -42,10 +42,10 @@ namespace KMS_Activator
         /// </param>
         /// <returns>
         ///     <para>
-        ///         一个<see langword="bool"/>值，<see langword="true"/>表示已激活
+        ///         一个<see cref="bool"/>值，<see langword="true"/>表示已激活
         ///     </para>
         ///     <para>
-        ///         A <see langword="bool"/> value, <see langword="true"/> indicates active
+        ///         A <see cref="bool"/> value, <see langword="true"/> indicates active
         ///     </para>
         /// </returns>
         public static bool IsOfficeActivated(string osppDirectory, out bool isStillNoInstalledKey)
@@ -88,10 +88,10 @@ namespace KMS_Activator
         /// </summary>
         /// <returns>
         ///     <para>
-        ///         一个 <see langword="bool"/> 值，<see langword="true"/> 即代表已被正确获取 
+        ///         一个 <see cref="bool"/> 值，<see langword="true"/> 即代表已被正确获取 
         ///     </para>
         ///     <para>
-        ///         A <see langword="bool"/> value, <see langword="true"/> indicates that it was retrieved correctly
+        ///         A <see cref="bool"/> value, <see langword="true"/> indicates that it was retrieved correctly
         ///     </para>
         /// </returns>
         /// <param name="osppPath">
@@ -219,10 +219,10 @@ namespace KMS_Activator
         /// </summary>
         /// <param name="osppDirectory">
         ///     <para>
-        ///         一个 <see langword="string"/> 值，应传入OSPP.vbs所在的目录 
+        ///         一个 <see cref="string"/> 值，应传入OSPP.vbs所在的目录 
         ///     </para>
         ///     <para>
-        ///         A <see langword="string"/> value should be passed in the directory where OSPP.vbs is located
+        ///         A <see cref="string"/> value should be passed in the directory where OSPP.vbs is located
         ///     </para>
         /// </param>
         /// <param name="convertStatus">
@@ -235,10 +235,10 @@ namespace KMS_Activator
         /// </param>
         /// <returns>
         ///     <para>
-        ///         一个 <see langword="bool"/> 值，<see langword="true"/> 则代表转换成功  
+        ///         一个 <see cref="bool"/> 值，<see langword="true"/> 则代表转换成功  
         ///     </para>
         ///     <para>
-        ///         A <see langword="bool"/> value, and <see langword="true"/> represents a successful conversion
+        ///         A <see cref="bool"/> value, and <see langword="true"/> represents a successful conversion
         ///     </para>
         /// </returns>
         public static bool ConvertToVOL(string osppDirectory, out ConvertStatus convertStatus)
@@ -353,34 +353,34 @@ namespace KMS_Activator
         /// </summary>
         /// <param name="licenseDir">
         ///     <para>
-        ///         一个 <see langword="string"/> 类型值，需要传入Pro Plus VL证书所在的目录（带反斜杠“\”）
+        ///         一个 <see cref="string"/> 类型值，需要传入Pro Plus VL证书所在的目录（带反斜杠“\”）
         ///     </para>
         ///     <para>
-        ///         A <see langword="string"/> value that requires the directory of the Pro Plus VL certificate (with a backslash "\")
+        ///         A <see cref="string"/> value that requires the directory of the Pro Plus VL certificate (with a backslash "\")
         ///     </para>
         /// </param>
         /// <param name="osppDir">
         ///     <para>
-        ///         一个 <see langword="string"/> 类型值，需要传入OSPP.vbs所在的目录（带反斜杠“\”）
+        ///         一个 <see cref="string"/> 类型值，需要传入OSPP.vbs所在的目录（带反斜杠“\”）
         ///     </para>
         ///     <para>
-        ///         A <see langword="string"/> value, passing in the directory of OSPP.vbs (with a backslash "\")
+        ///         A <see cref="string"/> value, passing in the directory of OSPP.vbs (with a backslash "\")
         ///     </para>
         /// </param>
         /// <param name="o_Key">
         ///     <para>
-        ///         一个 <see langword="string"/> 类型值，需要传入对应的Office的KMS密钥
+        ///         一个 <see cref="string"/> 类型值，需要传入对应的Office的KMS密钥
         ///     </para>
         ///     <para>
-        ///         A <see langword="string"/> type value that requires passing in the corresponding Office KMS key
+        ///         A <see cref="string"/> type value that requires passing in the corresponding Office KMS key
         ///     </para>
         /// </param>
         /// <param name="v_Key">
         ///     <para>
-        ///         一个 <see langword="string"/> 类型值，需要传入对应的Visio的KMS密钥
+        ///         一个 <see cref="string"/> 类型值，需要传入对应的Visio的KMS密钥
         ///     </para>
         ///     <para>
-        ///         A <see langword="string"/> value that requires the corresponding Visio KMS key
+        ///         A <see cref="string"/> value that requires the corresponding Visio KMS key
         ///     </para>
         /// </param>
         private static void InstallVolumeLicense(string licenseDir, string osppDir, string o_Key, string v_Key)
@@ -433,10 +433,10 @@ namespace KMS_Activator
         #region 静态变量与常量区
         /// <summary>
         ///     <para>
-        ///         一个由 <see langword="string"/> 对应 <see langword="string"/> 类型的字典，用于存储对应Office版本的密钥
+        ///         一个由 <see cref="string"/> 对应 <see cref="string"/> 类型的字典，用于存储对应Office版本的密钥
         ///     </para>
         ///     <para>
-        ///         A dictionary of type <see langword="string"/> to store the corresponding version of the Office key
+        ///         A dictionary of type <see cref="string"/> to store the corresponding version of the Office key
         ///     </para>
         /// </summary>
         private static Dictionary<string, string> officeKeys = new Dictionary<string, string>()
@@ -450,10 +450,10 @@ namespace KMS_Activator
 
         /// <summary>
         ///     <para>
-        ///         一个由 <see langword="string"/> 对应 <see langword="string"/> 类型的字典，用于存储对应Visio版本的密钥
+        ///         一个由 <see cref="string"/> 对应 <see cref="string"/> 类型的字典，用于存储对应Visio版本的密钥
         ///     </para>
         ///     <para>
-        ///         A dictionary of type <see langword="string"/> to store the corresponding Visio version of the key
+        ///         A dictionary of type <see cref="string"/> to store the corresponding Visio version of the key
         ///     </para>
         /// </summary>
         private static Dictionary<string, string> visioKeys = new Dictionary<string, string>()
@@ -467,28 +467,28 @@ namespace KMS_Activator
 
         /// <summary>
         ///     <para>
-        ///         一个 <see langword="string"/> 类型的静态值，用以存储OSPP.vbs所在的目录
+        ///         一个 <see cref="string"/> 类型的静态值，用以存储OSPP.vbs所在的目录
         ///     </para>
         ///     <para>
-        ///         A static value of type <see langword="string"/> to store the directory where OSPP.vbs is located
+        ///         A static value of type <see cref="string"/> to store the directory where OSPP.vbs is located
         ///     </para>
         /// </summary>
         public static string osppPosition;
         /// <summary>
         ///     <para>
-        ///         一个 <see langword="string"/> 类型的静态值，用以存储Office产品的版本名
+        ///         一个 <see cref="string"/> 类型的静态值，用以存储Office产品的版本名
         ///     </para>
         ///     <para>
-        ///         A static value of type <see langword="string"/> to store the version name of the Office product
+        ///         A static value of type <see cref="string"/> to store the version name of the Office product
         ///     </para>
         /// </summary>
         public static string officeProduct;
         /// <summary>
         ///     <para>
-        ///         一个 <see langword="bool"/> 类型的静态值，用以指示Office安装的核心位置是否已经被找到
+        ///         一个 <see cref="bool"/> 类型的静态值，用以指示Office安装的核心位置是否已经被找到
         ///     </para>
         ///     <para>
-        ///         A static value of type <see langword="bool"/> indicating whether the core location of the Office installation has been found
+        ///         A static value of type <see cref="bool"/> indicating whether the core location of the Office installation has been found
         ///     </para>
         /// </summary>
         public static bool isOfficeCoreFound = IsOfficePathFound(out osppPosition, out officeProduct);

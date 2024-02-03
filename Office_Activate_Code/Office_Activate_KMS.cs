@@ -1,6 +1,5 @@
 using System;
 using System.Windows;
-using Fms = System.Windows.Forms;
 using static KMS_Activator.Shared;  // 使用共享的功能代码  Use shared functional code blocks
 using static KMS_Activator.Office_Configurator;  // 使用与Office信息与配置相关的功能代码
 
@@ -26,22 +25,22 @@ namespace KMS_Activator
         /// </summary>
         /// <param name="kmsServerName">
         ///     <para>
-        ///         一个 <see langword="string"/> 类型值，需要传入目标KMS服务器的地址
+        ///         一个 <see cref="string"/> 类型值，需要传入目标KMS服务器的地址
         ///     </para>
         ///     <para>
-        ///         A <see langword="string"/> value that requires passing the address of the destination KMS server
+        ///         A <see cref="string"/> value that requires passing the address of the destination KMS server
         ///     </para>
         /// </param>
         public void ActOffice(string kmsServerName)
         {
             if (!isOfficeCoreFound)
             {
-                Fms::MessageBox.Show
+                MessageBox.Show
                 (
                     "无法推断Office核心配置库的路径，请检查您的Office的完整性或正确安装Office",
                     "抱歉",
-                    Fms::MessageBoxButtons.OK,
-                    Fms::MessageBoxIcon.Information
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
                 );
                 return;
             }
@@ -51,12 +50,12 @@ namespace KMS_Activator
             bool isNoInstalledKey, activationCondition = IsOfficeActivated(osppPosition, out isNoInstalledKey);
             if (activationCondition)
             {
-                Fms::MessageBox.Show
+                MessageBox.Show
                 (
                     "您的Office已激活，无需再次激活",
                     "提示",
-                    Fms::MessageBoxButtons.OK,
-                    Fms::MessageBoxIcon.Information
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
                 );
                 return;
             }
@@ -66,14 +65,14 @@ namespace KMS_Activator
                 // When no installation key is read
                 if (isNoInstalledKey)
                 {
-                    Fms::DialogResult result = Fms::MessageBox.Show
+                    MessageBoxResult result = MessageBox.Show
                     (
                         "您的Office尚未安装密钥，请检查您的Office是否已与Microsoft账户绑定激活。若是，请点击“是”退出；若不是，请单机“否”以继续",
                         "提示",
-                        Fms::MessageBoxButtons.YesNo,
-                        Fms::MessageBoxIcon.Information
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Information
                     );
-                    if (result == Fms::DialogResult.Yes)
+                    if (result == MessageBoxResult.Yes)
                     {
                         return;
                     }
@@ -81,14 +80,14 @@ namespace KMS_Activator
                 }
                 else
                 {
-                    Fms::DialogResult result = Fms::MessageBox.Show
+                    MessageBoxResult result = MessageBox.Show
                     (
                         "您的Office已经安装了密钥，是否继续？",
                         "提示",
-                        Fms::MessageBoxButtons.YesNo,
-                        Fms::MessageBoxIcon.Information
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Information
                     );
-                    if (result == Fms::DialogResult.No)
+                    if (result == MessageBoxResult.No)
                     {
                         return;
                     }
@@ -125,12 +124,12 @@ namespace KMS_Activator
                 }
                 catch (Exception ActOffice_Error)
                 {
-                    Fms::MessageBox.Show
+                    MessageBox.Show
                     (
                         $"激活过程中出现错误。错误原因：{ActOffice_Error.Message}。若重复出现错误，请检查系统配置或在该项目的Github主页的Issue页中提交您的问题",
                         "抱歉",
-                        Fms::MessageBoxButtons.OK,
-                        Fms::MessageBoxIcon.Information
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
                     );
                     return;
                 }
@@ -139,12 +138,12 @@ namespace KMS_Activator
             // Read the output again to check Office activation
             if (IsOfficeActivated(osppPosition, out bool is_NoInstalledKey))
             {
-                Fms::MessageBox.Show
+                MessageBox.Show
                 (
                     "您的Office已成功激活，请重启计算机以应用更改",
                     "恭喜",
-                    Fms::MessageBoxButtons.OK,
-                    Fms::MessageBoxIcon.Information
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
                 );
             }
             else
@@ -153,23 +152,23 @@ namespace KMS_Activator
                 // If the output also shows no installation key, chances are that Office has automatically completed digital activation
                 if (is_NoInstalledKey)
                 {
-                    Fms::MessageBox.Show
+                    MessageBox.Show
                     (
                         "您的Office应已与Microsoft账户绑定，并且已自动完成了数字激活。如情况不属实，请联系Microsoft或在该项目的Github主页的Issue页中提交您的问题",
                         "抱歉",
-                        Fms::MessageBoxButtons.OK,
-                        Fms::MessageBoxIcon.Information
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
                     );
 
                 }
                 else
                 {
-                    Fms::MessageBox.Show
+                    MessageBox.Show
                     (
                         "您的Office未能即时激活，这可能是外部程序打断造成的，请重启程序或重启计算机后重试",
                         "抱歉",
-                        Fms::MessageBoxButtons.OK,
-                        Fms::MessageBoxIcon.Information
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
                     );
                 }
             }

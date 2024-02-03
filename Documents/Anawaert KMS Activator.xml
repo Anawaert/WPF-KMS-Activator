@@ -63,11 +63,6 @@
             InitializeComponent
             </summary>
         </member>
-        <member name="M:KMS_Activator.App.Main">
-            <summary>
-            Application Entry Point.
-            </summary>
-        </member>
         <member name="T:KMS_Activator.MainWindow">
             <summary>
             <para>Interaction logic for MainWindow.xaml</para>
@@ -109,10 +104,10 @@
             </summary>
             <param name="kmsServerName">
                 <para>
-                    一个 <see langword="string"/> 类型值，需要传入目标KMS服务器的地址
+                    一个 <see cref="T:System.String"/> 类型值，需要传入目标KMS服务器的地址
                 </para>
                 <para>
-                    A <see langword="string"/> value that requires passing the address of the destination KMS server
+                    A <see cref="T:System.String"/> value that requires passing the address of the destination KMS server
                 </para>
             </param>
         </member>
@@ -153,10 +148,10 @@
             </param>
             <returns>
                 <para>
-                    一个<see langword="bool"/>值，<see langword="true"/>表示已激活
+                    一个<see cref="T:System.Boolean"/>值，<see langword="true"/>表示已激活
                 </para>
                 <para>
-                    A <see langword="bool"/> value, <see langword="true"/> indicates active
+                    A <see cref="T:System.Boolean"/> value, <see langword="true"/> indicates active
                 </para>
             </returns>
         </member>
@@ -171,10 +166,10 @@
             </summary>
             <returns>
                 <para>
-                    一个 <see langword="bool"/> 值，<see langword="true"/> 即代表已被正确获取 
+                    一个 <see cref="T:System.Boolean"/> 值，<see langword="true"/> 即代表已被正确获取 
                 </para>
                 <para>
-                    A <see langword="bool"/> value, <see langword="true"/> indicates that it was retrieved correctly
+                    A <see cref="T:System.Boolean"/> value, <see langword="true"/> indicates that it was retrieved correctly
                 </para>
             </returns>
             <param name="osppPath">
@@ -205,10 +200,10 @@
             </summary>
             <param name="osppDirectory">
                 <para>
-                    一个 <see langword="string"/> 值，应传入OSPP.vbs所在的目录 
+                    一个 <see cref="T:System.String"/> 值，应传入OSPP.vbs所在的目录 
                 </para>
                 <para>
-                    A <see langword="string"/> value should be passed in the directory where OSPP.vbs is located
+                    A <see cref="T:System.String"/> value should be passed in the directory where OSPP.vbs is located
                 </para>
             </param>
             <param name="convertStatus">
@@ -221,10 +216,10 @@
             </param>
             <returns>
                 <para>
-                    一个 <see langword="bool"/> 值，<see langword="true"/> 则代表转换成功  
+                    一个 <see cref="T:System.Boolean"/> 值，<see langword="true"/> 则代表转换成功  
                 </para>
                 <para>
-                    A <see langword="bool"/> value, and <see langword="true"/> represents a successful conversion
+                    A <see cref="T:System.Boolean"/> value, and <see langword="true"/> represents a successful conversion
                 </para>
             </returns>
         </member>
@@ -239,84 +234,84 @@
             </summary>
             <param name="licenseDir">
                 <para>
-                    一个 <see langword="string"/> 类型值，需要传入Pro Plus VL证书所在的目录（带反斜杠“\”）
+                    一个 <see cref="T:System.String"/> 类型值，需要传入Pro Plus VL证书所在的目录（带反斜杠“\”）
                 </para>
                 <para>
-                    A <see langword="string"/> value that requires the directory of the Pro Plus VL certificate (with a backslash "\")
+                    A <see cref="T:System.String"/> value that requires the directory of the Pro Plus VL certificate (with a backslash "\")
                 </para>
             </param>
             <param name="osppDir">
                 <para>
-                    一个 <see langword="string"/> 类型值，需要传入OSPP.vbs所在的目录（带反斜杠“\”）
+                    一个 <see cref="T:System.String"/> 类型值，需要传入OSPP.vbs所在的目录（带反斜杠“\”）
                 </para>
                 <para>
-                    A <see langword="string"/> value, passing in the directory of OSPP.vbs (with a backslash "\")
+                    A <see cref="T:System.String"/> value, passing in the directory of OSPP.vbs (with a backslash "\")
                 </para>
             </param>
             <param name="o_Key">
                 <para>
-                    一个 <see langword="string"/> 类型值，需要传入对应的Office的KMS密钥
+                    一个 <see cref="T:System.String"/> 类型值，需要传入对应的Office的KMS密钥
                 </para>
                 <para>
-                    A <see langword="string"/> type value that requires passing in the corresponding Office KMS key
+                    A <see cref="T:System.String"/> type value that requires passing in the corresponding Office KMS key
                 </para>
             </param>
             <param name="v_Key">
                 <para>
-                    一个 <see langword="string"/> 类型值，需要传入对应的Visio的KMS密钥
+                    一个 <see cref="T:System.String"/> 类型值，需要传入对应的Visio的KMS密钥
                 </para>
                 <para>
-                    A <see langword="string"/> value that requires the corresponding Visio KMS key
+                    A <see cref="T:System.String"/> value that requires the corresponding Visio KMS key
                 </para>
             </param>
         </member>
         <member name="F:KMS_Activator.Office_Configurator.officeKeys">
             <summary>
                 <para>
-                    一个由 <see langword="string"/> 对应 <see langword="string"/> 类型的字典，用于存储对应Office版本的密钥
+                    一个由 <see cref="T:System.String"/> 对应 <see cref="T:System.String"/> 类型的字典，用于存储对应Office版本的密钥
                 </para>
                 <para>
-                    A dictionary of type <see langword="string"/> to store the corresponding version of the Office key
+                    A dictionary of type <see cref="T:System.String"/> to store the corresponding version of the Office key
                 </para>
             </summary>
         </member>
         <member name="F:KMS_Activator.Office_Configurator.visioKeys">
             <summary>
                 <para>
-                    一个由 <see langword="string"/> 对应 <see langword="string"/> 类型的字典，用于存储对应Visio版本的密钥
+                    一个由 <see cref="T:System.String"/> 对应 <see cref="T:System.String"/> 类型的字典，用于存储对应Visio版本的密钥
                 </para>
                 <para>
-                    A dictionary of type <see langword="string"/> to store the corresponding Visio version of the key
+                    A dictionary of type <see cref="T:System.String"/> to store the corresponding Visio version of the key
                 </para>
             </summary>
         </member>
         <member name="F:KMS_Activator.Office_Configurator.osppPosition">
             <summary>
                 <para>
-                    一个 <see langword="string"/> 类型的静态值，用以存储OSPP.vbs所在的目录
+                    一个 <see cref="T:System.String"/> 类型的静态值，用以存储OSPP.vbs所在的目录
                 </para>
                 <para>
-                    A static value of type <see langword="string"/> to store the directory where OSPP.vbs is located
+                    A static value of type <see cref="T:System.String"/> to store the directory where OSPP.vbs is located
                 </para>
             </summary>
         </member>
         <member name="F:KMS_Activator.Office_Configurator.officeProduct">
             <summary>
                 <para>
-                    一个 <see langword="string"/> 类型的静态值，用以存储Office产品的版本名
+                    一个 <see cref="T:System.String"/> 类型的静态值，用以存储Office产品的版本名
                 </para>
                 <para>
-                    A static value of type <see langword="string"/> to store the version name of the Office product
+                    A static value of type <see cref="T:System.String"/> to store the version name of the Office product
                 </para>
             </summary>
         </member>
         <member name="F:KMS_Activator.Office_Configurator.isOfficeCoreFound">
             <summary>
                 <para>
-                    一个 <see langword="bool"/> 类型的静态值，用以指示Office安装的核心位置是否已经被找到
+                    一个 <see cref="T:System.Boolean"/> 类型的静态值，用以指示Office安装的核心位置是否已经被找到
                 </para>
                 <para>
-                    A static value of type <see langword="bool"/> indicating whether the core location of the Office installation has been found
+                    A static value of type <see cref="T:System.Boolean"/> indicating whether the core location of the Office installation has been found
                 </para>
             </summary>
         </member>
@@ -360,6 +355,167 @@
                 </para>
             </summary>
         </member>
+        <member name="T:KMS_Activator.ConfigOperations">
+            <summary>
+                <para>
+                    该静态类主要用于实现对配置文件的读写
+                </para>
+                <para>
+                    This static class is mainly used to read and write configuration files
+                </para>
+            </summary>
+            <summary>
+                <para>
+                    该静态类主要用于实现对配置文件的读写
+                </para>
+                <para>
+                    This static class is mainly used to read and write configuration files
+                </para>
+            </summary>
+        </member>
+        <member name="M:KMS_Activator.ConfigOperations.ReadConfig``1(System.String)">
+            <summary>
+                <para>
+                    该静态函数用于读取配置文件，并反序列化为特定的类型
+                </para>
+                <para>
+                    This static function is used to read the configuration file and deserialize it to a specific type
+                </para>
+            </summary>
+            <typeparam name="T">
+                <para>
+                    需要反序列化的类型，且无有参构造
+                </para>
+                <para>
+                    The type to deserialize
+                </para>
+            </typeparam>
+            <param name="configPath">
+                <para>
+                    配置文件的绝对路径
+                </para>
+                <para>
+                    Absolute path to the configuration file
+                </para>
+            </param>
+            <returns>
+                <para>
+                    反序列化的类型，默认为<see cref="T:KMS_Activator.Config_Type"/>
+                </para>
+                <para>
+                    Deserialized type, defaults to <see cref="T:KMS_Activator.Config_Type"/>
+                </para>
+            </returns>
+        </member>
+        <member name="M:KMS_Activator.ConfigOperations.ReadConfigAsync``1(System.String)">
+            <summary>
+                <para>
+                    该静态异步函数用于读取配置文件，并反序列化为特定的类型
+                </para>
+                <para>
+                    This static asynchronous function is used to read the configuration file and deserialize it to a specific type
+                </para>
+            </summary>
+            <typeparam name="T">
+                <para>
+                    需要反序列化的类型，且无有参构造
+                </para>
+                <para>
+                    The type to deserialize
+                </para>
+            </typeparam>
+            <param name="configPath">
+                <para>
+                    配置文件的绝对路径
+                </para>
+                <para>
+                    Absolute path to the configuration file
+                </para>
+            </param>
+            <returns>
+                <para>
+                    一个<see cref="T:System.Threading.Tasks.Task`1"/>类型，默认为<see cref="T:KMS_Activator.Config_Type"/>
+                </para>
+                <para>
+                    A <see cref="T:System.Threading.Tasks.Task`1"/> type, defaults to <see cref="T:KMS_Activator.Config_Type"/>
+                </para>
+            </returns>
+        </member>
+        <member name="M:KMS_Activator.ConfigOperations.WriteConfig(KMS_Activator.Config_Type,System.String)">
+            <summary>
+                <para>
+                    该静态函数用于将特定类型序列化为配置JSON文件
+                </para>
+                <para>
+                    This static function is used to serialize a specific type into a configuration JSON file
+                </para>
+            </summary>
+            <param name="config">
+                <para>
+                    需要序列化的源类型
+                </para>
+                <para>
+                    The source type to serialize
+                </para>
+            </param>
+            <param name="configPath">
+                <para>
+                    配置文件的绝对路径
+                </para>
+                <para>
+                    Absolute path to the configuration file
+                </para>
+            </param>
+            <returns>
+                <para>
+                    一个<see cref="T:System.Boolean"/>值，指示是否写入成功
+                </para>
+                <para>
+                    A <see cref="T:System.Boolean"/> value indicating whether the write was successful
+                </para>
+            </returns>
+        </member>
+        <member name="M:KMS_Activator.ConfigOperations.WriteConfigAsync(KMS_Activator.Config_Type,System.String)">
+            <summary>
+                <para>
+                    该静态异步函数用于将特定类型序列化为配置JSON文件
+                </para>
+                <para>
+                    This static asynchronous function is used to serialize a specific type into a configuration JSON file
+                </para>
+            </summary>
+            <param name="config">
+                <para>
+                    需要序列化的源类型
+                </para>
+                <para>
+                    The source type to serialize
+                </para>
+            </param>
+            <param name="configPath">
+                <para>
+                    配置文件的绝对路径
+                </para>
+                <para>
+                    Absolute path to the configuration file
+                </para>
+            </param>
+            <returns>
+                <para>
+                    一个<see cref="T:System.Threading.Tasks.Task`1"/>类型，<see cref="T:System.Boolean"/>类型值用于指示是否写入成功
+                </para>
+                <para>
+                    A <see cref="T:System.Threading.Tasks.Task`1"/>, <see cref="T:System.Boolean"/> value is used to indicate whether the write was successful
+                </para>
+            </returns>
+        </member>
+        <member name="T:KMS_Activator.Current_Config">
+            <summary>
+            该静态类为指示程序界面设置的静态变量所在的类
+            <br/>
+            ***** 未使用数据绑定 *****
+            </summary>
+        </member>
         <member name="T:KMS_Activator.Shared">
             <summary>
                 <para>
@@ -370,138 +526,6 @@
                 </para>
             </summary>
         </member>
-        <member name="M:KMS_Activator.Shared.RunProcess(System.String,System.String,System.String,System.Boolean)">
-            <summary>
-                <para>
-                    该静态函数用于启动位于特定目录下的一些重要系统内置程序以实现某些功能
-                </para>
-                <para>
-                    This static function is used to launch some important system built-in programs located in the specific directory to implement certain functions
-                </para>
-            </summary>
-            <param name="execname">
-                <para>
-                    可执行程序名称
-                </para>
-                <para>
-                    Name of an executable program
-                </para>
-            </param>
-            <param name="args">
-                <para>
-                    需要传入的参数
-                </para>
-                <para>
-                    Parameters that need to be passed in
-                </para>
-            </param>
-            <param name="workdir">
-                <para>
-                    工作目录，若置空则认为是System32
-                </para>
-                <para>
-                    The working directory, if empty, is considered System32
-                </para>
-            </param>
-            <param name="is_silent">
-                <para>
-                    是否静默执行
-                </para>
-                <para>
-                    Silent execution or not
-                </para>
-            </param>
-            <returns>
-                <para>
-                    一个 <see langword="string"/> 类型值，即被调用程序的输出值 
-                </para>
-                <para>
-                    A <see langword="string"/> value, which is the output of the called program
-                </para>
-            </returns>
-        </member>
-        <member name="M:KMS_Activator.Shared.IsWinActivated">
-            <summary>
-                <para>
-                    该函数用于Windows判断是否已经激活
-                </para> 
-                <para>
-                    This function is used to determine whether it has been activated
-                </para>
-            </summary>
-            <returns>
-                <para>
-                    一个 <see langword="bool"/> 类型值，<see langword="true"/> 代表已激活，<see langword="false"/> 代表未激活  
-                </para>
-                <para>
-                    A <see langword="bool"/> value where <see langword="true"/> means activated and <see langword="false"/> means not activated
-                </para>
-            </returns>
-        </member>
-        <member name="M:KMS_Activator.Shared.IsAdministrators">
-            <summary>
-                <para>
-                    该函数用于验证当前登陆的账户是否为管理员账户
-                </para>
-                <para>
-                    This function is used to verify that the current login account is an administrator account
-                </para>
-            </summary>
-            <returns>
-                <para>
-                    一个 <see langword="bool"/>，<see langword="true"/> 则表示这是管理员账户
-                </para>
-                <para>
-                    A <see langword="bool"/> and <see langword="true"/> means this is an administrator account
-                </para>
-            </returns>
-        </member>
-        <member name="M:KMS_Activator.Shared.AutoRenewSign(System.String)">
-            <summary>
-                <para>
-                    该函数用于向schtasks.exe传递命令，以设定在180天后自动启动程序进行激活
-                </para>
-                <para>
-                    This function is used to pass a command to schtasks.exe to set the program to start automatically for activation after 180 days
-                </para>
-            </summary>
-            <param name="renewTarget">
-                <para>
-                    一个 <see langword="string"/> 类型值，需要传入续签的类型（Windows或Office）
-                </para>
-                <para>
-                    A <see langword="string"/> value with the type to renew (Windows or Office)
-                </para>
-            </param>
-        </member>
-        <member name="M:KMS_Activator.Shared.CancelAutoRenew(System.String)">
-            <summary>
-                <para>
-                    该函数用于向schtasks.exe传递命令，取消已经设定的启动任务
-                </para>
-                <para>
-                    This function is used to pass a command to schtasks.exe to cancel a startup task that has already been set
-                </para>
-            </summary>
-            <param name="cancelRenewTarget">
-                <para>
-                    一个 <see langword="string"/> 类型值，需要传入取消续签的类型（Windows或Office）
-                </para>
-                <para>
-                    A <see langword="string"/> value that requires the type of cancellation (Windows or Office)
-                </para>
-            </param>
-        </member>
-        <member name="M:KMS_Activator.Shared.AutoCheckUpdate">
-            <summary>
-                <para>
-                    该函数用于通过异步的方法检查Github上最新的Release版本号，以提示用户是否更新。该函数来自Anawaert USBHDDSpy
-                </para>
-                <para>
-                    This function is used to asynchronously check the latest Release number on Github to prompt the user for an update. This function is from Anawaert USBHDDSpy
-                </para>
-            </summary>
-        </member>
         <member name="F:KMS_Activator.Shared.CSCRIPT">
             <summary>
                 <para>
@@ -509,6 +533,16 @@
                 </para>
                 <para>
                     This value is an alias for cscript.exe
+                </para>
+            </summary>
+        </member>
+        <member name="F:KMS_Activator.Shared.AW_KMS_SERVER_ADDR">
+            <summary>
+                <para>
+                    该常量为Anawaert的KMS服务器地址
+                </para>
+                <para>
+                    This value is the address of Anawaert KMS server
                 </para>
             </summary>
         </member>
@@ -562,6 +596,214 @@
                 </para>
             </summary>
         </member>
+        <member name="F:KMS_Activator.Shared.USER_DOC_KMS_PATH">
+            <summary>
+                <para>
+                    该变量为KMS Activator在用户的文档目录下的工作目录(C:\Users\%USERNAME%\Documents\KMS Activator\)
+                </para>
+                <para>
+                    This variable is the KMS Activator working directory in the user's Documents directory (C:\Users\%USERNAME%\Documents\KMS Activator\)
+                </para>
+            </summary>        
+        </member>
+        <member name="F:KMS_Activator.Shared.JSON_CFG_PATH">
+            <summary>
+                <para>
+                    该变量为KMS Activator在用户的文档目录下的工作目录中配置文件的路径
+                </para>
+                <para>
+                    This variable is the path to the KMS Activator profile in the user's working directory under the document directory
+                </para>
+            </summary>  
+        </member>
+        <member name="M:KMS_Activator.Shared.RunProcess(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+                <para>
+                    该静态函数用于启动位于特定目录下的一些重要系统内置程序以实现某些功能
+                </para>
+                <para>
+                    This static function is used to launch some important system built-in programs located in the specific directory to implement certain functions
+                </para>
+            </summary>
+            <param name="execname">
+                <para>
+                    可执行程序名称
+                </para>
+                <para>
+                    Name of an executable program
+                </para>
+            </param>
+            <param name="args">
+                <para>
+                    需要传入的参数
+                </para>
+                <para>
+                    Parameters that need to be passed in
+                </para>
+            </param>
+            <param name="workdir">
+                <para>
+                    工作目录，若置空则认为是System32
+                </para>
+                <para>
+                    The working directory, if empty, is considered System32
+                </para>
+            </param>
+            <param name="is_silent">
+                <para>
+                    是否静默执行
+                </para>
+                <para>
+                    Silent execution or not
+                </para>
+            </param>
+            <returns>
+                <para>
+                    一个 <see cref="T:System.String"/> 类型值，即被调用程序的输出值 
+                </para>
+                <para>
+                    A <see cref="T:System.String"/> value, which is the output of the called program
+                </para>
+            </returns>
+        </member>
+        <member name="M:KMS_Activator.Shared.IsWinActivated">
+            <summary>
+                <para>
+                    该函数用于Windows判断是否已经激活
+                </para> 
+                <para>
+                    This function is used to determine whether it has been activated
+                </para>
+            </summary>
+            <returns>
+                <para>
+                    一个 <see cref="T:System.Boolean"/> 类型值，<see langword="true"/> 代表已激活，<see langword="false"/> 代表未激活  
+                </para>
+                <para>
+                    A <see cref="T:System.Boolean"/> value where <see langword="true"/> means activated and <see langword="false"/> means not activated
+                </para>
+            </returns>
+        </member>
+        <member name="M:KMS_Activator.Shared.IsAdministrators">
+            <summary>
+                <para>
+                    该函数用于验证当前登陆的账户是否为管理员账户
+                </para>
+                <para>
+                    This function is used to verify that the current login account is an administrator account
+                </para>
+            </summary>
+            <returns>
+                <para>
+                    一个 <see cref="T:System.Boolean"/>，<see langword="true"/> 则表示这是管理员账户
+                </para>
+                <para>
+                    A <see cref="T:System.Boolean"/> and <see langword="true"/> means this is an administrator account
+                </para>
+            </returns>
+        </member>
+        <member name="M:KMS_Activator.Shared.AutoRenewSign(System.String)">
+            <summary>
+                <para>
+                    该函数用于向schtasks.exe传递命令，以设定在180天后自动启动程序进行激活
+                </para>
+                <para>
+                    This function is used to pass a command to schtasks.exe to set the program to start automatically for activation after 180 days
+                </para>
+            </summary>
+            <param name="renewTarget">
+                <para>
+                    一个 <see cref="T:System.String"/> 类型值，需要传入续签的类型（Windows或Office）
+                </para>
+                <para>
+                    A <see cref="T:System.String"/> value with the type to renew (Windows or Office)
+                </para>
+            </param>
+        </member>
+        <member name="M:KMS_Activator.Shared.CancelAutoRenew(System.String)">
+            <summary>
+                <para>
+                    该函数用于向schtasks.exe传递命令，取消已经设定的启动任务
+                </para>
+                <para>
+                    This function is used to pass a command to schtasks.exe to cancel a startup task that has already been set
+                </para>
+            </summary>
+            <param name="cancelRenewTarget">
+                <para>
+                    一个 <see cref="T:System.String"/> 类型值，需要传入取消续签的类型（Windows或Office）
+                </para>
+                <para>
+                    A <see cref="T:System.String"/> value that requires the type of cancellation (Windows or Office)
+                </para>
+            </param>
+        </member>
+        <member name="M:KMS_Activator.Shared.AutoCheckUpdate">
+            <summary>
+                <para>
+                    该函数用于通过异步的方法检查Github上最新的Release版本号，以提示用户是否更新。该函数来自Anawaert USBHDDSpy
+                </para>
+                <para>
+                    This function is used to asynchronously check the latest Release number on Github to prompt the user for an update. This function is from Anawaert USBHDDSpy
+                </para>
+            </summary>
+        </member>
+        <member name="M:KMS_Activator.Shared.RefreshConfigInit">
+            <summary>
+                <para>
+                    该函数用于刷新程序中指示当前程序内设置的全局静态变量
+                </para>
+                <para>
+                    This function is used to refresh the global static variables in the program indicating the current setting within the program
+                </para>
+            </summary>
+        </member>
+        <member name="M:KMS_Activator.Shared.RefreshConfigFile(System.String)">
+            <summary>
+                <para>
+                    该函数用于将程序后台中的全局静态变量刷新写入至配置文件中
+                </para>
+                <para>
+                    This function is used to write the global static variable flush in the background of the program to the configuration file
+                </para>
+            </summary>
+            <param name="path">
+                <para>
+                    配置文件的绝对路径，使用一个<see cref="T:System.String"/>类型变量表示
+                </para>   
+                <para>
+                    The absolute path to the configuration file, represented by a <see cref="T:System.String"/> variable
+                </para>        
+            </param>
+        </member>
+        <member name="M:KMS_Activator.Shared.EnableConfigFromFile(System.String)">
+            <summary>
+                <para>
+                    该函数用于将配置文件的内容读取并应用于程序界面中
+                </para>
+                <para>
+                    This function is used to read the contents of the configuration file and apply them to the program interfac
+                </para>
+            </summary>
+            <param name="path">
+                <para>
+                    配置文件的绝对路径，使用一个<see cref="T:System.String"/>类型变量表示
+                </para>   
+                <para>
+                    The absolute path to the configuration file, represented by a <see cref="T:System.String"/> variable
+                </para>        
+            </param>
+        </member>
+        <member name="M:KMS_Activator.Shared.CreateDirInUserDocuments">
+            <summary>
+                <para>
+                    该函数用于为KMS Activator在用户的文档目录下创建程序需要的目录(C:\Users\%USERNAME%\Documents\KMS Activator\)
+                </para>
+                <para>
+                    This function is used to create a directory in the user's Documents directory for the KMS Activator for the application (C:\Users\%USERNAME%\Documents\KMS Activator\)
+                </para>
+            </summary>
+        </member>
         <member name="T:KMS_Activator.Win_Activator">
             <summary>
                 <para>
@@ -571,24 +813,6 @@
                     This class is mainly used to realize the function of activating Windows
                 </para>
             </summary>
-        </member>
-        <member name="M:KMS_Activator.Win_Activator.ActWin(System.String)">
-            <summary>
-                <para>
-                    该函数主要用于激活Windows
-                </para>
-                <para>
-                    This function is primarily used to activate Windows
-                </para>
-            </summary>
-            <param name="kmsServerName">
-                <para>
-                    一个 <see langword="string"/> 类型值，需要传入目标KMS服务器的地址
-                </para>
-                <para>
-                    A <see langword="string"/> value that requires passing the address of the destination KMS server
-                </para>
-            </param>
         </member>
         <member name="F:KMS_Activator.Win_Activator.volKeys">
             <summary>
@@ -601,12 +825,30 @@
             </summary>
             <returns>
                 <para>
-                    一个 <see langword="string"/> 类型值，即密钥
+                    一个 <see cref="T:System.String"/> 类型值，即密钥
                 </para>
                 <para>
-                    A <see langword="string"/> value, which is a VOL key
+                    A <see cref="T:System.String"/> value, which is a VOL key
                 </para>
             </returns>
+        </member>
+        <member name="M:KMS_Activator.Win_Activator.ActWin(System.String)">
+            <summary>
+                <para>
+                    该函数主要用于激活Windows
+                </para>
+                <para>
+                    This function is primarily used to activate Windows
+                </para>
+            </summary>
+            <param name="kmsServerName">
+                <para>
+                    一个 <see cref="T:System.String"/> 类型值，需要传入目标KMS服务器的地址
+                </para>
+                <para>
+                    A <see cref="T:System.String"/> value that requires passing the address of the destination KMS server
+                </para>
+            </param>
         </member>
     </members>
 </doc>

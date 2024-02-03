@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
 using Microsoft.Win32;
-using Wpf = System.Windows;
+using System.Windows;
 using System.Net.Http;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using System.Threading;
+using System.Text;
 
 namespace KMS_Activator
 {
@@ -25,6 +24,91 @@ namespace KMS_Activator
     /// </summary>
     public static class Shared
     {
+        #region 全局静态变量与常量区
+        /// <summary>
+        ///     <para>
+        ///         该常量的值为cscript.exe
+        ///     </para>
+        ///     <para>
+        ///         This value is an alias for cscript.exe
+        ///     </para>
+        /// </summary>
+        public const string CSCRIPT = "cscript.exe";
+        /// <summary>
+        ///     <para>
+        ///         该常量为Anawaert的KMS服务器地址
+        ///     </para>
+        ///     <para>
+        ///         This value is the address of Anawaert KMS server
+        ///     </para>
+        /// </summary>
+        public const string AW_KMS_SERVER_ADDR = "anawaert.tech";
+        /// <summary>
+        ///     <para>
+        ///         该静态变量指示当前应用程序运行时所在的目录
+        ///     </para>
+        ///     <para>
+        ///         This static variable indicates the directory where the current application is running
+        ///     </para>
+        /// </summary>
+        public static string EXEC_PATH = AppDomain.CurrentDomain.BaseDirectory + "\\";
+        /// <summary>
+        ///     <para>
+        ///         该静态量用以获取存储当前Windows系统的产品名或版本名
+        ///     </para>
+        ///     <para>
+        ///         This static quantity is used to obtain the product name or version name that stores the current Windows system
+        ///     </para>
+        /// </summary>
+        public static string WIN_VERSION = Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductName", string.Empty)?.ToString() ?? "Not_Found";
+        /// <summary>
+        ///     <para>
+        ///         该值指示当前系统的System32目录的绝对路径
+        ///     </para>
+        ///     <para>
+        ///         This value indicates the absolute path to the System32 directory on the current system
+        ///     </para>
+        /// </summary>
+        public static string SYS32_PATH = Environment.GetEnvironmentVariable("SystemRoot") + "\\System32";
+        /// <summary>
+        ///     <para>
+        ///         该值指示当前用户的“文档”文件夹
+        ///     </para>
+        ///     <para>
+        ///         This value indicates the current user's Documents folder
+        ///     </para>
+        /// </summary>
+        public static string USER_DOC_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\";
+        /// <summary>
+        ///     <para>
+        ///         该变量为运行在UI线程上的Window类实例
+        ///     </para>
+        ///     <para>
+        ///         This variable is an instance of the Window class that runs on the UI thread
+        ///     </para>
+        /// </summary>
+        public static MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+        /// <summary>
+        ///     <para>
+        ///         该变量为KMS Activator在用户的文档目录下的工作目录(C:\Users\%USERNAME%\Documents\KMS Activator\)
+        ///     </para>
+        ///     <para>
+        ///         This variable is the KMS Activator working directory in the user's Documents directory (C:\Users\%USERNAME%\Documents\KMS Activator\)
+        ///     </para>
+        /// </summary>        
+        public static string USER_DOC_KMS_PATH = USER_DOC_PATH + "KMS Activator\\";
+        /// <summary>
+        ///     <para>
+        ///         该变量为KMS Activator在用户的文档目录下的工作目录中配置文件的路径
+        ///     </para>
+        ///     <para>
+        ///         This variable is the path to the KMS Activator profile in the user's working directory under the document directory
+        ///     </para>
+        /// </summary>  
+        public static string JSON_CFG_PATH = USER_DOC_KMS_PATH + "cfg.json";
+
+        #endregion 全局静态变量与常量区
+
         /// <summary>
         ///     <para>
         ///         该静态函数用于启动位于特定目录下的一些重要系统内置程序以实现某些功能
@@ -67,10 +151,10 @@ namespace KMS_Activator
         /// </param>
         /// <returns>
         ///     <para>
-        ///         一个 <see langword="string"/> 类型值，即被调用程序的输出值 
+        ///         一个 <see cref="string"/> 类型值，即被调用程序的输出值 
         ///     </para>
         ///     <para>
-        ///         A <see langword="string"/> value, which is the output of the called program
+        ///         A <see cref="string"/> value, which is the output of the called program
         ///     </para>
         /// </returns>
         public static string RunProcess(string execname, string args, string workdir, bool is_silent)
@@ -82,6 +166,7 @@ namespace KMS_Activator
                 FileName = execname,
                 WorkingDirectory = workdir == string.Empty ? SYS32_PATH : workdir,
                 Arguments = args,
+                Verb = "RunAs"
             };
             // 如果需要静默运行
             // If it needs to run silently
@@ -136,10 +221,10 @@ namespace KMS_Activator
         /// </summary>
         /// <returns>
         ///     <para>
-        ///         一个 <see langword="bool"/> 类型值，<see langword="true"/> 代表已激活，<see langword="false"/> 代表未激活  
+        ///         一个 <see cref="bool"/> 类型值，<see langword="true"/> 代表已激活，<see langword="false"/> 代表未激活  
         ///     </para>
         ///     <para>
-        ///         A <see langword="bool"/> value where <see langword="true"/> means activated and <see langword="false"/> means not activated
+        ///         A <see cref="bool"/> value where <see langword="true"/> means activated and <see langword="false"/> means not activated
         ///     </para>
         /// </returns>
         public static bool IsWinActivated()
@@ -162,10 +247,10 @@ namespace KMS_Activator
         /// </summary>
         /// <returns>
         ///     <para>
-        ///         一个 <see langword="bool"/>，<see langword="true"/> 则表示这是管理员账户
+        ///         一个 <see cref="bool"/>，<see langword="true"/> 则表示这是管理员账户
         ///     </para>
         ///     <para>
-        ///         A <see langword="bool"/> and <see langword="true"/> means this is an administrator account
+        ///         A <see cref="bool"/> and <see langword="true"/> means this is an administrator account
         ///     </para>
         /// </returns>
         public static bool IsAdministrators()
@@ -185,10 +270,10 @@ namespace KMS_Activator
         /// </summary>
         /// <param name="renewTarget">
         ///     <para>
-        ///         一个 <see langword="string"/> 类型值，需要传入续签的类型（Windows或Office）
+        ///         一个 <see cref="string"/> 类型值，需要传入续签的类型（Windows或Office）
         ///     </para>
         ///     <para>
-        ///         A <see langword="string"/> value with the type to renew (Windows or Office)
+        ///         A <see cref="string"/> value with the type to renew (Windows or Office)
         ///     </para>
         /// </param>
         public static void AutoRenewSign(string renewTarget)
@@ -196,14 +281,13 @@ namespace KMS_Activator
             Assembly? assembly = Assembly.GetEntryAssembly();
             if (assembly != null)
             {
-                // 将自身拷贝到“C:\Users\%username%\KMS Activator\”下后利用schtasks.exe设定定时任务，在180天后再次启动
-                // Copy itself to "C:\Users\%username%\KMS Activator\" and use schtasks.exe to set a scheduled task and start it again after 180 days
-                DirectoryInfo info = Directory.CreateDirectory(USER_DOC_PATH + "KMS Activator");
-                File.Copy(assembly.Location, info.FullName + "\\Anawaert KMS Activator.exe", true);
+                // 将自身拷贝到“C:\Users\%username%\KMS Activator\”下后利用schtasks.exe设定定时任务，在180天内再次启动
+                // Copy itself to "C:\Users\%username%\KMS Activator\" and use schtasks.exe to set a scheduled task and start it again in 180 days
+                File.Copy(assembly.Location, USER_DOC_KMS_PATH + "Anawaert KMS Activator.exe", true);
                 string exeName = "schtasks.exe";
-                // "/sm"开关为"StartMode"的缩写，"renew"指示这次启动程序是以续签的身份启动，renew后面的参数"win"或"office"指示将续签什么类型的激活
+                // "/sm"开关为"StartMode"的缩写，"renew"指示这次启动程序是以续签的身份启动，renew后面的参数"windows"或"office"指示将续签什么类型的激活
                 // The "/sm" switch is short for "StartMode", "renew" indicates that this time the boot program is started as a renewal, and the parameter "Windows" or "Office" after renew indicates what type of activation will be renewed
-                string args = "/create /tn KMS_Renew_" + renewTarget + " /tr " + "\"" + info.FullName + "\\Anawaert KMS Activator.exe /sm renew " + renewTarget + "\" /sc daily /mo 180";
+                string args = "/create /tn KMS_Renew_" + renewTarget + " /tr " + "\"" + USER_DOC_KMS_PATH + "Anawaert KMS Activator.exe renew " + renewTarget + "\" /sc daily /mo 179";
                 RunProcess(exeName, args, string.Empty, true);
             }
         }
@@ -218,16 +302,16 @@ namespace KMS_Activator
         /// </summary>
         /// <param name="cancelRenewTarget">
         ///     <para>
-        ///         一个 <see langword="string"/> 类型值，需要传入取消续签的类型（Windows或Office）
+        ///         一个 <see cref="string"/> 类型值，需要传入取消续签的类型（Windows或Office）
         ///     </para>
         ///     <para>
-        ///         A <see langword="string"/> value that requires the type of cancellation (Windows or Office)
+        ///         A <see cref="string"/> value that requires the type of cancellation (Windows or Office)
         ///     </para>
         /// </param>
         public static void CancelAutoRenew(string cancelRenewTarget)
         {
             string exeName = "schtasks.exe";
-            string args = "schtasks /delete /tn KMS_Renew_" + cancelRenewTarget + " /f";
+            string args = "/delete /tn KMS_Renew_" + cancelRenewTarget + " /f";
             RunProcess(exeName, args, string.Empty, true);
         }
 
@@ -243,17 +327,44 @@ namespace KMS_Activator
         {
             try
             {
-                HttpClient NewClient = new HttpClient();
-                HttpResponseMessage httpResponse = await NewClient.GetAsync("https://github.com/Anawaert/WPF-KMS-Activator");  // 连接至GitHub上USBHDDSpy的主页
+                HttpClient newClient = new HttpClient();
+                HttpResponseMessage httpResponse = await newClient.GetAsync("https://github.com/Anawaert/WPF-KMS-Activator/releases");  // 连接至GitHub上的主页
                 httpResponse.EnsureSuccessStatusCode();  // 确保Http正确相响应
-                string ResponseBody = await httpResponse.Content.ReadAsStringAsync();  // 将相应返回的主页内容从字节码转为字符串
+                string responseBody = await httpResponse.Content.ReadAsStringAsync();  // 将相应返回的主页内容从字节码转为字符串
 
-                Regex GetTitleRegex = new Regex(@"<title>.+?</title>");  // 匹配<title>与</title>标签之间的全部内容
-                Regex GetDateFromTitleRegex = new Regex("");  // 匹配<title>与</title>标签之间以xxxx-xx为格式的日期字符串。此处为什么要使用两次正则呢，因为经实测如果仅使用本行代码的正则规则匹配，可能导致匹配到非希望的结果。
-                if (GetDateFromTitleRegex.Match(GetTitleRegex.Match(ResponseBody).Value).Value != "2023-05")
+                Regex getSpanTagsRegex = new Regex(@"<span(.*?)</span>");  // 匹配<span>与</span>标签之间的全部内容,但考虑到<span>标签可能包含其他的样式，故仅匹配<span到</span>之间
+                Regex get_a_tags_regex = new Regex(@"<a(.*?)</a>");  // 匹配<a>与</a>标签之间的内容
+                Regex getVersionNumsRegex = new Regex(@"(\d+\.\d+\.\d+\.\d+)");  // 匹配<span>与</span>标签之间以x.x.x.x为格式的版本号
+
+                // 先将HTML字符串中所有<span></span>标签之间的内容捕获，然后合并成一个新的大字符串
+                MatchCollection spanTagsRegexCollections = getSpanTagsRegex.Matches(responseBody);
+                StringBuilder spanTagsStringBuilder = new StringBuilder();
+                foreach (Match spanTag in spanTagsRegexCollections.Cast<Match>())
                 {
-                    DialogResult result = MessageBox.Show("当前更新可用，是否现在进行更新并导航至下载界面？", "USBHDDSpy Update", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);  // 弹出对话框
-                    if (result == DialogResult.Yes)  // 单击“是”
+                    spanTagsStringBuilder.Append(spanTag.Value);
+                }
+
+                // 然后将<span></span>组成的大字符串中包含<a></a>的内容捕获，Release页每个发行版的标题就在<a></a>里面
+                MatchCollection a_tags_regex_collections = get_a_tags_regex.Matches(spanTagsStringBuilder.ToString());
+                StringBuilder a_tags_string_builder = new StringBuilder();
+                foreach (Match a_tag in a_tags_regex_collections.Cast<Match>())
+                {
+                    a_tags_string_builder.Append(a_tag.Value);
+                }
+
+                // 再从<a></a>组成的“小”字符串中匹配版本号，第一个匹配就是最新版本的版本号
+                Match versionNumsMatch = getVersionNumsRegex.Match(a_tags_string_builder.ToString());
+                if (versionNumsMatch.Value != "1.1.0.0" && versionNumsMatch.Success)
+                {
+                    MessageBoxResult result = MessageBox.Show
+                    (
+                        "当前更新可用，是否现在跳转至下载界面以获取更新？", 
+                        "软件更新", 
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Information,
+                        MessageBoxResult.No
+                    );
+                    if (result == MessageBoxResult.Yes)  // 单击“是”
                     {
                         try
                         {
@@ -261,101 +372,97 @@ namespace KMS_Activator
                             ShellCmd.StartInfo.FileName = "cmd.exe";
                             ShellCmd.StartInfo.RedirectStandardInput = true; ShellCmd.StartInfo.UseShellExecute = false; ShellCmd.StartInfo.CreateNoWindow = true;  // 隐式调用cmd.exe
                             ShellCmd.Start();
-                            ShellCmd.StandardInput.WriteLine("EXPLORER \"https://github.com/Anawaert-Download/USBHDDSpy_Download/archive/refs/heads/main.zip\" & EXIT");  // 使用cmd语句访问下载链接。由于Anawaert无条件建立一个24小时开放的直链下载服务，突发奇想把Github作为下载源，经实践暂且认为可行。
+                            ShellCmd.StandardInput.WriteLine("EXPLORER \"https://github.com/Anawaert/WPF-KMS-Activator/releases\" & EXIT");  // 使用cmd语句访问下载链接。
                             ShellCmd.Dispose();  // 释放内存
                         }
-                        catch { MessageBox.Show("连接至GitHub时发生错误，更新已取消", "USBHDDSpy 消息", MessageBoxButtons.OK); }  // 当网络连接不通畅或者无网络连接时
-                    }
-                    else if (result == DialogResult.Cancel)  // 单击“取消”时
-                    {
-                        if (MessageBox.Show("是否取消更新？\n\n若单击“是”，则将屏蔽自动更新，您需要手动访问GitHub以获取更新；若单击“否”，则将取消本次更新，但不会屏蔽", "USBHHDDSpy 消息", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.OK)
-                        {
-                            // MainConsole.UpdateOrNot = "0";  // 将MainConsole中UpdateOrNot静态变量改为"0"，这样以后就不检查更新
-
-                        }
+                        catch { MessageBox.Show("连接至GitHub时发生错误，导航已取消", "提示", MessageBoxButton.OK, MessageBoxImage.Information); }
                     }
                 }
             }
             catch { }
         }
-        
-        //public static void ChangeLabelFontFamily(string targetFontFamily, Wpf::Controls.Label targetLabel)
-        //{
-        //    mainWindow.Dispatcher.Invoke
-        //    (
-        //        () =>
-        //        {
-        //            targetLabel.FontFamily = new Wpf::Media.FontFamily(targetFontFamily);
-        //        }
-        //    );
-        //}
 
-        //public static void ChangeGroupBoxVisibility(Wpf::Visibility visibility, Wpf::Controls.GroupBox targetGroupBox)
-        //{
-        //    mainWindow.Dispatcher.Invoke
-        //    (
-        //        () =>
-        //        {
-        //            targetGroupBox.Visibility = visibility;
-        //        }
-        //    );
-        //}
+        /// <summary>
+        ///     <para>
+        ///         该函数用于刷新程序中指示当前程序内设置的全局静态变量
+        ///     </para>
+        ///     <para>
+        ///         This function is used to refresh the global static variables in the program indicating the current setting within the program
+        ///     </para>
+        /// </summary>
+        public static void RefreshConfigInit()
+        {
+            Current_Config.isAutoRenew = mainWindow.autoRenew_CheckBox.IsChecked ?? true;
+            Current_Config.isAutoUpdate = mainWindow.autoUpdate_CheckBox.IsChecked ?? true;
+        }
 
-        #region 全局静态变量与常量区
         /// <summary>
         ///     <para>
-        ///         该常量的值为cscript.exe
+        ///         该函数用于将程序后台中的全局静态变量刷新写入至配置文件中
         ///     </para>
         ///     <para>
-        ///         This value is an alias for cscript.exe
+        ///         This function is used to write the global static variable flush in the background of the program to the configuration file
         ///     </para>
         /// </summary>
-        public const string CSCRIPT = "cscript.exe";
+        /// <param name="path">
+        ///     <para>
+        ///         配置文件的绝对路径，使用一个<see cref="string"/>类型变量表示
+        ///     </para>   
+        ///     <para>
+        ///         The absolute path to the configuration file, represented by a <see cref="string"/> variable
+        ///     </para>        
+        /// </param>
+        public static void RefreshConfigFile(string path)
+        {
+            Config_Type config = new Config_Type()
+            {
+                IsAutoUpdate = Current_Config.isAutoUpdate,
+                IsAutoRenew = Current_Config.isAutoRenew,
+                IsDarkMode = Current_Config.isDarkMode
+            };
+            ConfigOperations.WriteConfig(config, path);
+        }
+
         /// <summary>
         ///     <para>
-        ///         该静态变量指示当前应用程序运行时所在的目录
+        ///         该函数用于将配置文件的内容读取并应用于程序界面中
         ///     </para>
         ///     <para>
-        ///         This static variable indicates the directory where the current application is running
+        ///         This function is used to read the contents of the configuration file and apply them to the program interfac
         ///     </para>
         /// </summary>
-        public static string EXEC_PATH = AppDomain.CurrentDomain.BaseDirectory + "\\";
+        /// <param name="path">
+        ///     <para>
+        ///         配置文件的绝对路径，使用一个<see cref="string"/>类型变量表示
+        ///     </para>   
+        ///     <para>
+        ///         The absolute path to the configuration file, represented by a <see cref="string"/> variable
+        ///     </para>        
+        /// </param>
+        public static void EnableConfigFromFile(string path)
+        {
+            Config_Type config = ConfigOperations.ReadConfig<Config_Type>(path);
+
+            Current_Config.isAutoUpdate = config.IsAutoUpdate;
+            Current_Config.isAutoRenew = config.IsAutoRenew;
+            Current_Config.isDarkMode = config.IsDarkMode;
+
+            mainWindow.autoRenew_CheckBox.IsChecked = Current_Config.isAutoRenew;
+            mainWindow.autoUpdate_CheckBox.IsChecked = Current_Config.isAutoUpdate;
+        }
+
         /// <summary>
         ///     <para>
-        ///         该静态量用以获取存储当前Windows系统的产品名或版本名
+        ///         该函数用于为KMS Activator在用户的文档目录下创建程序需要的目录(C:\Users\%USERNAME%\Documents\KMS Activator\)
         ///     </para>
         ///     <para>
-        ///         This static quantity is used to obtain the product name or version name that stores the current Windows system
+        ///         This function is used to create a directory in the user's Documents directory for the KMS Activator for the application (C:\Users\%USERNAME%\Documents\KMS Activator\)
         ///     </para>
         /// </summary>
-        public static string WIN_VERSION = Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductName", string.Empty)?.ToString() ?? "Not_Found";
-        /// <summary>
-        ///     <para>
-        ///         该值指示当前系统的System32目录的绝对路径
-        ///     </para>
-        ///     <para>
-        ///         This value indicates the absolute path to the System32 directory on the current system
-        ///     </para>
-        /// </summary>
-        public static string SYS32_PATH = Environment.GetEnvironmentVariable("SystemRoot") + "\\System32";
-        /// <summary>
-        ///     <para>
-        ///         该值指示当前用户的“文档”文件夹
-        ///     </para>
-        ///     <para>
-        ///         This value indicates the current user's Documents folder
-        ///     </para>
-        /// </summary>
-        public static string USER_DOC_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\";
-        /// <summary>
-        ///     <para>
-        ///         该变量为运行在UI线程上的Window类实例
-        ///     </para>
-        ///     <para>
-        ///         This variable is an instance of the Window class that runs on the UI thread
-        ///     </para>
-        /// </summary>
-        public static MainWindow mainWindow = (MainWindow)Wpf::Application.Current.MainWindow;
-        #endregion
+        public static DirectoryInfo CreateDirInUserDocuments()
+        {
+            DirectoryInfo info = Directory.CreateDirectory(USER_DOC_PATH + "KMS Activator");
+            return info;
+        }
     }
 }

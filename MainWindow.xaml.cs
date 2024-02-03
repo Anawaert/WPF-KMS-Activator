@@ -1,14 +1,13 @@
-﻿ using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using static KMS_Activator.Shared;
-using Fms = System.Windows.Forms;
-using static KMS_Activator.Office_Configurator;
-using static KMS_Activator.Animations_Related;
+using System.IO;
 using System.Windows.Media.Animation;
 using System.Threading;
 using System.Collections.Generic;
+using static KMS_Activator.Shared;
+using static KMS_Activator.Office_Configurator;
+using static KMS_Activator.Animations_Related;
 
 namespace KMS_Activator
 {
@@ -27,13 +26,31 @@ namespace KMS_Activator
             InitializeComponent();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             // 设置几个Label
             // Set the content of Labels in MainWindow
             winVersion_Label.Content = WIN_VERSION;
             officeVersion_Label.Content = officeProduct;
-            Fms::Application.EnableVisualStyles();
+            
+            // 新增：先判断文档文件夹下的KMS Activator文件夹是否存在，然后加载JSON格式的配置文件
+            if (!Directory.Exists(USER_DOC_KMS_PATH.TrimEnd('\\')))
+            {
+                DirectoryInfo createInfo = CreateDirInUserDocuments();
+                USER_DOC_KMS_PATH = createInfo.FullName + "\\";
+            }
+            if (!File.Exists(JSON_CFG_PATH))
+            {
+                RefreshConfigInit();
+                RefreshConfigFile(JSON_CFG_PATH);
+            }
+            EnableConfigFromFile(JSON_CFG_PATH);
+
+            // 新增：加载完主窗口后选择是否检查更新
+            if (Current_Config.isAutoUpdate)
+            {
+                await AutoCheckUpdate();
+            }
         }
 
         // 当“+”号Label按钮按下的时候
@@ -112,17 +129,19 @@ namespace KMS_Activator
                         Win_Activator activator = new Win_Activator();
                         activator.ActWin(selectedContent);
                         IsWinActivated();
+
                         // 若“自动续签”被选中，那么就设定一下计划任务；否则，就取消自动续签
                         // If Auto-renew is selected, set the scheduled tasks; Otherwise, the auto-renewal is canceled
-                        //if (isAutoRenewChecked)
-                        //{
-                        //    CancelAutoRenew("Windows");
-                        //    AutoRenewSign("Windows");
-                        //}
-                        //else
-                        //{
-                        //    CancelAutoRenew("Windows");
-                        //}
+                        if (isAutoRenewChecked)
+                        {
+                            CancelAutoRenew("Windows");
+                            AutoRenewSign("Windows");
+                        }
+                        else
+                        {
+                            CancelAutoRenew("Windows");
+                        }
+
                         // 执行完后再返回UI线程执行剩下的动画
                         //When you're done, return to the UI thread to execute the rest of the animation
                         this.Dispatcher.Invoke
@@ -160,15 +179,17 @@ namespace KMS_Activator
                         );
                         Office_Activator activator = new Office_Activator();
                         activator.ActOffice(selectedContent);
-                        //if (isAutoRenewChecked)
-                        //{
-                        //    CancelAutoRenew("Office");
-                        //    AutoRenewSign("Office");
-                        //}
-                        //else
-                        //{
-                        //    CancelAutoRenew("Office");
-                        //}
+
+                        if (isAutoRenewChecked)
+                        {
+                            CancelAutoRenew("Office");
+                            AutoRenewSign("Office");
+                        }
+                        else
+                        {
+                            CancelAutoRenew("Office");
+                        }
+
                         this.Dispatcher.Invoke
                         (
                             () =>
@@ -184,6 +205,16 @@ namespace KMS_Activator
             }
         }
 
+        private void autoRenew_CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshConfigInit();
+            RefreshConfigFile(JSON_CFG_PATH);
+        }
 
+        private void autoUpdate_CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshConfigInit();
+            RefreshConfigFile(JSON_CFG_PATH);
+        }
     }
 }

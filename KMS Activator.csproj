@@ -6,24 +6,26 @@
     <RootNamespace>KMS_Activator</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <UseWindowsForms>True</UseWindowsForms>
+    <UseWindowsForms>False</UseWindowsForms>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Images\KMS_Activator_LOGO_ICO.ico</ApplicationIcon>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Title>Anawaert KMS Activator</Title>
     <PackageId>Anawaert KMS Activator</PackageId>
-    <Version>1.0.0.0</Version>
+    <Version>1.1.0.0</Version>
     <Authors>Anawaert</Authors>
     <Company>Anawaert Studio</Company>
     <Product>Anawaert KMS Activator</Product>
-    <Copyright>Copyright (C) 2017-2023 Anawaert Studio</Copyright>
-    <PackageProjectUrl>www.anawaert.tech</PackageProjectUrl>
+    <Copyright>Copyright (C) 2017-2024 Anawaert Studio</Copyright>
+    <PackageProjectUrl>anawaert.tech</PackageProjectUrl>
     <PackageIcon>KMS_Activator_LOGO.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <AssemblyName>Anawaert KMS Activator</AssemblyName>
     <NeutralLanguage>zh-CN</NeutralLanguage>
     <PackageReleaseNotes>一个用于Windows与Office的KMS激活小工具</PackageReleaseNotes>
     <Description>一个用于Windows与Office的KMS激活小工具</Description>
+    <FileVersion>1.1.0.0</FileVersion>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -34,18 +36,17 @@
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
+	<ItemGroup>
+		<ApplicationDefinition Remove="App.xaml"></ApplicationDefinition>
+		<Page Include="App.xaml"></Page>
+	</ItemGroup>
+
   <ItemGroup>
     <None Remove="Images\KMS_Activator_LOGO.png" />
     <None Remove="Images\KMS_Activator_LOGO_ICO.ico" />
     <None Remove="Images\KMS_Mode_PNG.png" />
     <None Remove="Images\Office19_Logo.png" />
     <None Remove="Images\Win10_Logo.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Windows_Activate_Code\" />
-    <Folder Include="Office_Activate_Code\" />
-    <Folder Include="Documents\" />
   </ItemGroup>
 
   <ItemGroup>
