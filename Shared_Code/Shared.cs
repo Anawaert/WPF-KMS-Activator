@@ -1,16 +1,15 @@
-using System.Security.Principal;
 using System;
-using System.Collections.Generic;
+using System.Security.Principal;
+using System.IO;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Reflection;
-using System.IO;
 using Microsoft.Win32;
 using System.Windows;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Text;
+
 
 namespace KMS_Activator
 {
@@ -278,12 +277,13 @@ namespace KMS_Activator
         /// </param>
         public static void AutoRenewSign(string renewTarget)
         {
-            Assembly? assembly = Assembly.GetEntryAssembly();
-            if (assembly != null)
+            ProcessModule? module = Process.GetCurrentProcess().MainModule;
+            string? currentPath = module!.FileName;
+            if (currentPath != null)
             {
                 // 将自身拷贝到“C:\Users\%username%\KMS Activator\”下后利用schtasks.exe设定定时任务，在180天内再次启动
                 // Copy itself to "C:\Users\%username%\KMS Activator\" and use schtasks.exe to set a scheduled task and start it again in 180 days
-                File.Copy(assembly.Location, USER_DOC_KMS_PATH + "Anawaert KMS Activator.exe", true);
+                File.Copy(currentPath, USER_DOC_KMS_PATH + "Anawaert KMS Activator.exe", true);
                 string exeName = "schtasks.exe";
                 // "/sm"开关为"StartMode"的缩写，"renew"指示这次启动程序是以续签的身份启动，renew后面的参数"windows"或"office"指示将续签什么类型的激活
                 // The "/sm" switch is short for "StartMode", "renew" indicates that this time the boot program is started as a renewal, and the parameter "Windows" or "Office" after renew indicates what type of activation will be renewed
@@ -354,7 +354,7 @@ namespace KMS_Activator
 
                 // 再从<a></a>组成的“小”字符串中匹配版本号，第一个匹配就是最新版本的版本号
                 Match versionNumsMatch = getVersionNumsRegex.Match(a_tags_string_builder.ToString());
-                if (versionNumsMatch.Value != "1.1.0.0" && versionNumsMatch.Success)
+                if (versionNumsMatch.Value != "1.1.1.0" && versionNumsMatch.Success)
                 {
                     MessageBoxResult result = MessageBox.Show
                     (

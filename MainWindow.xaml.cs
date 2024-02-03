@@ -132,7 +132,7 @@ namespace KMS_Activator
 
                         // 若“自动续签”被选中，那么就设定一下计划任务；否则，就取消自动续签
                         // If Auto-renew is selected, set the scheduled tasks; Otherwise, the auto-renewal is canceled
-                        if (isAutoRenewChecked)
+                        if (Current_Config.isAutoRenew)
                         {
                             CancelAutoRenew("Windows");
                             AutoRenewSign("Windows");
@@ -180,7 +180,7 @@ namespace KMS_Activator
                         Office_Activator activator = new Office_Activator();
                         activator.ActOffice(selectedContent);
 
-                        if (isAutoRenewChecked)
+                        if (Current_Config.isAutoRenew)
                         {
                             CancelAutoRenew("Office");
                             AutoRenewSign("Office");
