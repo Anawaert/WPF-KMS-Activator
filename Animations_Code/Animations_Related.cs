@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Media.Animation;
@@ -51,7 +48,7 @@ namespace KMS_Activator
             DoubleAnimation animation = new DoubleAnimation()
             {
                 From = 0,
-                To = -mainWindow.Width,
+                To = -mainWindow!.Width,
                 Duration = TimeSpan.FromSeconds(0.4)
             };
 
@@ -91,7 +88,7 @@ namespace KMS_Activator
             }
             DoubleAnimation animation = new DoubleAnimation()
             {
-                From = -mainWindow.Width,
+                From = -mainWindow!.Width,
                 To = 0,
                 Duration = TimeSpan.FromSeconds(0.4)
             };

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.IO;
 using System.Windows.Media.Animation;
 using System.Threading;
 using System.Collections.Generic;
@@ -30,22 +29,10 @@ namespace KMS_Activator
         {
             // 设置几个Label
             // Set the content of Labels in MainWindow
+            mainWindow = (MainWindow)Application.Current.MainWindow;
             winVersion_Label.Content = WIN_VERSION;
             officeVersion_Label.Content = officeProduct;
-            
-            // 新增：先判断文档文件夹下的KMS Activator文件夹是否存在，然后加载JSON格式的配置文件
-            if (!Directory.Exists(USER_DOC_KMS_PATH.TrimEnd('\\')))
-            {
-                DirectoryInfo createInfo = CreateDirInUserDocuments();
-                USER_DOC_KMS_PATH = createInfo.FullName + "\\";
-            }
-            if (!File.Exists(JSON_CFG_PATH))
-            {
-                RefreshConfigInit();
-                RefreshConfigFile(JSON_CFG_PATH);
-            }
-            EnableConfigFromFile(JSON_CFG_PATH);
-
+            EnableConfigToUI();
             // 新增：加载完主窗口后选择是否检查更新
             if (Current_Config.isAutoUpdate)
             {
@@ -134,12 +121,12 @@ namespace KMS_Activator
                         // If Auto-renew is selected, set the scheduled tasks; Otherwise, the auto-renewal is canceled
                         if (Current_Config.isAutoRenew)
                         {
-                            CancelAutoRenew("Windows");
-                            AutoRenewSign("Windows");
+                            CancelAutoRenew("WINDOWS");
+                            AutoRenewSign("WINDOWS");
                         }
                         else
                         {
-                            CancelAutoRenew("Windows");
+                            CancelAutoRenew("WINDOWS");
                         }
 
                         // 执行完后再返回UI线程执行剩下的动画
@@ -182,12 +169,12 @@ namespace KMS_Activator
 
                         if (Current_Config.isAutoRenew)
                         {
-                            CancelAutoRenew("Office");
-                            AutoRenewSign("Office");
+                            CancelAutoRenew("OFFICE");
+                            AutoRenewSign("OFFICE");
                         }
                         else
                         {
-                            CancelAutoRenew("Office");
+                            CancelAutoRenew("OFFICE");
                         }
 
                         this.Dispatcher.Invoke

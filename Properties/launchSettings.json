@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "KMS Activator": {
+      "commandName": "Project",
+      "commandLineArgs": "--renew WINDOWS\r\n"
+    }
+  }
+}

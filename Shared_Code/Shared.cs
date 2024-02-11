@@ -86,7 +86,7 @@ namespace KMS_Activator
         ///         This variable is an instance of the Window class that runs on the UI thread
         ///     </para>
         /// </summary>
-        public static MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+        internal static MainWindow? mainWindow;
         /// <summary>
         ///     <para>
         ///         该变量为KMS Activator在用户的文档目录下的工作目录(C:\Users\%USERNAME%\Documents\KMS Activator\)
@@ -269,25 +269,29 @@ namespace KMS_Activator
         /// </summary>
         /// <param name="renewTarget">
         ///     <para>
-        ///         一个 <see cref="string"/> 类型值，需要传入续签的类型（Windows或Office）
+        ///         一个 <see cref="string"/> 类型值，需要传入续签的类型（"Windows"或"Office"）
         ///     </para>
         ///     <para>
-        ///         A <see cref="string"/> value with the type to renew (Windows or Office)
+        ///         A <see cref="string"/> value with the type to renew ("Windows" or "Office")
         ///     </para>
         /// </param>
         public static void AutoRenewSign(string renewTarget)
         {
+            string exec_in_user_doc_path = USER_DOC_KMS_PATH + "Activator.exe";
             ProcessModule? module = Process.GetCurrentProcess().MainModule;
             string? currentPath = module!.FileName;
             if (currentPath != null)
             {
                 // 将自身拷贝到“C:\Users\%username%\KMS Activator\”下后利用schtasks.exe设定定时任务，在180天内再次启动
                 // Copy itself to "C:\Users\%username%\KMS Activator\" and use schtasks.exe to set a scheduled task and start it again in 180 days
-                File.Copy(currentPath, USER_DOC_KMS_PATH + "Anawaert KMS Activator.exe", true);
+                if (currentPath != exec_in_user_doc_path)
+                {
+                    File.Copy(currentPath, exec_in_user_doc_path, true);
+                }
                 string exeName = "schtasks.exe";
-                // "/sm"开关为"StartMode"的缩写，"renew"指示这次启动程序是以续签的身份启动，renew后面的参数"windows"或"office"指示将续签什么类型的激活
+                // "/sm"开关为"StartMode"的缩写，"renew"指示这次启动程序是以续签的身份启动，--renew后面的参数"windows"或"office"指示将续签什么类型的激活，/rl指示使用最高权限启动
                 // The "/sm" switch is short for "StartMode", "renew" indicates that this time the boot program is started as a renewal, and the parameter "Windows" or "Office" after renew indicates what type of activation will be renewed
-                string args = "/create /tn KMS_Renew_" + renewTarget + " /tr " + "\"" + USER_DOC_KMS_PATH + "Anawaert KMS Activator.exe renew " + renewTarget + "\" /sc daily /mo 179";
+                string args = "/create /tn \\Anawaert\\KMS_Renew_" + renewTarget + " /tr " + "\"\\\"" + USER_DOC_KMS_PATH + "Activator.exe\\\" --renew " + renewTarget + "\" /sc DAILY /mo 179 /rl HIGHEST";
                 RunProcess(exeName, args, string.Empty, true);
             }
         }
@@ -302,16 +306,16 @@ namespace KMS_Activator
         /// </summary>
         /// <param name="cancelRenewTarget">
         ///     <para>
-        ///         一个 <see cref="string"/> 类型值，需要传入取消续签的类型（Windows或Office）
+        ///         一个 <see cref="string"/> 类型值，需要传入取消续签的类型（"Windows"或"Office"）
         ///     </para>
         ///     <para>
-        ///         A <see cref="string"/> value that requires the type of cancellation (Windows or Office)
+        ///         A <see cref="string"/> value that requires the type of cancellation ("Windows" or "Office")
         ///     </para>
         /// </param>
         public static void CancelAutoRenew(string cancelRenewTarget)
         {
             string exeName = "schtasks.exe";
-            string args = "/delete /tn KMS_Renew_" + cancelRenewTarget + " /f";
+            string args = "/delete /tn \\Anawaert\\KMS_Renew_" + cancelRenewTarget + " /f";
             RunProcess(exeName, args, string.Empty, true);
         }
 
@@ -354,7 +358,7 @@ namespace KMS_Activator
 
                 // 再从<a></a>组成的“小”字符串中匹配版本号，第一个匹配就是最新版本的版本号
                 Match versionNumsMatch = getVersionNumsRegex.Match(a_tags_string_builder.ToString());
-                if (versionNumsMatch.Value != "1.1.1.0" && versionNumsMatch.Success)
+                if (versionNumsMatch.Value != "1.1.2.0" && versionNumsMatch.Success)
                 {
                     MessageBoxResult result = MessageBox.Show
                     (
@@ -392,8 +396,8 @@ namespace KMS_Activator
         /// </summary>
         public static void RefreshConfigInit()
         {
-            Current_Config.isAutoRenew = mainWindow.autoRenew_CheckBox.IsChecked ?? true;
-            Current_Config.isAutoUpdate = mainWindow.autoUpdate_CheckBox.IsChecked ?? true;
+            Current_Config.isAutoRenew = mainWindow!.autoRenew_CheckBox.IsChecked ?? true;
+            Current_Config.isAutoUpdate = mainWindow!.autoUpdate_CheckBox.IsChecked ?? true;
         }
 
         /// <summary>
@@ -425,10 +429,10 @@ namespace KMS_Activator
 
         /// <summary>
         ///     <para>
-        ///         该函数用于将配置文件的内容读取并应用于程序界面中
+        ///         该函数用于将配置文件的内容读取到程序静态变量中
         ///     </para>
         ///     <para>
-        ///         This function is used to read the contents of the configuration file and apply them to the program interfac
+        ///         This function is used to read the contents of the configuration file and store them into static variables
         ///     </para>
         /// </summary>
         /// <param name="path">
@@ -439,7 +443,7 @@ namespace KMS_Activator
         ///         The absolute path to the configuration file, represented by a <see cref="string"/> variable
         ///     </para>        
         /// </param>
-        public static void EnableConfigFromFile(string path)
+        public static void ReadConfigFromFile(string path)
         {
             Config_Type config = ConfigOperations.ReadConfig<Config_Type>(path);
 
@@ -447,8 +451,24 @@ namespace KMS_Activator
             Current_Config.isAutoRenew = config.IsAutoRenew;
             Current_Config.isDarkMode = config.IsDarkMode;
 
-            mainWindow.autoRenew_CheckBox.IsChecked = Current_Config.isAutoRenew;
-            mainWindow.autoUpdate_CheckBox.IsChecked = Current_Config.isAutoUpdate;
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         该函数用于将（用于配置的）静态变量中的值应用到UI界面
+        ///     </para>
+        ///     <para>
+        ///         This function is used to apply values stored in static variables that are used to be configurations to UI
+        ///     </para>
+        /// </summary>
+        public static void EnableConfigToUI()
+        {
+            Action actionUI = () =>
+            {
+                mainWindow!.autoRenew_CheckBox.IsChecked = Current_Config.isAutoRenew;
+                mainWindow!.autoUpdate_CheckBox.IsChecked = Current_Config.isAutoUpdate;
+            };
+            mainWindow!.Dispatcher.Invoke(actionUI);
         }
 
         /// <summary>
