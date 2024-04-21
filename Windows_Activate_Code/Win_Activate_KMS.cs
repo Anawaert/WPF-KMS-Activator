@@ -159,8 +159,8 @@ namespace KMS_Activator
 
             // 首先写入VOL密钥
             // The VOL key is written first
-            //ChangeLabelFontFamily("等线 Light", mainWindow.winChechVerLabel);
-            //ChangeLabelFontFamily("等线", mainWindow.winInstallKeyLabel);
+            // ChangeLabelFontFamily("等线 Light", mainWindow.winChechVerLabel);
+            // ChangeLabelFontFamily("等线", mainWindow.winInstallKeyLabel);
             try
             {
                 RunProcess
@@ -218,13 +218,38 @@ namespace KMS_Activator
                     SYS32_PATH,
                     true
                 );
-                MessageBox.Show
-                (
-                    "已完成对 "+ WIN_VERSION + " 产品的激活！",
-                    "恭喜",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
+
+                if (IsWinActivated())
+                {
+                    MessageBox.Show
+                    (
+                        "已完成对 " + WIN_VERSION + " 产品的激活！",
+                        "恭喜",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show
+                    (
+                        "已完成对 " + WIN_VERSION + " 产品的激活操作，但未能即时查询到成功，请重新计算机以刷新激活状态。\n" +
+                        "是否立即重启您的计算机？",
+                        "提示",
+                        MessageBoxButton.OKCancel,
+                        MessageBoxImage.Question
+                    );
+                    
+                    if (result == MessageBoxResult.OK)
+                    {
+                        RunProcess("shutdown.exe", "/r /t 0", SYS32_PATH, true);
+                        Application.Current.Shutdown();
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
             }
             catch (Exception apply_Error)
             {

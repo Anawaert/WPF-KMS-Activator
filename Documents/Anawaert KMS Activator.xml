@@ -63,6 +63,36 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:KMS_Activator.Converters.BoolToBrushCvter">
+            <summary>
+                <para>
+                    该类主要提供一个由bool值对Brushes类型的转换器
+                </para>
+                <para>
+                    
+                </para>
+            </summary>
+        </member>
+        <member name="M:KMS_Activator.Converters.BoolToBrushCvter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+                <para>
+                    转换函数，详见接口<see cref="T:System.Windows.Data.IValueConverter"/>中对该函数的注释
+                </para>
+                <para>
+                    
+                </para>        
+            </summary>
+        </member>
+        <member name="M:KMS_Activator.Converters.BoolToBrushCvter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+                <para>
+                    反向转换函数，详见接口<see cref="T:System.Windows.Data.IValueConverter"/>中对该函数的注释
+                </para>
+                <para>
+                    
+                </para>        
+            </summary>
+        </member>
         <member name="T:KMS_Activator.MainWindow">
             <summary>
             <para>Interaction logic for MainWindow.xaml</para>
@@ -713,10 +743,10 @@
             </summary>
             <param name="renewTarget">
                 <para>
-                    一个 <see cref="T:System.String"/> 类型值，需要传入续签的类型（Windows或Office）
+                    一个 <see cref="T:System.String"/> 类型值，需要传入续签的类型（"Windows"或"Office"）
                 </para>
                 <para>
-                    A <see cref="T:System.String"/> value with the type to renew (Windows or Office)
+                    A <see cref="T:System.String"/> value with the type to renew ("Windows" or "Office")
                 </para>
             </param>
         </member>
@@ -731,10 +761,10 @@
             </summary>
             <param name="cancelRenewTarget">
                 <para>
-                    一个 <see cref="T:System.String"/> 类型值，需要传入取消续签的类型（Windows或Office）
+                    一个 <see cref="T:System.String"/> 类型值，需要传入取消续签的类型（"Windows"或"Office"）
                 </para>
                 <para>
-                    A <see cref="T:System.String"/> value that requires the type of cancellation (Windows or Office)
+                    A <see cref="T:System.String"/> value that requires the type of cancellation ("Windows" or "Office")
                 </para>
             </param>
         </member>
@@ -776,13 +806,13 @@
                 </para>        
             </param>
         </member>
-        <member name="M:KMS_Activator.Shared.EnableConfigFromFile(System.String)">
+        <member name="M:KMS_Activator.Shared.ReadConfigFromFile(System.String)">
             <summary>
                 <para>
-                    该函数用于将配置文件的内容读取并应用于程序界面中
+                    该函数用于将配置文件的内容读取到程序静态变量中
                 </para>
                 <para>
-                    This function is used to read the contents of the configuration file and apply them to the program interfac
+                    This function is used to read the contents of the configuration file and store them into static variables
                 </para>
             </summary>
             <param name="path">
@@ -793,6 +823,16 @@
                     The absolute path to the configuration file, represented by a <see cref="T:System.String"/> variable
                 </para>        
             </param>
+        </member>
+        <member name="M:KMS_Activator.Shared.EnableConfigToUI">
+            <summary>
+                <para>
+                    该函数用于将（用于配置的）静态变量中的值应用到UI界面
+                </para>
+                <para>
+                    This function is used to apply values stored in static variables that are used to be configurations to UI
+                </para>
+            </summary>
         </member>
         <member name="M:KMS_Activator.Shared.CreateDirInUserDocuments">
             <summary>

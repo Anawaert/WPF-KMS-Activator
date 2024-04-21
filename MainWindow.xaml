@@ -5,24 +5,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:System="clr-namespace:System;assembly=mscorlib" 
+        xmlns:cvters="clr-namespace:KMS_Activator.Converters"
         mc:Ignorable="d"
         Title="Anawaert KMS Activator" Height="320" Width="640"
         Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize"
         Icon="/Images/KMS_Activator_LOGO_ICO.ico">
-
+    
     <!--引入外部的资源字典-->
     <Window.Resources>
         <ResourceDictionary>
-            <System:Boolean x:Key="IsTrue">True</System:Boolean>
-            <System:Boolean x:Key="IsFalse">False</System:Boolean>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="./UI_Style_Code/UI_Style_Related.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="./UI_Style_Code/UI_Style_Related.xaml">
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-
+    
+    <!--zbool值与背景颜色数据绑定 -->
+    <!--<Window.Background>
+        <SolidColorBrush Color="{Binding isBlack, Converter={StaticResource BoolToBrushCvter}}"/>
+    </Window.Background>-->
+    
     <!--主窗口的UI布局部分-->
     <!--主容器-->
     <Grid>
@@ -82,10 +87,17 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <RibbonRadioButton LargeImageSource="/Images/KMS_Mode_PNG.png" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Label="KMS激活模式" FontFamily="等线 Light" FontSize="12" IsChecked="True" BorderBrush="LightGreen" BorderThickness="1" Cursor="Hand"></RibbonRadioButton>
-            <GridSplitter Grid.Column="0" Grid.RowSpan="5" BorderBrush="LightGray" BorderThickness="1.5" Margin="0,5,0,5"/>
+            <Label FontSize="16" FontFamily="等线 Light" HorizontalAlignment="Left" VerticalAlignment="Center" Content=" ☰" Foreground="Gray"></Label>
+            <Label FontSize="16" FontFamily="等线 Light" HorizontalAlignment="Right" VerticalAlignment="Center" Content="菜单  " Foreground="Gray"></Label>
+            <RibbonRadioButton Grid.RowSpan="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Label="KMS 激活模式" FontFamily="等线 Light" FontSize="13" IsChecked="True" BorderBrush="LightGreen" BorderThickness="1" Cursor="Hand"></RibbonRadioButton>
+            <GridSplitter Grid.Row="0" Grid.RowSpan="2" BorderBrush="LightGray" BorderThickness="0.5" ResizeDirection="Rows" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,5,0"></GridSplitter>
+            <GridSplitter Grid.Row="1" Grid.RowSpan="2" BorderBrush="LightGray" BorderThickness="0.5" ResizeDirection="Rows" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,5,0"></GridSplitter>
+            <GridSplitter Grid.Column="0" Grid.RowSpan="8" BorderBrush="LightGray" BorderThickness="1.5" Margin="5,5,0,5" IsEnabled="False"></GridSplitter>
         </Grid>
 
         <!--主页面的Grid-->
@@ -168,6 +180,15 @@
                     <!--应用了自定义的UI样式-->
                     <ComboBox Template="{DynamicResource ComboBox_NewStyle1}" x:Name="selectServer_ComboBox" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="2" VerticalAlignment="Center" Margin="5" FontSize="16" FontFamily="等线 Light" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                         <ComboBoxItem Content="Anawaert KMS 服务器" IsSelected="True"></ComboBoxItem>
+                        <ComboBoxItem Content="kms.chinancee.com" IsSelected="False"></ComboBoxItem>
+                        <ComboBoxItem Content="kms.loli.beer" IsSelected="False"></ComboBoxItem>
+                        <ComboBoxItem Content="kms.cgtsoft.com" IsSelected="False"></ComboBoxItem>
+                        <ComboBoxItem Content="kms.sixyin.com" IsSelected="False"></ComboBoxItem>
+                        <ComboBoxItem Content="kms.wxlost.com" IsSelected="False"></ComboBoxItem>
+                        <ComboBoxItem Content="kms.bearlele.top" IsSelected="False"></ComboBoxItem>
+                        <ComboBoxItem Content="kms.myds.cloud" IsSelected="False"></ComboBoxItem>
+                        <ComboBoxItem Content="kms.03k.org" IsSelected="False"></ComboBoxItem>
+                        <ComboBoxItem Content="zh.us.to" IsSelected="False"></ComboBoxItem>
                         <ComboBox.Resources>
                             <Style TargetType="{x:Type ComboBox}">
                                 <Setter Property="Background" Value="White"></Setter>
@@ -208,7 +229,7 @@
                     <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="等线 Light" FontSize="12" Foreground="Orange" Content="Office 版本"></Label>
                 </Grid>
             </GroupBox>
-            <GridSplitter Grid.Column="3" Grid.RowSpan="5" BorderBrush="LightGray" BorderThickness="1.5" Margin="0,5,0,5"/>
+            <GridSplitter Grid.Column="3" Grid.RowSpan="5" BorderBrush="LightGray" BorderThickness="1.5" Margin="0,5,0,5" IsEnabled="False"/>
         </Grid>
     </Grid>
 

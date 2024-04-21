@@ -113,20 +113,33 @@ namespace KMS_Activator
                                 isAutoRenewChecked = autoRenew_CheckBox.IsChecked == true;
                             }
                         );
-                        Win_Activator activator = new Win_Activator();
-                        activator.ActWin(selectedContent);
-                        IsWinActivated();
 
-                        // 若“自动续签”被选中，那么就设定一下计划任务；否则，就取消自动续签
-                        // If Auto-renew is selected, set the scheduled tasks; Otherwise, the auto-renewal is canceled
-                        if (Current_Config.isAutoRenew)
+                        if (IsWinActivated())
                         {
-                            CancelAutoRenew("WINDOWS");
-                            AutoRenewSign("WINDOWS");
+                            MessageBox.Show
+                            (
+                                "您的Windows已激活，无需再次激活",
+                                "提示",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information
+                            );
                         }
                         else
                         {
-                            CancelAutoRenew("WINDOWS");
+                            Win_Activator activator = new Win_Activator();
+                            activator.ActWin(selectedContent);
+
+                            // 若“自动续签”被选中，那么就设定一下计划任务；否则，就取消自动续签
+                            // If Auto-renew is selected, set the scheduled tasks; Otherwise, the auto-renewal is canceled
+                            if (Current_Config.isAutoRenew)
+                            {
+                                CancelAutoRenew("WINDOWS");
+                                AutoRenewSign("WINDOWS");
+                            }
+                            else
+                            {
+                                CancelAutoRenew("WINDOWS");
+                            }
                         }
 
                         // 执行完后再返回UI线程执行剩下的动画
