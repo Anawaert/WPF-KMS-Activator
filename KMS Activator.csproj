@@ -12,7 +12,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Title>Anawaert KMS Activator</Title>
     <PackageId>Anawaert KMS Activator</PackageId>
-    <Version>1.2.0.0</Version>
+    <Version>1.2.1.0</Version>
     <Authors>Anawaert</Authors>
     <Company>Anawaert Studio</Company>
     <Product>Anawaert KMS Activator</Product>
@@ -24,8 +24,8 @@
     <NeutralLanguage>zh-CN</NeutralLanguage>
     <PackageReleaseNotes>一个用于Windows与Office的KMS激活小工具</PackageReleaseNotes>
     <Description>一个用于Windows与Office的KMS激活小工具</Description>
-    <FileVersion>1.1.2.0</FileVersion>
-    <AssemblyVersion>1.1.2.0</AssemblyVersion>
+    <FileVersion>1.2.1.0</FileVersion>
+    <AssemblyVersion>1.2.1.0</AssemblyVersion>
     <RepositoryUrl>https://github.com/Anawaert/WPF-KMS-Activator</RepositoryUrl>
     <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>C:\Users\Adam\Desktop\Release\kmscert.pfx</AssemblyOriginatorKeyFile>
