@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using static KMS_Activator.Shared;
 using static KMS_Activator.Office_Configurator;
 using static KMS_Activator.Animations_Related;
+using System.ComponentModel.DataAnnotations;
 
 namespace KMS_Activator
 {
@@ -17,12 +18,32 @@ namespace KMS_Activator
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private readonly Dictionary<int, Label> stepLabels;
+        private readonly Dictionary<int, HandyControl.Controls.LoadingCircle> loadingCircles;
+
         /// <summary>
         /// 主窗口类构造函数
         /// </summary>
         public MainWindow()
         {
             InitializeComponent();
+
+            stepLabels = new Dictionary<int, Label>()
+            {
+                {1, stepDone1 },
+                {2, stepDone2 },
+                {3, stepDone3 },
+                {4, stepDone4 }
+            };
+
+            loadingCircles = new Dictionary<int, HandyControl.Controls.LoadingCircle>()
+            {
+                {1, loadingCircle1 },
+                {2, loadingCircle2 },
+                {3, loadingCircle3 },
+                {4, loadingCircle4 }
+            };
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -33,6 +54,7 @@ namespace KMS_Activator
             winVersion_Label.Content = WIN_VERSION;
             officeVersion_Label.Content = officeProduct;
             EnableConfigToUI();
+
             // 新增：加载完主窗口后选择是否检查更新
             if (Current_Config.isAutoUpdate)
             {
@@ -42,52 +64,64 @@ namespace KMS_Activator
 
         // 当“+”号Label按钮按下的时候
         // When the "+" Label button is pressed
-        private void addServerName_Button_Click(object sender, RoutedEventArgs e)
-        {
-            if (addServerName_TextBox.Visibility == Visibility.Hidden)
+        /*  private void addServerName_Button_Click(object sender, RoutedEventArgs e)
             {
-                addServerName_TextBox.Visibility = Visibility.Visible;
-                addServerName_Button.Content = "√";
-                deleteServerName_Button.Visibility = Visibility.Hidden;
-            }
-            else
-            {
-                if (addServerName_TextBox.Text.Trim(' ') != string.Empty && !addServerName_TextBox.Text.Contains("Anawaert KMS 服务器"))
+                if (addServerName_TextBox.Visibility == Visibility.Hidden)
                 {
-                    ComboBoxItem newItem = new ComboBoxItem
-                    {
-                        Content = addServerName_TextBox.Text,
-                        IsSelected = true,
-                    };
-                    selectServer_ComboBox.Items.Add(newItem);
+                    addServerName_TextBox.Visibility = Visibility.Visible;
+                    addServerName_Button.Content = "√";
+                    deleteServerName_Button.Visibility = Visibility.Hidden;
                 }
-                addServerName_TextBox.Text = string.Empty;
-                addServerName_TextBox.Visibility = Visibility.Hidden;
-                deleteServerName_Button.Visibility = Visibility.Visible;
-                addServerName_Button.Content = "+";
+                else
+                {
+                    if (addServerName_TextBox.Text.Trim(' ') != string.Empty && !addServerName_TextBox.Text.Contains("Anawaert KMS 服务器"))
+                    {
+                        ComboBoxItem newItem = new ComboBoxItem
+                        {
+                            Content = addServerName_TextBox.Text,
+                            IsSelected = true,
+                        };
+                        selectServer_ComboBox.Items.Add(newItem);
+                    }
+                    addServerName_TextBox.Text = string.Empty;
+                    addServerName_TextBox.Visibility = Visibility.Hidden;
+                    deleteServerName_Button.Visibility = Visibility.Visible;
+                    addServerName_Button.Content = "+";
+                }
             }
-        }
 
-        // 当“-”号Label按钮按下的时候
-        // When the "-" Label button is pressed
-        private void deleteServerName_Button_Click(object sender, RoutedEventArgs e)
+            // 当“-”号Label按钮按下的时候
+            // When the "-" Label button is pressed
+            private void deleteServerName_Button_Click(object sender, RoutedEventArgs e)
+            {
+                selectServer_ComboBox.Items.Remove
+                (
+                    (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
+                    null :
+                    selectServer_ComboBox.SelectedItem
+                );
+            }  */
+
+        private void RemoveLoadingAndNoticeLabels()
         {
-            selectServer_ComboBox.Items.Remove
-            (
-                (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ? 
-                null                                                                                        :
-                selectServer_ComboBox.SelectedItem
-            );
+            for (int i = 1; i < 5; i++)
+            {
+                loadingCircles[i].Visibility = Visibility.Collapsed;
+                stepLabels[i].Visibility = Visibility.Collapsed;
+            }
         }
 
         // 当“激活”Label按钮按下的时候
         // When the “激活” Label button is pressed
         private void activate_Button_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            RemoveLoadingAndNoticeLabels();
             // 执行动画
             // Begin the animation
-            MainW_Slide(new List<Grid> { menuGrid, page1_Grid });
-            awaiting_ProgressBar.IsIndeterminate = true;
+            MainW_Slide(new List<Grid> { mainInterfaceGrid });
+
+            // awaiting_ProgressBar.IsEnabled = true;
+
             // 当awaiting_ProgressBar被选中时
             // When awaiting_ProgressBar was selected
             if (actWin_RadioButton.IsChecked == true)
@@ -99,7 +133,7 @@ namespace KMS_Activator
                     () =>
                     {
                         Thread.Sleep(650);
-                        string selectedContent = "anawaert.tech";
+                        string selectedContent = "www.anawaert.tech";
                         bool isAutoRenewChecked = true;
                         // 通过UI线程拿到KMS服务器的选择
                         // Get the KMS server selection through the UI thread
@@ -108,7 +142,7 @@ namespace KMS_Activator
                             () =>
                             {
                                 selectedContent = (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
-                                                  "anawaert.tech" :
+                                                  "www.anawaert.tech" :
                                                   (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content;
                                 isAutoRenewChecked = autoRenew_CheckBox.IsChecked == true;
                             }
@@ -148,8 +182,8 @@ namespace KMS_Activator
                         (
                             () =>
                             {
-                                MainW_SlideBack(new List<Grid> { menuGrid, page1_Grid });
-                                awaiting_ProgressBar.IsIndeterminate = false;
+                                MainW_SlideBack(new List<Grid> { mainInterfaceGrid });
+                                // awaiting_ProgressBar.IsEnabled = false;
                             }
                         );
                     }
@@ -165,14 +199,14 @@ namespace KMS_Activator
                     () =>
                     {
                         Thread.Sleep(650);
-                        string selectedContent = "anawaert.tech";
+                        string selectedContent = "www.anawaert.tech";
                         bool isAutoRenewChecked = true;
                         this.Dispatcher.Invoke
                         (
                             () =>
                             {
                                 selectedContent = (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
-                                                  "anawaert.tech" :
+                                                  "www.anawaert.tech" :
                                                   (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content;
                                 isAutoRenewChecked = autoRenew_CheckBox.IsChecked == true;
                             }
@@ -194,8 +228,8 @@ namespace KMS_Activator
                         (
                             () =>
                             {
-                                MainW_SlideBack(new List<Grid> { menuGrid, page1_Grid });
-                                awaiting_ProgressBar.IsIndeterminate = false;
+                                MainW_SlideBack(new List<Grid> { mainInterfaceGrid });
+                                // awaiting_ProgressBar.IsEnabled = false;
                                 officeVersion_Label.Content = officeProduct;
                             }
                         );
@@ -215,6 +249,21 @@ namespace KMS_Activator
         {
             RefreshConfigInit();
             RefreshConfigFile(JSON_CFG_PATH);
+        }
+
+        internal void ShiftAwaitingAnimationEffects(int currentIndex)
+        {
+            int minIndex = 1;
+            if (currentIndex < 5)
+            {
+                loadingCircles[currentIndex].Visibility = Visibility.Visible;
+            }
+
+            for (int i = minIndex; i <= currentIndex - 1; i++)
+            {
+                loadingCircles[i].Visibility = Visibility.Collapsed;
+                stepLabels[i].Visibility = Visibility.Visible;
+            }
         }
     }
 }

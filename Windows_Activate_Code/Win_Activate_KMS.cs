@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using Microsoft.Win32;  // 配合注册表读写操作  Works with registry read and write operations
 using static KMS_Activator.Shared;  // 使用共享的功能代码  Use shared functional code blocks
-using System.Windows.Media;
+using static KMS_Activator.UI_Thread_Operations;  // 使用UI线程操作  Use UI thread operations
 
 namespace KMS_Activator
 {
@@ -76,8 +76,7 @@ namespace KMS_Activator
         /// </param>
         public void ActWin(string kmsServerName)
         {
-            //ChangeGroupBoxVisibility(Wpf::Visibility.Visible, mainWindow.winSteps_GroupBox);
-            //ChangeLabelFontFamily("等线", mainWindow.winChechVerLabel);
+            ShiftAwaitingAnimationEffectsTalker(1);
 
             string key = string.Empty;               
             foreach (string version in volKeys.Keys)
@@ -159,8 +158,7 @@ namespace KMS_Activator
 
             // 首先写入VOL密钥
             // The VOL key is written first
-            // ChangeLabelFontFamily("等线 Light", mainWindow.winChechVerLabel);
-            // ChangeLabelFontFamily("等线", mainWindow.winInstallKeyLabel);
+            ShiftAwaitingAnimationEffectsTalker(2);
             try
             {
                 RunProcess
@@ -185,6 +183,7 @@ namespace KMS_Activator
 
             // 开始配置连接KMS服务器
             // The configuration starts to connect to the KMS server
+            ShiftAwaitingAnimationEffectsTalker(3);
             try
             {
                 RunProcess
@@ -209,6 +208,7 @@ namespace KMS_Activator
 
             // 应用到系统激活
             // Apply to system activation
+            ShiftAwaitingAnimationEffectsTalker(4);
             try
             {
                 RunProcess
@@ -221,6 +221,7 @@ namespace KMS_Activator
 
                 if (IsWinActivated())
                 {
+                    ShiftAwaitingAnimationEffectsTalker(5);
                     MessageBox.Show
                     (
                         "已完成对 " + WIN_VERSION + " 产品的激活！",
@@ -231,6 +232,7 @@ namespace KMS_Activator
                 }
                 else
                 {
+                    ShiftAwaitingAnimationEffectsTalker(5);
                     MessageBoxResult result = MessageBox.Show
                     (
                         "已完成对 " + WIN_VERSION + " 产品的激活操作，但未能即时查询到成功，请重新计算机以刷新激活状态。\n" +

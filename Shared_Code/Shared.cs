@@ -9,6 +9,7 @@ using System.Windows;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Collections.Generic;
 
 
 namespace KMS_Activator
@@ -41,7 +42,7 @@ namespace KMS_Activator
         ///         This value is the address of Anawaert KMS server
         ///     </para>
         /// </summary>
-        public const string AW_KMS_SERVER_ADDR = "anawaert.tech";
+        public const string AW_KMS_SERVER_ADDR = "www.anawaert.tech";
         /// <summary>
         ///     <para>
         ///         该静态变量指示当前应用程序运行时所在的目录
@@ -50,7 +51,7 @@ namespace KMS_Activator
         ///         This static variable indicates the directory where the current application is running
         ///     </para>
         /// </summary>
-        public static string EXEC_PATH = AppDomain.CurrentDomain.BaseDirectory + "\\";
+        public static string EXEC_PATH { get; } = AppDomain.CurrentDomain.BaseDirectory + "\\";
         /// <summary>
         ///     <para>
         ///         该静态量用以获取存储当前Windows系统的产品名或版本名
@@ -59,7 +60,7 @@ namespace KMS_Activator
         ///         This static quantity is used to obtain the product name or version name that stores the current Windows system
         ///     </para>
         /// </summary>
-        public static string WIN_VERSION = Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductName", string.Empty)?.ToString() ?? "Not_Found";
+        public static string WIN_VERSION { get; } = Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductName", string.Empty)?.ToString() ?? "Not_Found";
         /// <summary>
         ///     <para>
         ///         该值指示当前系统的System32目录的绝对路径
@@ -68,7 +69,7 @@ namespace KMS_Activator
         ///         This value indicates the absolute path to the System32 directory on the current system
         ///     </para>
         /// </summary>
-        public static string SYS32_PATH = Environment.GetEnvironmentVariable("SystemRoot") + "\\System32";
+        public static string SYS32_PATH { get; } = Environment.GetEnvironmentVariable("SystemRoot") + "\\System32";
         /// <summary>
         ///     <para>
         ///         该值指示当前用户的“文档”文件夹
@@ -77,7 +78,7 @@ namespace KMS_Activator
         ///         This value indicates the current user's Documents folder
         ///     </para>
         /// </summary>
-        public static string USER_DOC_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\";
+        public static string USER_DOC_PATH { get; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\";
         /// <summary>
         ///     <para>
         ///         该变量为运行在UI线程上的Window类实例
@@ -86,7 +87,7 @@ namespace KMS_Activator
         ///         This variable is an instance of the Window class that runs on the UI thread
         ///     </para>
         /// </summary>
-        internal static MainWindow? mainWindow;
+        internal static MainWindow? mainWindow { get; set; }
         /// <summary>
         ///     <para>
         ///         该变量为KMS Activator在用户的文档目录下的工作目录(C:\Users\%USERNAME%\Documents\KMS Activator\)
@@ -95,7 +96,7 @@ namespace KMS_Activator
         ///         This variable is the KMS Activator working directory in the user's Documents directory (C:\Users\%USERNAME%\Documents\KMS Activator\)
         ///     </para>
         /// </summary>        
-        public static string USER_DOC_KMS_PATH = USER_DOC_PATH + "KMS Activator\\";
+        public static string USER_DOC_KMS_PATH { get; set; } = USER_DOC_PATH + "KMS Activator\\";
         /// <summary>
         ///     <para>
         ///         该变量为KMS Activator在用户的文档目录下的工作目录中配置文件的路径
@@ -104,7 +105,7 @@ namespace KMS_Activator
         ///         This variable is the path to the KMS Activator profile in the user's working directory under the document directory
         ///     </para>
         /// </summary>  
-        public static string JSON_CFG_PATH = USER_DOC_KMS_PATH + "cfg.json";
+        public static string JSON_CFG_PATH { get; } = USER_DOC_KMS_PATH + "cfg.json";
 
         #endregion 全局静态变量与常量区
 

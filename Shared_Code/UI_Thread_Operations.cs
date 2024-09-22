@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
-namespace KMS_Activator.Shared_Code
+namespace KMS_Activator
 {
-    internal class UI_Thread_Operations
+    internal static class UI_Thread_Operations
     {
-
+        internal static void ShiftAwaitingAnimationEffectsTalker(int current)
+        {
+            if (Shared.mainWindow != null)
+            {
+                Shared.mainWindow.Dispatcher.Invoke
+                (
+                    () => { Shared.mainWindow.ShiftAwaitingAnimationEffects(current); }
+                );
+            }
+        }
     }
 }

@@ -47,9 +47,20 @@
   <ItemGroup>
     <None Remove="Images\KMS_Activator_LOGO.png" />
     <None Remove="Images\KMS_Activator_LOGO_ICO.ico" />
-    <None Remove="Images\KMS_Mode_PNG.png" />
+    <None Remove="Images\KMS_Key_Icon.png" />
     <None Remove="Images\Office19_Logo.png" />
+    <None Remove="Images\Remote_KMS_Icon.png" />
     <None Remove="Images\Win10_Logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\KMS_Key_Icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HandyControl" Version="3.5.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -58,10 +69,10 @@
       <PackagePath>\</PackagePath>
     </Resource>
     <Resource Include="Images\KMS_Activator_LOGO_ICO.ico" />
-    <Resource Include="Images\KMS_Mode_PNG.png" />
     <Resource Include="Images\Office19_Logo.png">
       <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\Remote_KMS_Icon.png" />
     <Resource Include="Images\Win10_Logo.png" />
   </ItemGroup>
 
