@@ -86,13 +86,13 @@ namespace KMS_Activator
             {
                 myGrid.RenderTransform = translateTransform;
             }
-            DoubleAnimation animation = new DoubleAnimation()
+            DoubleAnimation animation = new DoubleAnimation
             {
                 From = -mainWindow!.Width,
                 To = 0,
-                Duration = TimeSpan.FromSeconds(0.4)
+                Duration = TimeSpan.FromSeconds(0.4),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
             };
-            animation.EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut };
             translateTransform.BeginAnimation(TranslateTransform.XProperty, animation);
         }
     }

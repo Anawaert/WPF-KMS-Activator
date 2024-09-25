@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Win32;  // 配合注册表读写操作  Works with registry read and write operations
 using static KMS_Activator.Shared;  // 使用共享的功能代码  Use shared functional code blocks
-using System.IO;  // 用于判断文件是否存在  Used to determine if a file exists
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace KMS_Activator
 {
@@ -65,11 +66,20 @@ namespace KMS_Activator
                 return false;
             }
 
-            // 当checkInfo中包含以下字段，则说明已激活
-            // checkInfo is activated when it contains the following fields
-            bool activationState = checkInfo.Contains("activation successful")         ||
-                                   checkInfo.Contains("0xC004F009")                    || 
-                                   checkInfo.Contains("LICENSE STATUS:  ---LICENSED---");
+            bool activationState = false;
+
+            // 使用正则表达式来匹配OSPP.vbs的输出结果中---与---之间的内容，若为Office Pro Plus的VL版本且"LICENSE STATUS:  ---LICENSED---"，则说明已激活
+            string pattern = @"(?<=-{39})(.*?)(?=-{39})";
+            MatchCollection checkInfoCollection = Regex.Matches(checkInfo, pattern, RegexOptions.Singleline);
+            foreach (Match match in checkInfoCollection)
+            {
+                string proPlusPattern = @"Office(\d{2})?ProPlus(\d{4})?(VL)?";
+                if (Regex.Match(match.Value, proPlusPattern).Success && match.Value.Contains("LICENSE STATUS:  ---LICENSED---"))
+                {
+                    activationState = true;
+                    break;
+                }
+            }
 
             // 检查是否为未安装密钥
             // Check if the key is not installed
@@ -116,8 +126,8 @@ namespace KMS_Activator
             {
                 // 首先判断系统是32位还是64位环境,然后获取正确的分支
                 // First determine whether the system is a 32-bit or 64-bit environment, and then get the correct branch
-                RegistryKey regKey = Environment.Is64BitOperatingSystem                                         ? 
-                                     RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64):
+                RegistryKey regKey = Environment.Is64BitOperatingSystem ?
+                                     RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64) :
                                      RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
                 string officePath = string.Empty;
                 // 由于在安装时可能会出现在64位系统中安装了32位的情况，所以使用officeBaseKey__来区分32位与64位在注册表中的位置
@@ -131,72 +141,76 @@ namespace KMS_Activator
                     throw new Exception("Office is not installed yet");
                 }
 
-                // 以下为具体的Office版本判断与从Office在注册表中提供的安装目录转化为OSPP.vbs所在目录的过程
-                // The following is the specific Office version determination and the process of converting the installation directory provided by Office in the registry to the directory where OSPP.vbs is located
-                // 当两处的注册表键值至少存在一个时候
-                // When at least one of the two registry keys exists
-                if (officeBaseKey64?.OpenSubKey("16.0") != null || officeBaseKey32?.OpenSubKey("16.0") != null)
+                // 改用循环来判断Office的版本，因为注册表中的Office的版本可能不止一个
+                // Use a loop to determine the version of Office, because there may be more than one version of Office in the registry
+                string[] officeInternalVersions = new string[] { "16.0", "15.0", "14.0" };
+                string office_ver = "Not_Found";
+                foreach (string ver in officeInternalVersions)
                 {
-                    // 读取Word键下InstallRoot键的Path键值以获取Office完整安装路径（若安装了Office，Word一定是必装的）
-                    // Read the Path key of the InstallRoot key under the Word key to get the full Office installation path (if you already have Office installed, Word is definitely required)
-                    RegistryKey? assumedKey64 = officeBaseKey64?.OpenSubKey("16.0\\Word\\InstallRoot");
-                    RegistryKey? assumedKey32 = officeBaseKey32?.OpenSubKey("16.0\\Word\\InstallRoot");
-
-                    if (assumedKey64?.GetValue("Path") == null && assumedKey32?.GetValue("Path") == null)
+                    // 由于安装了Office，那么注册表中一定会有一个Word的键，所以可以通过Word键来判断是否安装了Office
+                    // * 前提：该用户只安装了一个版本的Office
+                    // Since Office is installed, there will definitely be a Word key in the registry, so you can determine if Office is installed through the Word key
+                    // * Premise: The user has only installed one version of Office
+                    bool isSubKeyExist = officeBaseKey64?.OpenSubKey(ver) != null || officeBaseKey32?.OpenSubKey(ver) != null;
+                    bool isSubKeyHasWordKey = officeBaseKey64?.OpenSubKey(ver + "\\Word") != null || officeBaseKey32?.OpenSubKey(ver + "\\Word") != null;
+                    if (isSubKeyExist && isSubKeyHasWordKey)
                     {
-                        throw new Exception("Office已损坏");
-                    }
+                        // 读取Word键下InstallRoot键的Path键值以获取Office完整安装路径
+                        // Read the Path key of the InstallRoot key under the Word key to get the full Office installation path
+                        RegistryKey? assumedKey64 = officeBaseKey64?.OpenSubKey(ver + "\\Word\\InstallRoot");
+                        RegistryKey? assumedKey32 = officeBaseKey32?.OpenSubKey(ver + "\\Word\\InstallRoot");
 
-                    // 从注册表中读取Office的安装路径，并用路径中是否有root字段来判断版本是否为Office 2019或Office 2021
-                    // Read the Office installation path from the registry and use the root field in the path to determine whether the version is Office 2019 or Office 2021
-                    // OSPP.vbs一般仍然在C:\Program Files\Microsoft Office\Office1X\下
-                    // OSPP.vbs is still generally under C:\Program Files\Microsoft Office\Office1X\
-                    officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
-                    if (officePath.Contains("root"))
-                    {
-                        // 把\root给”Trim“掉，就是OSPP.vbs的所在目录了
-                        // Remove the \root from the path, and you now have the OSPP.vbs directory
-                        officePath = officePath.Replace("\\root", string.Empty);
-                        officeVersion = "Office 2019/2021";
+                        // 若存在Word键，但是Path键值为空，那么说明Office安装出现问题
+                        // If the Word key exists, but the Path key value is empty, it means that there is a problem with the Office installation
+                        if (assumedKey64?.GetValue("Path") == null && assumedKey32?.GetValue("Path") == null)
+                        {
+                            throw new Exception("Installation of Office is damaged");
+                        }
+
+                        // 从注册表中读取Office的安装路径，并用路径中是否有root字段来判断版本是否为Office 2019或Office 2021
+                        // Read the Office installation path from the registry and use the root field in the path to determine whether the version is Office 2019 or Office 2021
+                        officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
+                        if (ver == "16.0" && officePath.Contains("root"))
+                        {
+                            // 把"\root"给去掉，就是OSPP.vbs的所在目录了
+                            // Remove the \root from the path, and you now have the OSPP.vbs directory
+                            officePath = officePath.Replace("\\root", string.Empty);
+                            office_ver = "Office 2019/2021";
+                        }
+                        // 没有"\root"，那么就是Office 2016
+                        // If there is no "\root", it is Office 2016
+                        else if (ver == "16.0")
+                        {
+                            office_ver = officePath != string.Empty ? "Office 2016" : "Not_Found";
+                        }
+                        // 以下同理
+                        // The following is the same
+                        else if (ver == "15.0")
+                        {
+                            office_ver = officePath != string.Empty ? "Office 2013" : "Not_Found";
+                        }
+                        else if (ver == "14.0")
+                        {
+                            office_ver = officePath != string.Empty ? "Office 2010" : "Not_Found";
+                        }
+                        else
+                        {
+                            office_ver = "Not_Found";
+                        }
                     }
+                    // 若不存在Word键，那么说明该版本的Office并未安装
+                    // If the Word key does not exist, the version of Office is not installed
                     else
                     {
-                        officeVersion = officePath != string.Empty ? "Office 2016" : "Not_Found";
+                        continue;
                     }
                 }
-                else if (officeBaseKey64?.OpenSubKey("15.0") != null || officeBaseKey32?.OpenSubKey("15.0") != null)
-                {
-                    // 如果找到的子键为15.0，那么说明安装的为Office 2013
-                    // If the subkey found is 15.0, Office 2013 is installed
-                    RegistryKey? assumedKey64 = officeBaseKey64?.OpenSubKey("15.0\\Word\\InstallRoot");
-                    RegistryKey? assumedKey32 = officeBaseKey32?.OpenSubKey("15.0\\Word\\InstallRoot");
-
-                    if (assumedKey64?.GetValue("Path") == null || assumedKey32?.GetValue("Path") == null)
-                    {
-                        throw new Exception("Office已损坏");
-                    }
-                    officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
-                    officeVersion = officePath != string.Empty ? "Office 2013" : "Not_Found";
-                }
-                else if (officeBaseKey64?.OpenSubKey("14.0") != null || officeBaseKey32?.OpenSubKey("14.0") != null)
-                {
-                    RegistryKey? assumedKey64 = officeBaseKey64?.OpenSubKey("14.0\\Word\\InstallRoot");
-                    RegistryKey? assumedKey32 = officeBaseKey32?.OpenSubKey("14.0\\Word\\InstallRoot");
-
-                    if (assumedKey64?.GetValue("Path") == null || assumedKey32?.GetValue("Path") == null)
-                    {
-                        throw new Exception("Office已损坏");
-                    }
-                    officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
-                    officeVersion = officePath != string.Empty ? "Office 2010" : "Not_Found";
-                }
-                else
-                {
-                    // 如果都没有，说明要么键都存在，但是子键值都不存在（卸载了）；要么说明键都是null，也就是未安装或安装损坏
-                    // If neither is present, either both keys are present, but neither child key value is present (unloaded). Either the keys are null, which means that they are not installed or that the installation is broken
-                    officeVersion = "Not_Found";
-                }
+                // officePath默认为空，依据其内容来获取OSPP.vbs的所在目录
+                // 同理officeVersion
+                // officePath is empty by default, and the directory where OSPP.vbs is located is obtained based on its content
+                // Same with officeVersion
                 osppPath = officePath != string.Empty ? officePath : "Not_Found";
+                officeVersion = office_ver;
                 return true;
             }
             catch
@@ -207,6 +221,102 @@ namespace KMS_Activator
                 officeVersion = "Not_Found";
                 return false;
             }
+
+            // try
+            // {
+            //     // 首先判断系统是32位还是64位环境,然后获取正确的分支
+            //     // First determine whether the system is a 32-bit or 64-bit environment, and then get the correct branch
+            //     RegistryKey regKey = Environment.Is64BitOperatingSystem                                         ? 
+            //                          RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64):
+            //                          RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
+            //     string officePath = string.Empty;
+            //     // 由于在安装时可能会出现在64位系统中安装了32位的情况，所以使用officeBaseKey__来区分32位与64位在注册表中的位置
+            //     // officeBaseKey__ is used to distinguish the location of 32 bits from 64 bits in the registry because it may happen that 32 bits are installed on 64-bit systems at installation time
+            //     RegistryKey? officeBaseKey64 = regKey.OpenSubKey("SOFTWARE\\Microsoft\\Office");
+            //     RegistryKey? officeBaseKey32 = regKey.OpenSubKey("SOFTWARE\\WOW6432Node\\Microsoft\\Office");
+            //     // 若两者都为空，那么说明该计算机上并未安装Office（至少未在注册表中注册）
+            //     // If both are empty, Office is not installed on the machine (at least not registered in the registry)
+            //     if (officeBaseKey64 == null && officeBaseKey32 == null)
+            //     {
+            //         throw new Exception("Office is not installed yet");
+            //     }
+               
+            //     // 以下为具体的Office版本判断与从Office在注册表中提供的安装目录转化为OSPP.vbs所在目录的过程
+            //     // The following is the specific Office version determination and the process of converting the installation directory provided by Office in the registry to the directory where OSPP.vbs is located
+            //     // 当两处的注册表键值至少存在一个时候
+            //     // When at least one of the two registry keys exists
+            //     if (officeBaseKey64?.OpenSubKey("16.0") != null || officeBaseKey32?.OpenSubKey("16.0") != null)
+            //     {
+            //         // 读取Word键下InstallRoot键的Path键值以获取Office完整安装路径（若安装了Office，Word一定是必装的）
+            //         // Read the Path key of the InstallRoot key under the Word key to get the full Office installation path (if you already have Office installed, Word is definitely required)
+            //         RegistryKey? assumedKey64 = officeBaseKey64?.OpenSubKey("16.0\\Word\\InstallRoot");
+            //         RegistryKey? assumedKey32 = officeBaseKey32?.OpenSubKey("16.0\\Word\\InstallRoot");
+               
+            //         if (assumedKey64?.GetValue("Path") == null && assumedKey32?.GetValue("Path") == null)
+            //         {
+            //             throw new Exception("Office已损坏");
+            //         }
+               
+            //         // 从注册表中读取Office的安装路径，并用路径中是否有root字段来判断版本是否为Office 2019或Office 2021
+            //         // Read the Office installation path from the registry and use the root field in the path to determine whether the version is Office 2019 or Office 2021
+            //         // OSPP.vbs一般仍然在C:\Program Files\Microsoft Office\Office1X\下
+            //         // OSPP.vbs is still generally under C:\Program Files\Microsoft Office\Office1X\
+            //         officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
+            //         if (officePath.Contains("root"))
+            //         {
+            //             // 把\root给”Trim“掉，就是OSPP.vbs的所在目录了
+            //             // Remove the \root from the path, and you now have the OSPP.vbs directory
+            //             officePath = officePath.Replace("\\root", string.Empty);
+            //             officeVersion = "Office 2019/2021";
+            //         }
+            //         else
+            //         {
+            //             officeVersion = officePath != string.Empty ? "Office 2016" : "Not_Found";
+            //         }
+            //     }
+            //     else if (officeBaseKey64?.OpenSubKey("15.0") != null || officeBaseKey32?.OpenSubKey("15.0") != null)
+            //     {
+            //         // 如果找到的子键为15.0，那么说明安装的为Office 2013
+            //         // If the subkey found is 15.0, Office 2013 is installed
+            //         RegistryKey? assumedKey64 = officeBaseKey64?.OpenSubKey("15.0\\Word\\InstallRoot");
+            //         RegistryKey? assumedKey32 = officeBaseKey32?.OpenSubKey("15.0\\Word\\InstallRoot");
+               
+            //         if (assumedKey64?.GetValue("Path") == null || assumedKey32?.GetValue("Path") == null)
+            //         {
+            //             throw new Exception("Office已损坏");
+            //         }
+            //         officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
+            //         officeVersion = officePath != string.Empty ? "Office 2013" : "Not_Found";
+            //     }
+            //     else if (officeBaseKey64?.OpenSubKey("14.0") != null || officeBaseKey32?.OpenSubKey("14.0") != null)
+            //     {
+            //         RegistryKey? assumedKey64 = officeBaseKey64?.OpenSubKey("14.0\\Word\\InstallRoot");
+            //         RegistryKey? assumedKey32 = officeBaseKey32?.OpenSubKey("14.0\\Word\\InstallRoot");
+               
+            //         if (assumedKey64?.GetValue("Path") == null || assumedKey32?.GetValue("Path") == null)
+            //         {
+            //             throw new Exception("Office已损坏");
+            //         }
+            //         officePath = (assumedKey64 != null ? assumedKey64?.GetValue("Path") : assumedKey32?.GetValue("Path"))?.ToString() ?? string.Empty;
+            //         officeVersion = officePath != string.Empty ? "Office 2010" : "Not_Found";
+            //     }
+            //     else
+            //     {
+            //         // 如果都没有，说明要么键都存在，但是子键值都不存在（卸载了）；要么说明键都是null，也就是未安装或安装损坏
+            //         // If neither is present, either both keys are present, but neither child key value is present (unloaded). Either the keys are null, which means that they are not installed or that the installation is broken
+            //         officeVersion = "Not_Found";
+            //     }
+            //     osppPath = officePath != string.Empty ? officePath : "Not_Found";
+            //     return true;
+            // }
+            // catch
+            // {
+            //     // 以上任何一个环节出现错误，则说明要么注册表出现问题，要么Office安装出现问题，那么显然OSPP.vbs的位置和Office的版本都是未定义
+            //     // If any of the above links is wrong, it means that there is either a problem with the registry, or there is a problem with the Office installation, then obviously the location of OSPP.vbs and the version of Office are undefined
+            //     osppPath = "Not_Found";
+            //     officeVersion = "Not_Found";
+            //     return false;
+            // }
         }
 
         /// <summary>
@@ -281,7 +391,11 @@ namespace KMS_Activator
                     licenseDirectory += "16\\";
                     // 当证书文件夹中出现有Office Pro Plus 2021 VL的证书时，则默认用户下载安装的是2021版本的Office
                     // When the certificate of Office Pro Plus 2021 VL appears in the certificate folder, the default user downloads and installs the 2021 version of Office
-                    if (checkOutput.Contains("Office 19\\") && File.Exists(licenseDirectory + "ProPlus2021VL_KMS_Client_AE-ppd.xrm-ms"))
+
+                    // * 旧版代码中的判断条件，现已被注释掉，原因是考虑到有些Office会安装多个密钥。
+                    // * The judgment condition in the old code has been commented out, because some Office will install multiple keys.
+
+                    if (/* checkOutput.Contains("Office 21") && */ File.Exists(licenseDirectory + "ProPlus2021VL_KMS_Client_AE-ppd.xrm-ms"))
                     {
                         officeVer = "2021";
                         officeProduct = "Office 2021";
@@ -289,7 +403,7 @@ namespace KMS_Activator
                     }
                     // 当证书文件夹中没有2021的证书，但有2019的证书时，则默认用户下载安装的是2019版本的Office
                     // When there is no certificate for 2021 in the certificates folder, but there is a certificate for 2019, the default user downloads and installs the 2019 version of Office
-                    else if (checkOutput.Contains("Office 19\\")                                       && 
+                    else if (/* checkOutput.Contains("Office 19")                                      && */ 
                              !File.Exists(licenseDirectory + "ProPlus2021VL_KMS_Client_AE-ppd.xrm-ms") && 
                              File.Exists(licenseDirectory + "ProPlus2019VL_KMS_Client_AE-ppd.xrm-ms"))
                     {
@@ -297,11 +411,10 @@ namespace KMS_Activator
                         officeProduct = "Office 2019";
                         officekey = officeKeys["Office 2019"]; visiokey = visioKeys["Visio 2019"];
                     }
-                    // 不然就是2016版的Office
-                    // Or the 2016 version of Office
                     else
                     {
                         officeVer = "2016";
+                        officeProduct = "Office 2016";
                         officekey = officeKeys["Office 2016"]; visiokey = visioKeys["Visio 2016"];
                     }
                 }
@@ -311,12 +424,14 @@ namespace KMS_Activator
                 {
                     licenseDirectory += "15\\";
                     officeVer = "2013";
+                    officeProduct = "Office 2013";
                     officekey = officeKeys["Office 2013"]; visiokey = visioKeys["Visio 2013"];
                 }
                 else if (osppDirectory.EndsWith("Office14\\"))
                 {
                     licenseDirectory += "14\\";
                     officeVer = "2010";
+                    officeProduct = "Office 2010";
                     officekey = officeKeys["Office 2010"]; visiokey = visioKeys["Visio 2010"];
                 }
                 else
@@ -340,6 +455,45 @@ namespace KMS_Activator
             {
                 convertStatus = ConvertStatus.ConvertError;
                 return false;
+            }
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         该函数用以卸载所有已安装的密钥
+        ///     </para>
+        ///     <para>
+        ///         This function is used to uninstall all installed keys
+        ///     </para>
+        /// </summary>
+        /// <param name="osppDirectory">
+        ///     <para>
+        ///         需要传入一个 <see cref="string"/> 类型值，表示OSPP.vbs所在的目录
+        ///     </para>
+        ///     <para>
+        ///         Requires passing in a <see cref="string"/> value indicating the directory where OSPP.vbs is located
+        ///     </para>
+        /// </param>
+        public static void RemoveAllInstalledKeys(string osppDirectory)
+        {
+            // 匹配OSPP.vbs输出结果中---与---之间的内容
+            // Match the content between --- in the OSPP.vbs output
+            string pattern = @"(?<=-{39})(.*?)(?=-{39})";
+            string chkInfo = RunProcess(CSCRIPT, @"//Nologo ospp.vbs /dstatus", osppDirectory, true);
+
+            MatchCollection checkInfoCollection = Regex.Matches(chkInfo, pattern, RegexOptions.Singleline);
+            foreach (Match match in checkInfoCollection)
+            {
+                // 再次匹配已安装密钥
+                // Match the installed key again
+                string installedKeyPattern = @"(?<=installed product key: )[A-Za-z0-9]{5}";
+                Match matchedkey = Regex.Match(match.Value, installedKeyPattern);
+                // 若匹配成功，则执行卸载密钥
+                // If the match is successful, uninstall the key
+                if (matchedkey.Success/* && match.Value.Contains("LICENSE STATUS:  ---LICENSED---") */)
+                {
+                    RunProcess(CSCRIPT, "//NoLogo ospp.vbs /unpkey:" + matchedkey.Value, osppDirectory, true);
+                }
             }
         }
 
@@ -414,9 +568,7 @@ namespace KMS_Activator
                 RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + o_Key, osppDir, true);
                 RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + v_Key, osppDir, true);
             }
-            // 都不是，则安装ProPlusVL_KMS_XXXXX的证书，在自己的证书目录下，Office 2010至Office 2016都是这个名称
-            // If not, install the ProPlusVL_KMS_XXXXX certificate under the same name as Office 2010 through Office 2016 in your certificate directory
-            else
+            else if (officeProduct == "Office 2016")
             {
                 RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "ProPlusVL_KMS_Client-ppd.xrm-ms\"", osppDir, true);
                 RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inslic:" + "\"" + licenseDir + "ProPlusVL_KMS_Client-ul.xrm-ms\"", osppDir, true);
@@ -428,12 +580,19 @@ namespace KMS_Activator
                 RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + o_Key, osppDir, true);
                 RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + v_Key, osppDir, true);
             }
+            // 对于Office 2013和2010，其证书文件夹中没有证书，直接安装Pro Plus密钥即可
+            // For Office 2013 and 2010, there are no certificates in the certificate folder, just install the Pro Plus key
+            else
+            {
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + o_Key, osppDir, true);
+                RunProcess(CSCRIPT, "//NoLogo ospp.vbs /inpkey:" + v_Key, osppDir, true);
+            }
         }
 
         #region 静态变量与常量区
         /// <summary>
         ///     <para>
-        ///         一个由 <see cref="string"/> 对应 <see cref="string"/> 类型的字典，用于存储对应Office版本的密钥
+        ///         一个由 <see cref="string"/> 对应 <see cref="string"/> 类型的字典，用于存储对应Office Pro Plus版本的密钥
         ///     </para>
         ///     <para>
         ///         A dictionary of type <see cref="string"/> to store the corresponding version of the Office key
@@ -441,7 +600,7 @@ namespace KMS_Activator
         /// </summary>
         private static Dictionary<string, string> officeKeys = new Dictionary<string, string>()
         {
-            {"Office 2021", "NMMKJ-6RK4F-KMJVX-8D9MJ-6MWKP"},
+            {"Office 2021", "FXYTK-NJJ8C-GB6DW-3DYQT-6F7TH"},
             {"Office 2019", "NMMKJ-6RK4F-KMJVX-8D9MJ-6MWKP"},
             {"Office 2016", "XQNVK-8JYDB-WJ9W3-YJ8YR-WFG99"},
             {"Office 2013", "YC7DK-G2NP3-2QQC3-J6H88-GVGXT"},
@@ -458,7 +617,7 @@ namespace KMS_Activator
         /// </summary>
         private static Dictionary<string, string> visioKeys = new Dictionary<string, string>()
         {
-            {"Visio 2021", "9BGNQ-K37YR-RQHF2-38RQ3-7VCBB"},
+            {"Visio 2021", "KNH8D-FGHT4-T8RK3-CTDYJ-K2HT4"},
             {"Visio 2019", "9BGNQ-K37YR-RQHF2-38RQ3-7VCBB"},
             {"Visio 2016", "PD3PC-RHNGV-FXJ29-8JK7D-RJRJK"},
             {"Visio 2013", "C2FG9-N6J68-H8BTJ-BW3QX-RM3B3"},

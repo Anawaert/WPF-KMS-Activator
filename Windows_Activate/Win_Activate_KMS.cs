@@ -36,26 +36,97 @@ namespace KMS_Activator
         /// </returns>
         private static Dictionary<string, string> volKeys = new Dictionary<string, string>()
         {
-            {"Windows 11 Professional", "W269N-WFGWX-YVC9B-4J6C9-T83GX" },
+            {"Windows 11 Pro", "W269N-WFGWX-YVC9B-4J6C9-T83GX" },
+            {"Windows 11 Pro N", "MH37W-N47XK-V7XM9-C7227-GCQG9" },
+            {"Windows 11 Pro Education", "6TP4R-GNPTD-KYYHQ-7B7DP-J447Y" },
+            {"Windows 11 Pro Education N", "YVWGF-BXNMC-HTQYQ-CPQ99-66QFC" },
+            {"Windows 11 Education", "NW6C2-QMPVW-D7KKK-3GKT6-VCFB2" },
+            {"Windows 11 Education N", "2WH4N-8QGBV-H22JP-CT43Q-MDWWJ" },
             {"Windows 11 Enterprise", "NPPR9-FWDCX-D2C8J-H872K-2YT43" },
-            {"Windows 10 Professional", "W269N-WFGWX-YVC9B-4J6C9-T83GX" },
+            {"Windows 11 Enterprise N", "DPH2V-TTNVB-4X9Q3-TJR4H-KHJW4" },
+            {"Windows 11 Enterprise G", "YYVX9-NTFWV-6MDM3-9PT4T-4M68B" },
+            {"Windows 11 Enterprise G N", "44RPN-FTY23-9VTTB-MP9BX-T84FV" },
+
+            {"Windows 10 Pro", "W269N-WFGWX-YVC9B-4J6C9-T83GX" },
+            {"Windows 10 Pro N", "MH37W-N47XK-V7XM9-C7227-GCQG9" },
+            {"Windows 10 Pro Education", "6TP4R-GNPTD-KYYHQ-7B7DP-J447Y" },
+            {"Windows 10 Pro Education N", "YVWGF-BXNMC-HTQYQ-CPQ99-66QFC" },
+            {"Windows 10 Education", "NW6C2-QMPVW-D7KKK-3GKT6-VCFB2" },
+            {"Windows 10 Education N", "2WH4N-8QGBV-H22JP-CT43Q-MDWWJ" },
             {"Windows 10 Enterprise", "NPPR9-FWDCX-D2C8J-H872K-2YT43" },
-            {"Windows 8.1 Professional", "GCRJD-8NW9H-F2CDX-CCM8D-9D6T9" },
+            {"Windows 10 Enterprise N", "DPH2V-TTNVB-4X9Q3-TJR4H-KHJW4" },
+            {"Windows 10 Enterprise G", "YYVX9-NTFWV-6MDM3-9PT4T-4M68B" },
+            {"Windows 10 Enterprise G N", "44RPN-FTY23-9VTTB-MP9BX-T84FV" },
+            {"Windows 10 Enterprise LTSC 2021", "M7XTQ-FN8P6-TTKYV-9D4CC-J462D" },
+            {"Windows 10 Enterprise LTSC 2019", "M7XTQ-FN8P6-TTKYV-9D4CC-J462D" },
+            {"Windows 10 Enterprise N LTSC 2021", "92NFX-8DJQP-P6BBQ-THF9C-7CG2H" },
+            {"Windows 10 Enterprise N LTSC 2019", "92NFX-8DJQP-P6BBQ-THF9C-7CG2H" },
+            {"Windows 10 Enterprise LTSB 2016", "DCPHK-NFMTC-H88MJ-PFHPY-QJ4BJ" },
+            {"Windows 10 Enterprise N LTSB 2016", "QFFDN-GRT3P-VKWWX-X7T3R-8B639" },
+            {"Windows 10 Enterprise LTSB 2015", "WNMTR-4C88C-JK8YV-HQ7T2-76DF9" },
+            {"Windows 10 Enterprise LTSB N 2015", "2F77B-TNFGY-69QQF-B8YKP-D69TJ" },
+            
+            {"Windows 8.1 Pro", "GCRJD-8NW9H-F2CDX-CCM8D-9D6T9" },
+            {"Windows 8.1 Pro N", "HMCNV-VVBFX-7HMBH-CTY9B-B4FXY" },
             {"Windows 8.1 Enterprise", "MHF9N-XY6XB-WVXMC-BTDCT-MKKG7" },
+            {"Windows 8.1 Enterprise N", "TT4HM-HN7YT-62K67-RGRQJ-JFFXW" },
+
+            {"Windows 8 Pro", "NG4HW-VH26C-733KW-K6F98-J8CK4" },
+            {"Windows 8 Pro N", "XCVCF-2NXM9-723PB-MHCB7-2RYQQ" },
+            {"Windows 8 Enterprise", "32JNW-9KQ84-P47T8-D8GGY-CWCK7" },
+            {"Windows 8 Enterprise N", "JMNMF-RHW7P-DMY6X-RF3DR-X2BQT" },
+
             {"Windows 7 Professional", "FJ82H-XT6CR-J8D7P-XQJJ2-GPDD4" },
+            {"Windows 7 Professional N", "MRPKT-YTG23-K7D7T-X2JMM-QY7MG" },
+            {"Windows 7 Professional E", "W82YF-2Q76Y-63HXB-FGJG9-GF7QX" },
             {"Windows 7 Enterprise", "33PXH-7Y6KF-2VJC9-XBBR8-HVTHH" },
+            {"Windows 7 Enterprise N", "YDRBP-3D83W-TY26F-D46B2-XCKRJ" },
+            {"Windows 7 Enterprise E", "C29WB-22CC8-VJ326-GHFJW-H9DH4" },
+
+            {"Windows Vista Business", "YFKBB-PQJJV-G996G-VWGXY-2V3X8" },
+            {"Windows Vista Business N", "HMBQG-8H2RH-C77VX-27R82-VMQBT" },
+            {"Windows Vista Enterprise", "VKK3X-68KWM-X2YGT-QR4M6-4BWMV" },
+            {"Windows Vista Enterprise N", "VTC42-BM838-43QHV-84HX6-XJXKV" },
+
             {"Windows Server 2022 Standard", "VDYBN-27WPP-V4HQT-9VMD4-VMK7H" },
             {"Windows Server 2022 Datacenter", "WX4NM-KYWYW-QJJR4-XV3QB-6VM33" },
+
             {"Windows Server 2019 Standard", "N69G4-B89J2-4G8F4-WWYCC-J464C" },
             {"Windows Server 2019 Datacenter", "WMDGN-G9PQG-XVVXX-R3X43-63DFG" },
+
             {"Windows Server 2016 Standard", "WC2BQ-8NRM3-FDDYY-2BFGV-KHKQY" },
             {"Windows Server 2016 Datacenter", "CB7KF-BWN84-R7R2Y-793K2-8XDDG" },
+
             {"Windows Server 2012 R2 Server Standard", "D2N9P-3P6X9-2R39C-7RTCD-MDVJX" },
             {"Windows Server 2012 R2 Datacenter", "W3GGN-FT8W3-Y4M27-J84CP-Q3VJ9"},
+
             {"Windows Server 2008 R2 Standard", "YC6KT-GKW9T-YTKYR-T4X34-R7VHC" },
             {"Windows Server 2008 R2 Datacenter", "74YFP-3QFB3-KQT8W-PMXWJ-7M648" },
             {"Windows Server 2008 R2 Enterprise", "489J6-VHDMP-X63PK-3K798-CPX3Y" }
         };
+
+        //private static Dictionary<string, string> volKeys = new Dictionary<string, string>()
+        //{
+        //    {"Windows 11 Professional", "W269N-WFGWX-YVC9B-4J6C9-T83GX" },
+        //    {"Windows 11 Enterprise", "NPPR9-FWDCX-D2C8J-H872K-2YT43" },
+        //    {"Windows 10 Professional", "W269N-WFGWX-YVC9B-4J6C9-T83GX" },
+        //    {"Windows 10 Enterprise", "NPPR9-FWDCX-D2C8J-H872K-2YT43" },
+        //    {"Windows 8.1 Professional", "GCRJD-8NW9H-F2CDX-CCM8D-9D6T9" },
+        //    {"Windows 8.1 Enterprise", "MHF9N-XY6XB-WVXMC-BTDCT-MKKG7" },
+        //    {"Windows 7 Professional", "FJ82H-XT6CR-J8D7P-XQJJ2-GPDD4" },
+        //    {"Windows 7 Enterprise", "33PXH-7Y6KF-2VJC9-XBBR8-HVTHH" },
+        //    {"Windows Server 2022 Standard", "VDYBN-27WPP-V4HQT-9VMD4-VMK7H" },
+        //    {"Windows Server 2022 Datacenter", "WX4NM-KYWYW-QJJR4-XV3QB-6VM33" },
+        //    {"Windows Server 2019 Standard", "N69G4-B89J2-4G8F4-WWYCC-J464C" },
+        //    {"Windows Server 2019 Datacenter", "WMDGN-G9PQG-XVVXX-R3X43-63DFG" },
+        //    {"Windows Server 2016 Standard", "WC2BQ-8NRM3-FDDYY-2BFGV-KHKQY" },
+        //    {"Windows Server 2016 Datacenter", "CB7KF-BWN84-R7R2Y-793K2-8XDDG" },
+        //    {"Windows Server 2012 R2 Server Standard", "D2N9P-3P6X9-2R39C-7RTCD-MDVJX" },
+        //    {"Windows Server 2012 R2 Datacenter", "W3GGN-FT8W3-Y4M27-J84CP-Q3VJ9"},
+        //    {"Windows Server 2008 R2 Standard", "YC6KT-GKW9T-YTKYR-T4X34-R7VHC" },
+        //    {"Windows Server 2008 R2 Datacenter", "74YFP-3QFB3-KQT8W-PMXWJ-7M648" },
+        //    {"Windows Server 2008 R2 Enterprise", "489J6-VHDMP-X63PK-3K798-CPX3Y" }
+        //};
         #endregion
 
         /// <summary>
@@ -81,9 +152,9 @@ namespace KMS_Activator
             string key = string.Empty;               
             foreach (string version in volKeys.Keys)
             {
-                // 当读取到的产品名包含字典中的版本名或版本名中包含有产品名时
+                // 当读取到的产品名包含字典中的版本名且版本名中包含有产品名时
                 // When the read product name contains the version name in the dictionary or the version name contains the product name
-                if (version.Contains(WIN_VERSION) || WIN_VERSION.Contains(version))  
+                if (version.Trim().Contains(WIN_VERSION) && WIN_VERSION.Trim().Contains(version))  
                 {                                                                    
                     // 从字典中获取对应版本名的VOL密钥
                     // Obtain the VOL key corresponding to the version name from the dictionary
@@ -106,8 +177,8 @@ namespace KMS_Activator
                         {
                             MessageBox.Show
                             (
-                                "您的Windows产品\"" + WIN_VERSION + "\"在转换为正式版时发生错误，请您手动转换为正式版后再试\n\n点击“确定“以返回主页面",
-                                "抱歉",
+                                "您的 Windows 产品\"" + WIN_VERSION + "\"在转换为正式版时发生错误，请您手动转换为正式版后再尝试激活\n\n点击“确定“以返回主页面",
+                                "发生错误",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Error
                             );
@@ -118,8 +189,8 @@ namespace KMS_Activator
                         // When the conversion is successful
                         MessageBoxResult msg = MessageBox.Show
                         (
-                            "您的Windows产品\"" + WIN_VERSION + "\"已成功转换为正式版，请重新启动以保留更改\n\n是否现在重启？",
-                            "提示",
+                            "您的 Windows 产品\"" + WIN_VERSION + "\"已成功转换为正式版，请重新启动以保留更改。\n\n是否现在重启？",
+                            "消息提示",
                             MessageBoxButton.YesNo,
                             MessageBoxImage.Information
                         );
@@ -144,8 +215,8 @@ namespace KMS_Activator
             {
                 MessageBox.Show
                 (
-                    "您的Windows产品\"" + WIN_VERSION + "\"不受支持，请更换Windows版本或使用其他开发者的（KMS）激活器\n\n点击“确定“以退出程序",
-                    "抱歉",
+                    "您的 Windows 产品\"" + WIN_VERSION + "\"不受支持，请更换 Windows 版本或使用其他开发者的激活工具。\n\n点击“确定“以退出程序",
+                    "发生错误",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error
                 );
@@ -173,8 +244,8 @@ namespace KMS_Activator
             {
                 MessageBox.Show
                 (
-                    $"装载密钥：{key}时发生错误。错误原因：{setVOL_Error.Message}。若您反复看到该消息，请联系Microsoft或在该项目的Github主页的Issue页中提交您的问题",
-                    "抱歉",
+                    $"装载密钥：{key} 时发生错误。错误原因：{setVOL_Error.Message}。若您反复看到该消息，请联系Microsoft或在该项目的Github页中提交您的问题。",
+                    "发生错误",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error
                 );
@@ -198,8 +269,8 @@ namespace KMS_Activator
             {
                 MessageBox.Show
                 (
-                    $"连接KMS服务器时发生错误。错误原因：{setServer_Error.Message}。若您反复看到该消息，请检查网络设置或在该项目的Github主页的Issue页中提交您的问题",
-                    "抱歉",
+                    $"连接KMS服务器时发生错误。错误原因：{setServer_Error.Message}。若您反复看到该消息，请检查网络或在该项目的页中提交您的问题。",
+                    "发生错误",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error
                 );
@@ -225,7 +296,7 @@ namespace KMS_Activator
                     MessageBox.Show
                     (
                         "已完成对 " + WIN_VERSION + " 产品的激活！",
-                        "恭喜",
+                        "消息提示",
                         MessageBoxButton.OK,
                         MessageBoxImage.Information
                     );
@@ -235,9 +306,9 @@ namespace KMS_Activator
                     ShiftAwaitingAnimationEffectsTalker(5);
                     MessageBoxResult result = MessageBox.Show
                     (
-                        "已完成对 " + WIN_VERSION + " 产品的激活操作，但未能即时查询到成功，请重新计算机以刷新激活状态。\n" +
+                        "已完成对 " + WIN_VERSION + " 产品的激活操作，但未能即时查询到成功，请重启计算机以更新激活状态。\n" +
                         "是否立即重启您的计算机？",
-                        "提示",
+                        "消息提示",
                         MessageBoxButton.OKCancel,
                         MessageBoxImage.Question
                     );
@@ -257,8 +328,8 @@ namespace KMS_Activator
             {
                 MessageBox.Show
                 (
-                    $"执行激活Windows发生错误。错误原因：{apply_Error.Message}。若您反复看到该消息，请检查系统设置或在该项目的Github主页的Issue页中提交您的问题",
-                    "抱歉",
+                    $"执行激活 Windows 发生错误。错误原因：{apply_Error.Message}。若您反复看到该消息，请检查系统设置或在该项目的Github页中提交您的问题。",
+                    "发生错误",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error
                 );

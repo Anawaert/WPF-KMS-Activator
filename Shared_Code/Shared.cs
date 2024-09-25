@@ -359,7 +359,7 @@ namespace KMS_Activator
 
                 // 再从<a></a>组成的“小”字符串中匹配版本号，第一个匹配就是最新版本的版本号
                 Match versionNumsMatch = getVersionNumsRegex.Match(a_tags_string_builder.ToString());
-                if (versionNumsMatch.Value != "1.2.1.0" && versionNumsMatch.Success)
+                if (versionNumsMatch.Value != "2.0.0.0" && versionNumsMatch.Success)
                 {
                     MessageBoxResult result = MessageBox.Show
                     (
@@ -380,7 +380,7 @@ namespace KMS_Activator
                             ShellCmd.StandardInput.WriteLine("EXPLORER \"https://github.com/Anawaert/WPF-KMS-Activator/releases\" & EXIT");  // 使用cmd语句访问下载链接。
                             ShellCmd.Dispose();  // 释放内存
                         }
-                        catch { MessageBox.Show("连接至GitHub时发生错误，导航已取消", "提示", MessageBoxButton.OK, MessageBoxImage.Information); }
+                        catch { MessageBox.Show("连接至GitHub时发生错误，导航已取消", "消息提示", MessageBoxButton.OK, MessageBoxImage.Information); }
                     }
                 }
             }

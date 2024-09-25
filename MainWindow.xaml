@@ -8,21 +8,21 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" 
         xmlns:cvters="clr-namespace:KMS_Activator.Converters"
         mc:Ignorable="d"
-        Title="Anawaert KMS Activator" Height="320" Width="640"
+        Title="Anawaert Activator" Height="320" Width="640"
         Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize"
         Icon="/Images/KMS_Activator_LOGO_ICO.ico">
 
     <!--引入外部的资源字典-->
-    <Window.Resources>
+    <!--<Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="./UI_Style_Code/UI_Style_Related.xaml">
+                <ResourceDictionary Source="./UI_Style/UI_Style_Related.xaml">
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </Window.Resources>
+    </Window.Resources>-->
 
     <!-- bool值与背景颜色数据绑定 -->
     <!--<Window.Background>
@@ -79,7 +79,7 @@
                         <ColumnDefinition Width="3*"></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Label x:Name="checkVerLabel" Grid.Row="1" Content="检查版本" FontSize="12" FontFamily="等线 Light" HorizontalAlignment="Left" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent"></Label>
+                    <Label x:Name="checkVerLabel" Grid.Row="1" Content="检查信息" FontSize="12" FontFamily="等线 Light" HorizontalAlignment="Left" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent"></Label>
                     <Label x:Name="installKeyLabel" Grid.Row="2" Content="安装密钥" FontSize="12" FontFamily="等线 Light" HorizontalAlignment="Left" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent"></Label>
                     <Label x:Name="connect2ServerLabel" Grid.Row="3" Content="连接服务器" FontSize="12" FontFamily="等线 Light" HorizontalAlignment="Left" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent"></Label>
                     <Label x:Name="applyLabel" Grid.Row="4" Content="应用激活" FontSize="12" FontFamily="等线 Light" HorizontalAlignment="Left" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent"></Label>

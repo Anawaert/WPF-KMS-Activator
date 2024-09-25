@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Animation;
 using System.Threading;
 using System.Collections.Generic;
 using static KMS_Activator.Shared;
 using static KMS_Activator.Office_Configurator;
 using static KMS_Activator.Animations_Related;
-using System.ComponentModel.DataAnnotations;
 
 namespace KMS_Activator
 {
@@ -18,8 +16,12 @@ namespace KMS_Activator
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        // 该字典存储了激活过程中打勾的Label
+        // This dictionary stores the Label with a check mark during the activation process
         private readonly Dictionary<int, Label> stepLabels;
+
+        // 该字典存储了激活过程中表示转圈的LoadingCircle
+        // This dictionary stores the LoadingCircle during the activation process
         private readonly Dictionary<int, HandyControl.Controls.LoadingCircle> loadingCircles;
 
         /// <summary>
@@ -132,8 +134,8 @@ namespace KMS_Activator
                 (
                     () =>
                     {
-                        Thread.Sleep(650);
-                        string selectedContent = "www.anawaert.tech";
+                        // Thread.Sleep(500);
+                        string selectedContent = AW_KMS_SERVER_ADDR;
                         bool isAutoRenewChecked = true;
                         // 通过UI线程拿到KMS服务器的选择
                         // Get the KMS server selection through the UI thread
@@ -141,8 +143,8 @@ namespace KMS_Activator
                         (
                             () =>
                             {
-                                selectedContent = (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
-                                                  "www.anawaert.tech" :
+                                selectedContent = (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert 服务器" ?
+                                                  AW_KMS_SERVER_ADDR :
                                                   (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content;
                                 isAutoRenewChecked = autoRenew_CheckBox.IsChecked == true;
                             }
@@ -150,9 +152,11 @@ namespace KMS_Activator
 
                         if (IsWinActivated())
                         {
+                            UI_Thread_Operations.ShiftAwaitingAnimationEffectsTalker(1);
+
                             MessageBox.Show
                             (
-                                "您的Windows已激活，无需再次激活",
+                                "您的 Windows 已激活，无需再次激活",
                                 "提示",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Information
@@ -198,15 +202,15 @@ namespace KMS_Activator
                 (
                     () =>
                     {
-                        Thread.Sleep(650);
-                        string selectedContent = "www.anawaert.tech";
+                        // Thread.Sleep(500);
+                        string selectedContent = AW_KMS_SERVER_ADDR;
                         bool isAutoRenewChecked = true;
                         this.Dispatcher.Invoke
                         (
                             () =>
                             {
-                                selectedContent = (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert KMS 服务器" ?
-                                                  "www.anawaert.tech" :
+                                selectedContent = (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content == "Anawaert 服务器" ?
+                                                  AW_KMS_SERVER_ADDR :
                                                   (string)((ComboBoxItem)selectServer_ComboBox.SelectedItem).Content;
                                 isAutoRenewChecked = autoRenew_CheckBox.IsChecked == true;
                             }
@@ -230,7 +234,7 @@ namespace KMS_Activator
                             {
                                 MainW_SlideBack(new List<Grid> { mainInterfaceGrid });
                                 // awaiting_ProgressBar.IsEnabled = false;
-                                officeVersion_Label.Content = officeProduct;
+                                // officeVersion_Label.Content = officeProduct;
                             }
                         );
                     }
@@ -251,6 +255,8 @@ namespace KMS_Activator
             RefreshConfigFile(JSON_CFG_PATH);
         }
 
+        // 用来表示激活过程中的动画效果，实现方法很蠢，但是暂时没有更好的办法
+        // Used to represent the animation effects during the activation process, the implementation method is very stupid, but there is no better way for the time being
         internal void ShiftAwaitingAnimationEffects(int currentIndex)
         {
             int minIndex = 1;

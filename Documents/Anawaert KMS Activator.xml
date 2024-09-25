@@ -253,6 +253,24 @@
                 </para>
             </returns>
         </member>
+        <member name="M:KMS_Activator.Office_Configurator.RemoveAllInstalledKeys(System.String)">
+            <summary>
+                <para>
+                    该函数用以卸载所有已安装的密钥
+                </para>
+                <para>
+                    This function is used to uninstall all installed keys
+                </para>
+            </summary>
+            <param name="osppDirectory">
+                <para>
+                    需要传入一个 <see cref="T:System.String"/> 类型值，表示OSPP.vbs所在的目录
+                </para>
+                <para>
+                    Requires passing in a <see cref="T:System.String"/> value indicating the directory where OSPP.vbs is located
+                </para>
+            </param>
+        </member>
         <member name="M:KMS_Activator.Office_Configurator.InstallVolumeLicense(System.String,System.String,System.String,System.String)">
             <summary>
                 <para>
@@ -298,7 +316,7 @@
         <member name="F:KMS_Activator.Office_Configurator.officeKeys">
             <summary>
                 <para>
-                    一个由 <see cref="T:System.String"/> 对应 <see cref="T:System.String"/> 类型的字典，用于存储对应Office版本的密钥
+                    一个由 <see cref="T:System.String"/> 对应 <see cref="T:System.String"/> 类型的字典，用于存储对应Office Pro Plus版本的密钥
                 </para>
                 <para>
                     A dictionary of type <see cref="T:System.String"/> to store the corresponding version of the Office key
@@ -576,7 +594,7 @@
                 </para>
             </summary>
         </member>
-        <member name="F:KMS_Activator.Shared.EXEC_PATH">
+        <member name="P:KMS_Activator.Shared.EXEC_PATH">
             <summary>
                 <para>
                     该静态变量指示当前应用程序运行时所在的目录
@@ -586,7 +604,7 @@
                 </para>
             </summary>
         </member>
-        <member name="F:KMS_Activator.Shared.WIN_VERSION">
+        <member name="P:KMS_Activator.Shared.WIN_VERSION">
             <summary>
                 <para>
                     该静态量用以获取存储当前Windows系统的产品名或版本名
@@ -596,7 +614,7 @@
                 </para>
             </summary>
         </member>
-        <member name="F:KMS_Activator.Shared.SYS32_PATH">
+        <member name="P:KMS_Activator.Shared.SYS32_PATH">
             <summary>
                 <para>
                     该值指示当前系统的System32目录的绝对路径
@@ -606,7 +624,7 @@
                 </para>
             </summary>
         </member>
-        <member name="F:KMS_Activator.Shared.USER_DOC_PATH">
+        <member name="P:KMS_Activator.Shared.USER_DOC_PATH">
             <summary>
                 <para>
                     该值指示当前用户的“文档”文件夹
@@ -616,7 +634,7 @@
                 </para>
             </summary>
         </member>
-        <member name="F:KMS_Activator.Shared.mainWindow">
+        <member name="P:KMS_Activator.Shared.mainWindow">
             <summary>
                 <para>
                     该变量为运行在UI线程上的Window类实例
@@ -626,7 +644,7 @@
                 </para>
             </summary>
         </member>
-        <member name="F:KMS_Activator.Shared.USER_DOC_KMS_PATH">
+        <member name="P:KMS_Activator.Shared.USER_DOC_KMS_PATH">
             <summary>
                 <para>
                     该变量为KMS Activator在用户的文档目录下的工作目录(C:\Users\%USERNAME%\Documents\KMS Activator\)
@@ -636,7 +654,7 @@
                 </para>
             </summary>        
         </member>
-        <member name="F:KMS_Activator.Shared.JSON_CFG_PATH">
+        <member name="P:KMS_Activator.Shared.JSON_CFG_PATH">
             <summary>
                 <para>
                     该变量为KMS Activator在用户的文档目录下的工作目录中配置文件的路径
@@ -843,6 +861,20 @@
                     This function is used to create a directory in the user's Documents directory for the KMS Activator for the application (C:\Users\%USERNAME%\Documents\KMS Activator\)
                 </para>
             </summary>
+        </member>
+        <member name="T:KMS_Activator.UI_Thread_Operations">
+            <summary>
+                <para>该类主要用以实现UI线程上的一些简单动画效果的功能</para>
+                <para>This class is mainly used to achieve some simple animation effects on the UI thread</para>
+            </summary>
+        </member>
+        <member name="M:KMS_Activator.UI_Thread_Operations.ShiftAwaitingAnimationEffectsTalker(System.Int32)">
+            <summary>
+                <para>该函数主要通知UI线程改变激活过程中的加载动画效果</para>
+            </summary>
+            <param name="current">
+                <para>需要改变效果的步骤</para>
+            </param>
         </member>
         <member name="T:KMS_Activator.Win_Activator">
             <summary>
