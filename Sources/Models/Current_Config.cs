@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KMS_Activator
+namespace Activator
 {
     /// <summary>
     /// 该静态类为指示程序界面设置的静态变量所在的类

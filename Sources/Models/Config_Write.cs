@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.IO;
 
-namespace KMS_Activator
+namespace Activator
 {
     /// <summary>
     ///     <para>

@@ -1,0 +1,155 @@
+﻿<Page x:Class="Activator.Views.OnlineActivationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:v="clr-namespace:Activator.Views"
+      xmlns:vm="clr-namespace:Activator.ViewModels"
+      xmlns:cvter="clr-namespace:Activator.Converters"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      mc:Ignorable="d" 
+      d:DesignHeight="540" d:DesignWidth="960"
+      d:DataContext="{d:DesignInstance Type=vm:OnlineActivationViewModel, IsDesignTimeCreatable=True}"
+      Title="OnlineActivationPage">
+
+    <Page.Resources>
+        <cvter:BoolToVisibilityCvter x:Key="BooleanToVisibilityConverter"></cvter:BoolToVisibilityCvter>
+    </Page.Resources>
+
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <ui:CardExpander Margin="0,0,0,10" IsExpanded="True">
+                <ui:CardExpander.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <ui:TextBlock Grid.Row="0" FontTypography="Body" Text="激活模式"></ui:TextBlock>
+
+                        <ui:TextBlock Grid.Row="1" Foreground="{ui:ThemeResource ResourceKey=TextFillColorSecondaryBrush}"
+                                      Text="选择激活 Windows 或 Office 产品">
+                        </ui:TextBlock>
+                    </Grid>
+                </ui:CardExpander.Header>
+
+                <StackPanel Orientation="Vertical">
+                    <RadioButton x:Name="activateWindowsRadioButton" Content="激活 Microsoft Windows" Grid.Column="0" Grid.Row="1" 
+                                 IsChecked="{Binding IsWindowsActivationMode, Mode=TwoWay}" HorizontalAlignment="Left">
+                    </RadioButton>
+
+                    <RadioButton x:Name="activateOfficeRadioButton" Content="激活 Microsoft Office" Grid.Column="1" Grid.Row="1"
+                                 IsChecked="{Binding IsOfficeActivationMode, Mode=TwoWay}" HorizontalAlignment="Left">
+                    </RadioButton>
+                </StackPanel>
+            </ui:CardExpander>
+
+            <ui:CardControl Margin="0,0,0,10">
+                <ui:CardControl.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <ui:TextBlock Grid.Row="0" FontTypography="Body" Text="服务器"></ui:TextBlock>
+
+                        <ui:TextBlock Grid.Row="1" Foreground="{ui:ThemeResource ResourceKey=TextFillColorSecondaryBrush}"
+                                      Text="选择在线激活所使用的服务器">
+                        </ui:TextBlock>
+                    </Grid>
+                </ui:CardControl.Header>
+
+                <StackPanel Orientation="Vertical">
+                    <ComboBox x:Name="selectServerComboBox" Background="Transparent" ItemsSource="{Binding Servers, Mode=TwoWay}" 
+                              SelectedIndex="0" SelectedItem="{Binding SelectedServerContentString, Mode=OneWayToSource}">
+                    </ComboBox>
+                </StackPanel>
+            </ui:CardControl>
+
+            <ui:CardControl Margin="0,0,0,10">
+                <ui:CardControl.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <ui:TextBlock Grid.Row="0" FontTypography="Body" Text="自动续签"></ui:TextBlock>
+
+                        <ui:TextBlock Grid.Row="1" Foreground="{ui:ThemeResource ResourceKey=TextFillColorSecondaryBrush}"
+                          Text="在激活有效期结束前再次自动运行激活">
+                        </ui:TextBlock>
+                    </Grid>
+                </ui:CardControl.Header>
+
+                <StackPanel Orientation="Vertical">
+                    <ui:ToggleSwitch IsChecked="{Binding IsAutoKMSRenewal}" IsThreeState="False"></ui:ToggleSwitch>
+                </StackPanel>
+            </ui:CardControl>
+
+            <ui:CardExpander Margin="0,0,0,10" ContentPadding="0" IsExpanded="True">
+                <ui:CardExpander.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <ui:TextBlock Grid.Row="0" FontTypography="Body" Text="激活"></ui:TextBlock>
+
+                        <ui:TextBlock Grid.Row="1" Foreground="{ui:ThemeResource ResourceKey=TextFillColorSecondaryBrush}"
+                                      Text="点击按钮以执行或卸载联机 KMS 激活">
+                        </ui:TextBlock>
+                    </Grid>
+                </ui:CardExpander.Header>
+
+                <StackPanel Orientation="Vertical">
+                    <ui:Anchor Padding="16" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                               Background="Transparent" BorderThickness="0,0,0,0.5" CornerRadius="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <ProgressBar Grid.Column="0" IsIndeterminate="True" 
+                                         Visibility="{Binding ActivateCommand.IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         VerticalAlignment="Center" Margin="0,0,16,0">
+                            </ProgressBar>
+
+                            <ui:Button x:Name="onlineActivationButton" Grid.Column="1" Content="执行联机 KMS 激活" Cursor="Hand"
+                                       HorizontalAlignment="Right" VerticalAlignment="Center" Appearance="Primary"
+                                       Command="{Binding ActivateCommand}">
+                            </ui:Button>
+                        </Grid>
+                    </ui:Anchor>
+
+                    <ui:Anchor Padding="16" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                               Background="Transparent" BorderThickness="0" CornerRadius="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <ProgressBar Grid.Column="0" IsIndeterminate="True"
+                                         Visibility="{Binding DeActivateCommand.IsRunning
+                                , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         VerticalAlignment="Center" Margin="0,0,16,0">
+                            </ProgressBar>
+
+                            <ui:Button x:Name="removeKMSActivationButton" Grid.Column="1" Content="卸载联机 KMS 激活" Cursor="Hand" 
+                                       Width="{Binding ElementName=onlineActivationButton, Path=ActualWidth}"
+                                       HorizontalAlignment="Right" VerticalAlignment="Center" Command="{Binding DeActivateCommand}">
+                            </ui:Button>
+                        </Grid>
+                    </ui:Anchor>
+                </StackPanel>
+            </ui:CardExpander>
+        </StackPanel>
+    </Grid>
+</Page>

@@ -1,0 +1,61 @@
+﻿<ui:FluentWindow
+        x:Class="Activator.Views.MainWindow"
+        x:Name="ActivatorMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:v="clr-namespace:Activator.Views"
+        xmlns:vm="clr-namespace:Activator.ViewModels"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        mc:Ignorable="d"
+        Title="Anawaert KMS Activator" Height="720" Width="1280"
+        MinHeight="506" MinWidth="900"
+        Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Sources/Images/ActivatorLogoIco128.ico">
+
+    <Window.DataContext>
+        <vm:MainWindowViewModel></vm:MainWindowViewModel>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding ElementName=mainWindowTitleBar, Path=ActualHeight}"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <ui:NavigationView x:Name="mainWindowNavigationView" IsBackButtonVisible="Auto" Grid.Row="1" Padding="36"
+                           BreadcrumbBar="{Binding ElementName=navigationViewBreadcrumbBar}">
+            <ui:NavigationView.Header>
+                <ui:BreadcrumbBar x:Name="navigationViewBreadcrumbBar" Margin="16,16,0,10" FontWeight="DemiBold"/>
+            </ui:NavigationView.Header>
+
+            <ui:NavigationView.AutoSuggestBox>
+                <ui:AutoSuggestBox Margin="10,0,10,10" PlaceholderText="搜索"/>
+            </ui:NavigationView.AutoSuggestBox>
+
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Content="首页" Icon="{ui:SymbolIcon Symbol=Home24}"></ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="KMS 激活" Icon="{ui:SymbolIcon Symbol=KeyMultiple20}" IsExpanded="True">
+                    <ui:NavigationViewItem.MenuItems>
+                        <!--<ui:NavigationViewItem Content="KMS38 激活" Icon="{ui:SymbolIcon Symbol=Key32}" />-->
+
+                        <ui:NavigationViewItem Content="联机 KMS 激活" Icon="{ui:SymbolIcon Symbol=Globe32}"
+                                               TargetPageType="{x:Type v:OnlineActivationPage}"/>
+
+                        <!--<ui:NavigationViewItem Content="手动 KMS 激活" Icon="{ui:SymbolIcon Symbol=HandLeft28}" 
+                                               TargetPageType="{x:Type v:ManualOnlineActivationPage}"/>-->
+                    </ui:NavigationViewItem.MenuItems>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.MenuItems>
+        </ui:NavigationView>
+
+        <ui:TitleBar x:Name="mainWindowTitleBar" Title="Anawaert KMS Activator" Grid.Row="0"
+                     CloseWindowByDoubleClickOnIcon="True">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="pack://application:,,,/Sources/Images/ActivatorLogo.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+    </Grid>
+</ui:FluentWindow>

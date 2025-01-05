@@ -8,7 +8,7 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>False</UseWindowsForms>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>Images\KMS_Activator_LOGO_ICO.ico</ApplicationIcon>
+    <ApplicationIcon>Sources\Images\ActivatorLogoIco128.ico</ApplicationIcon>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Title>Anawaert Activator</Title>
     <PackageId>Anawaert Activator</PackageId>
@@ -45,35 +45,37 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <None Remove="Images\KMS_Activator_LOGO.png" />
-    <None Remove="Images\KMS_Activator_LOGO_ICO.ico" />
-    <None Remove="Images\KMS_Key_Icon.png" />
-    <None Remove="Images\Office19_Logo.png" />
-    <None Remove="Images\Remote_KMS_Icon.png" />
-    <None Remove="Images\Win10_Logo.png" />
+    <None Remove="Sources\Images\ActivatorLogo.png" />
+    <None Remove="Sources\Images\ActivatorLogoIco128.ico" />
+    <None Remove="Sources\Images\KeyIcon.png" />
+    <None Remove="Sources\Images\Office2019Logo.png" />
+    <None Remove="Sources\Images\OnlineKMSIcon.png" />
+    <None Remove="Sources\Images\Windows10Logo.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\KMS_Key_Icon.png">
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Include="Serilog" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="WPF-UI" Version="3.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Sources\Images\ActivatorLogo.png">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </Resource>
+    <Resource Include="Sources\Images\ActivatorLogoIco128.ico" />
+    <Resource Include="Sources\Images\KeyIcon.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="HandyControl" Version="3.5.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\KMS_Activator_LOGO.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </Resource>
-    <Resource Include="Images\KMS_Activator_LOGO_ICO.ico" />
-    <Resource Include="Images\Office19_Logo.png">
+    <Resource Include="Sources\Images\Office2019Logo.png">
       <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Images\Remote_KMS_Icon.png" />
-    <Resource Include="Images\Win10_Logo.png" />
+    <Resource Include="Sources\Images\OnlineKMSIcon.png" />
+    <Resource Include="Sources\Images\Windows10Logo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -81,6 +83,12 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Animations\" />
+    <Folder Include="Documentation\UserGuides\" />
+    <Folder Include="Sources\Views\Dictionaries\" />
   </ItemGroup>
 
 </Project>
