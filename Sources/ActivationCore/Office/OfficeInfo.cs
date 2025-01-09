@@ -7,9 +7,9 @@ namespace Activator
 {
     public class OfficeInfo
     {
-        public static OfficeProductName OfficeProduct { get; private set; }
+        public static OfficeEditionName OfficeEdition { get; private set; }
 
-        public static VisioProductName VisioProduct { get; private set; }
+        public static VisioEditionName VisioEdition { get; private set; }
 
         public static bool IsOfficeCoreFound { get; private set; }
 
@@ -20,6 +20,8 @@ namespace Activator
         public static string? OsppDirectory { get; private set; }
 
         public static string? LicenseDirectory { get; private set; }
+
+        public static event Action<OfficeEditionName>? OfficeEditionChanged;
 
         private static void FindOfficeCoreDirectory()
         {
@@ -125,8 +127,8 @@ namespace Activator
 
                 // OSPP.vbs如果是在“...\Mircrosoft Office\Office1X\”下，那么其证书就在“..\Microsoft Office\root\Licenses1X\”下
                 // If OSPP.vbs is under "...\Mircrosoft Office\Office1X\", then its certificate is under "..\Microsoft Office\root\Licenses1X\"
-                OfficeProductName officeVersion;
-                VisioProductName visioVersion;
+                OfficeEditionName officeEdition;
+                VisioEditionName visioEdition;
                 if (OsppDirectory.EndsWith("Office16\\"))
                 {
                     licenseDirectory += "16\\";
@@ -135,8 +137,8 @@ namespace Activator
                     // When the certificate of Office Pro Plus 2021 VL appears in the certificate folder, the default user downloads and installs the 2021 version of Office
                     if (File.Exists(licenseDirectory + "ProPlus2021VL_KMS_Client_AE-ppd.xrm-ms"))
                     {
-                        officeVersion = OfficeProductName.Office_2021;
-                        visioVersion = VisioProductName.Visio_2021;
+                        officeEdition = OfficeEditionName.Office_2021;
+                        visioEdition = VisioEditionName.Visio_2021;
                     }
 
                     // 当证书文件夹中没有2021的证书，但有2019的证书时，则默认用户下载安装的是2019版本的Office
@@ -144,43 +146,43 @@ namespace Activator
                     else if (!File.Exists(licenseDirectory + "ProPlus2021VL_KMS_Client_AE-ppd.xrm-ms") &&
                              File.Exists(licenseDirectory + "ProPlus2019VL_KMS_Client_AE-ppd.xrm-ms"))
                     {
-                        officeVersion = OfficeProductName.Office_2019;
-                        visioVersion = VisioProductName.Visio_2019;
+                        officeEdition = OfficeEditionName.Office_2019;
+                        visioEdition = VisioEditionName.Visio_2019;
                     }
                     else
                     {
-                        officeVersion = OfficeProductName.Office_2016;
-                        visioVersion = VisioProductName.Visio_2016;
+                        officeEdition = OfficeEditionName.Office_2016;
+                        visioEdition = VisioEditionName.Visio_2016;
                     }
                 }
                 else if (OsppDirectory.EndsWith("Office15\\"))
                 {
                     licenseDirectory += "15\\";
 
-                    officeVersion = OfficeProductName.Office_2013;
-                    visioVersion = VisioProductName.Visio_2013;
+                    officeEdition = OfficeEditionName.Office_2013;
+                    visioEdition = VisioEditionName.Visio_2013;
                 }
                 else if (OsppDirectory.EndsWith("Office14\\"))
                 {
                     licenseDirectory += "14\\";
 
-                    officeVersion = OfficeProductName.Office_2010;
-                    visioVersion = VisioProductName.Visio_2010;
+                    officeEdition = OfficeEditionName.Office_2010;
+                    visioEdition = VisioEditionName.Visio_2010;
                 }
                 else
                 {
-                    officeVersion = OfficeProductName.Unsupported;
-                    visioVersion = VisioProductName.Unsupported;
+                    officeEdition = OfficeEditionName.Unsupported;
+                    visioEdition = VisioEditionName.Unsupported;
                 }
 
-                OfficeProduct = officeVersion;
-                VisioProduct = visioVersion;
+                OfficeEdition = officeEdition;
+                VisioEdition = visioEdition;
                 LicenseDirectory = licenseDirectory;
             }
             catch
             {
-                OfficeProduct = OfficeProductName.Unsupported;
-                VisioProduct = VisioProductName.Unsupported;
+                OfficeEdition = OfficeEditionName.Unsupported;
+                VisioEdition = VisioEditionName.Unsupported;
                 LicenseDirectory = null;
             }
         }
@@ -253,6 +255,8 @@ namespace Activator
             FindOfficeLicenseDirectory();
             CheckOfficeActivation();
             CheckOfficeInstalledKey();
+
+            OfficeEditionChanged?.Invoke(OfficeEdition);
         }
 
         public static void RefreshOfficeInfo() => InitializeOfficeInfo();

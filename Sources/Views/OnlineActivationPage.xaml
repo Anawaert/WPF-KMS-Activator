@@ -16,7 +16,14 @@
 
     <Page.Resources>
         <cvter:BoolToVisibilityCvter x:Key="BooleanToVisibilityConverter"></cvter:BoolToVisibilityCvter>
+        <cvter:IsRunningToIsEnabledMultiValueCvter x:Key="IsRunningToIsEnabledMultiValueCvter"></cvter:IsRunningToIsEnabledMultiValueCvter>
     </Page.Resources>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadSettingsCommand}"></i:InvokeCommandAction>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <Grid>
         <StackPanel Orientation="Vertical">
@@ -39,10 +46,20 @@
                 <StackPanel Orientation="Vertical">
                     <RadioButton x:Name="activateWindowsRadioButton" Content="激活 Microsoft Windows" Grid.Column="0" Grid.Row="1" 
                                  IsChecked="{Binding IsWindowsActivationMode, Mode=TwoWay}" HorizontalAlignment="Left">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </RadioButton>
 
                     <RadioButton x:Name="activateOfficeRadioButton" Content="激活 Microsoft Office" Grid.Column="1" Grid.Row="1"
                                  IsChecked="{Binding IsOfficeActivationMode, Mode=TwoWay}" HorizontalAlignment="Left">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </RadioButton>
                 </StackPanel>
             </ui:CardExpander>
@@ -65,12 +82,18 @@
 
                 <StackPanel Orientation="Vertical">
                     <ComboBox x:Name="selectServerComboBox" Background="Transparent" ItemsSource="{Binding Servers, Mode=TwoWay}" 
-                              SelectedIndex="0" SelectedItem="{Binding SelectedServerContentString, Mode=OneWayToSource}">
+                              SelectedIndex="{Binding SelectedServerIndex, Mode=TwoWay}" 
+                              SelectedItem="{Binding SelectedServerContentString, Mode=OneWayToSource}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </ComboBox>
                 </StackPanel>
             </ui:CardControl>
 
-            <ui:CardControl Margin="0,0,0,10">
+            <!--<ui:CardControl Margin="0,0,0,10">
                 <ui:CardControl.Header>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -87,9 +110,18 @@
                 </ui:CardControl.Header>
 
                 <StackPanel Orientation="Vertical">
-                    <ui:ToggleSwitch IsChecked="{Binding IsAutoKMSRenewal}" IsThreeState="False"></ui:ToggleSwitch>
+                    <ui:ToggleSwitch IsChecked="{Binding IsAutoKMSRenewal}" IsThreeState="False">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <i:InvokeCommandAction Command="{Binding EnabledManualRenewalSwitchCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="Unchecked">
+                                <i:InvokeCommandAction Command="{Binding DisabledManualRenewalSwitchCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ui:ToggleSwitch>
                 </StackPanel>
-            </ui:CardControl>
+            </ui:CardControl>-->
 
             <ui:CardExpander Margin="0,0,0,10" ContentPadding="0" IsExpanded="True">
                 <ui:CardExpander.Header>
@@ -124,6 +156,12 @@
                             <ui:Button x:Name="onlineActivationButton" Grid.Column="1" Content="执行联机 KMS 激活" Cursor="Hand"
                                        HorizontalAlignment="Right" VerticalAlignment="Center" Appearance="Primary"
                                        Command="{Binding ActivateCommand}">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource IsRunningToIsEnabledMultiValueCvter}">
+                                        <Binding Path="ActivateCommand.IsRunning"></Binding>
+                                        <Binding Path="DeActivateCommand.IsRunning"></Binding>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
                             </ui:Button>
                         </Grid>
                     </ui:Anchor>
@@ -145,6 +183,12 @@
                             <ui:Button x:Name="removeKMSActivationButton" Grid.Column="1" Content="卸载联机 KMS 激活" Cursor="Hand" 
                                        Width="{Binding ElementName=onlineActivationButton, Path=ActualWidth}"
                                        HorizontalAlignment="Right" VerticalAlignment="Center" Command="{Binding DeActivateCommand}">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource IsRunningToIsEnabledMultiValueCvter}">
+                                        <Binding Path="ActivateCommand.IsRunning"></Binding>
+                                        <Binding Path="DeActivateCommand.IsRunning"></Binding>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
                             </ui:Button>
                         </Grid>
                     </ui:Anchor>

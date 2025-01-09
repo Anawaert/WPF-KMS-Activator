@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 
 namespace Activator
 {
@@ -21,8 +20,6 @@ namespace Activator
 
         public static string? JsonFilePath { get; private set; }
 
-        public static ObservableCollection<string>? Servers { get; private set; }
-
         public static void InitializeSharedInfo()
         {
             ApplicationCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory + "\\";
@@ -30,12 +27,6 @@ namespace Activator
             UserDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\";
             UserDocumentsActivatorPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Anawaert KMS Activator\\";
             JsonFilePath = UserDocumentsActivatorPath + "Activator Configuration.json";
-            Servers = new ObservableCollection<string>()
-            {
-                "Anawaert 服务器（推荐）",
-                "服务器：kms.03k.org",
-                "服务器：kms.cgtsoft.com"
-            };
         }
     }
 }

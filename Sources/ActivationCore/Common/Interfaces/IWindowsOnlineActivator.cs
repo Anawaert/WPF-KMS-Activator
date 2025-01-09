@@ -1,6 +1,6 @@
 ﻿namespace Activator
 {
-    public interface IOnlineActivator
+    public interface IWindowsOnlineActivator
     {
         public bool SetActivationKey(string key);
 

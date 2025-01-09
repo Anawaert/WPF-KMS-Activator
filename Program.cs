@@ -95,9 +95,6 @@ namespace Activator
             //    }
             //    return RENEW_OFFICE_DONE;
             //}
-            Shared.InitializeSharedInfo();
-            WindowsInfo.InitializeWindowsInfo();
-            OfficeInfo.InitializeOfficeInfo();
 
             App activator = new App();
             activator.InitializeComponent();

@@ -4,6 +4,6 @@ namespace Activator
 {
     public partial class Utility
     {
-        internal static DirectoryInfo CreateActivatorDirectory() => Directory.CreateDirectory(Shared.UserDocumentsActivatorPath + "Anawaert KMS Activator");
+        internal static DirectoryInfo CreateActivatorDirectory() => Directory.CreateDirectory(Shared.UserDocumentsPath + "Anawaert KMS Activator");
     }
 }

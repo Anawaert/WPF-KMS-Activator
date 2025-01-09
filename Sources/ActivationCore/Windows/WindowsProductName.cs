@@ -2,6 +2,10 @@
 {
     public enum WindowsProductName
     {
+        // 不支持的 Windows 版本
+        // Unsupported versions of Windows
+        Unsupported,
+
         // Windows 11 的产品名称
         // Product names of Windows 11
         Windows_11_Education,
@@ -124,10 +128,6 @@
         // Windows Server 2025 的产品名称
         // Product names of Windows Server 2025
         Windows_Server_2025_Standard,
-        Windows_Server_2025_Datacenter,
-
-        // 不支持的 Windows 版本
-        // Unsupported versions of Windows
-        Unsupported
+        Windows_Server_2025_Datacenter
     }
 }

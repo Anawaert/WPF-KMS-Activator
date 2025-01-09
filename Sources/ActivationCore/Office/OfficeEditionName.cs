@@ -1,6 +1,6 @@
 ﻿namespace Activator
 {
-    public enum OfficeProductName
+    public enum OfficeEditionName
     {
         Unsupported,
         Office_2010,
@@ -10,7 +10,7 @@
         Office_2021
     }
 
-    public enum VisioProductName
+    public enum VisioEditionName
     {
         Unsupported,
         Visio_2010,

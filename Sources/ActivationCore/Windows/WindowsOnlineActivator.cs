@@ -3,13 +3,13 @@ using System.Diagnostics;
 
 namespace Activator
 {
-    public class WindowsOnlineActivator : IOnlineActivator
+    public class WindowsOnlineActivator : IWindowsOnlineActivator
     {
         public string? GetActivationKey(WindowsProductName windowsProduct)
         {
             try
             {
-                return WindowsActivationKeys.OnlineActivationKeys[windowsProduct];
+                return WindowsActivationKey.OnlineActivationKey[windowsProduct];
             }
             catch
             {

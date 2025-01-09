@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Activator
 {
-    public class WindowsActivationKeys
+    public class WindowsActivationKey
     {
-        public static Dictionary<WindowsProductName, string> OnlineActivationKeys { get; } = new Dictionary<WindowsProductName, string>()
+        public static Dictionary<WindowsProductName, string> OnlineActivationKey { get; } = new Dictionary<WindowsProductName, string>()
         {
             { WindowsProductName.Windows_11_Pro, "W269N-WFGWX-YVC9B-4J6C9-T83GX" },
             { WindowsProductName.Windows_11_Pro_N, "MH37W-N47XK-V7XM9-C7227-GCQG9" },
@@ -75,6 +75,6 @@ namespace Activator
             { WindowsProductName.Windows_Server_2008_R2_Enterprise, "489J6-VHDMP-X63PK-3K798-CPX3Y" }
         };
 
-        public static Dictionary<WindowsProductName, string> MultipleActivationKeys { get; }
+        public static Dictionary<WindowsProductName, string> MultipleActivationKey { get; }
     }
 }

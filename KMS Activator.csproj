@@ -51,6 +51,13 @@
     <None Remove="Sources\Images\Office2019Logo.png" />
     <None Remove="Sources\Images\OnlineKMSIcon.png" />
     <None Remove="Sources\Images\Windows10Logo.png" />
+    <None Remove="Sources\Images\WindowsFluentDesignUICropped.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Sources\Images\WindowsFluentDesignUICropped.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

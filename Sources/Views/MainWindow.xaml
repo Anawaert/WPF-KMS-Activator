@@ -4,6 +4,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:v="clr-namespace:Activator.Views"
         xmlns:vm="clr-namespace:Activator.ViewModels"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -19,16 +20,44 @@
         <vm:MainWindowViewModel></vm:MainWindowViewModel>
     </Window.DataContext>
 
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding ReadSystemInfoCommand}"></i:InvokeCommandAction>
+            <i:InvokeCommandAction Command="{Binding LoadAllSettingsCommand}"></i:InvokeCommandAction>
+            <i:InvokeCommandAction Command="{Binding CreateActivatorDirectoryCommand}"></i:InvokeCommandAction>
+        </i:EventTrigger>
+
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding SaveAllSettingsCommand}"></i:InvokeCommandAction>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="{Binding ElementName=mainWindowTitleBar, Path=ActualHeight}"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
+        <ui:TitleBar x:Name="mainWindowTitleBar" Title="Anawaert KMS Activator" Grid.Row="0"
+                     CloseWindowByDoubleClickOnIcon="True">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="pack://application:,,,/Sources/Images/ActivatorLogo.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+
         <ui:NavigationView x:Name="mainWindowNavigationView" IsBackButtonVisible="Auto" Grid.Row="1" Padding="36"
-                           BreadcrumbBar="{Binding ElementName=navigationViewBreadcrumbBar}">
+                           BreadcrumbBar="{Binding ElementName=navigationViewBreadcrumbBar}" SelectionChanged="OnNavigationViewSelectionChanged"
+                           TitleBar="{Binding ElementName=mainWindowTitleBar}">
             <ui:NavigationView.Header>
-                <ui:BreadcrumbBar x:Name="navigationViewBreadcrumbBar" Margin="16,16,0,10" FontWeight="DemiBold"/>
+                <StackPanel Orientation="Vertical">
+                    <ui:InfoBar x:Name="mainWindowReadingSystemInfoBar" Title="初始化读取 Windows 与 Office 信息中" IsClosable="False"
+                                IsOpen="{Binding ReadSystemInfoCommand.IsRunning}" Severity="Warning">
+                        <ui:InfoBar.Message>
+                            请等待信息读取并初始化完毕后再执行任何操作
+                        </ui:InfoBar.Message>
+                    </ui:InfoBar>
+                    <ui:BreadcrumbBar x:Name="navigationViewBreadcrumbBar" Margin="36,36,0,0" FontWeight="DemiBold"/>
+
+                </StackPanel>
             </ui:NavigationView.Header>
 
             <ui:NavigationView.AutoSuggestBox>
@@ -36,7 +65,10 @@
             </ui:NavigationView.AutoSuggestBox>
 
             <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem Content="首页" Icon="{ui:SymbolIcon Symbol=Home24}"></ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="首页" Icon="{ui:SymbolIcon Symbol=Home24}" 
+                                       TargetPageType="{x:Type v:HomePage}">
+                </ui:NavigationViewItem>
+
                 <ui:NavigationViewItem Content="KMS 激活" Icon="{ui:SymbolIcon Symbol=KeyMultiple20}" IsExpanded="True">
                     <ui:NavigationViewItem.MenuItems>
                         <!--<ui:NavigationViewItem Content="KMS38 激活" Icon="{ui:SymbolIcon Symbol=Key32}" />-->
@@ -49,13 +81,15 @@
                     </ui:NavigationViewItem.MenuItems>
                 </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
-        </ui:NavigationView>
 
-        <ui:TitleBar x:Name="mainWindowTitleBar" Title="Anawaert KMS Activator" Grid.Row="0"
-                     CloseWindowByDoubleClickOnIcon="True">
-            <ui:TitleBar.Icon>
-                <ui:ImageIcon Source="pack://application:,,,/Sources/Images/ActivatorLogo.png" />
-            </ui:TitleBar.Icon>
-        </ui:TitleBar>
+            <ui:NavigationView.FooterMenuItems>
+                <ui:NavigationViewItem Content="设置" Icon="{ui:SymbolIcon Symbol=Settings24}"
+                                       TargetPageType="{x:Type v:SettingsPage}">
+                </ui:NavigationViewItem>
+            </ui:NavigationView.FooterMenuItems>
+            
+        </ui:NavigationView>
+        
+        
     </Grid>
 </ui:FluentWindow>

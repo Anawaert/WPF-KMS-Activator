@@ -11,6 +11,8 @@ namespace Activator
 
         public static bool IsReleaseVersion { get; private set; }
 
+        public static event Action<WindowsProductName>? WindowsProductChanged;
+
         private static void CheckWindowsActivation()
         {
             try
@@ -47,7 +49,7 @@ namespace Activator
                     WindowsProduct = WindowsProductName.Unsupported;
                     foreach (WindowsProductName product in Enum.GetValues(typeof(WindowsProductName)))
                     {
-                        if (productNameFromRegistry.Contains(product.ToString().Replace("_", " ")))
+                        if (productNameFromRegistry.Contains(product.ToString().Replace("_Point_", ".").Replace("_", " ")))
                         {
                             WindowsProduct = product;
                             break;
@@ -88,6 +90,8 @@ namespace Activator
             GetWindowsVersion();
             CheckWindowsActivation();
             CheckWindowsIsReleaseVersion();
+
+            WindowsProductChanged?.Invoke(WindowsProduct);
         }
 
         public static void RefreshWindowsInfo() => InitializeWindowsInfo();
