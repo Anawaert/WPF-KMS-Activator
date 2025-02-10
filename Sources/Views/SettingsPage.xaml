@@ -11,13 +11,19 @@
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       mc:Ignorable="d" 
       d:DataContext="{d:DesignInstance Type=vm:SettingsViewModels, IsDesignTimeCreatable=True}"
-      d:DesignHeight="540" d:DesignWidth="960"
+      d:DesignHeight="1080" d:DesignWidth="960"
       Title="SettingsPage">
-
+    
+    <!-- 长期更新页，未来将加入更多功能 -->
+    <!-- Long-term update page, more functions will be added in the future -->
+    
+    <!-- 需要改为 IoC 方式 -->
     <Page.DataContext>
         <vm:SettingsViewModels></vm:SettingsViewModels>
     </Page.DataContext>
-
+    
+    <!-- 在设置页面加载时执行读取设置信息的命令 -->
+    <!-- Execute the command to read the settings information when the settings page is loaded -->
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadSettingsCommand}"></i:InvokeCommandAction>
@@ -44,6 +50,8 @@
                 </ui:CardControl.Header>
 
                 <StackPanel Orientation="Vertical">
+                    <!-- 当 WindowsProduct 未指定时，暂时利用枚举的特性显示“不支持” -->
+                    <!-- When WindowsProduct is not specified, temporarily use the characteristics of the enumeration to display "Unsupported" -->
                     <ui:TextBlock x:Name="windowsVersionTextBlock" Background="Transparent" 
                                   Text="{Binding WindowsProduct}">
                     </ui:TextBlock>
@@ -144,6 +152,8 @@
 
                 <StackPanel Orientation="Vertical">
                     <ui:ToggleSwitch IsChecked="{Binding IsUpdateCheckEnabled}" IsThreeState="False">
+                        <!-- 当该 ToggleSwitch 的状态发生变化时，都会执行保存设置的命令 -->
+                        <!-- When the state of this ToggleSwitch changes, the command to save the settings will be executed -->
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Checked">
                                 <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
@@ -168,56 +178,61 @@
                         <ui:TextBlock Grid.Row="0" FontTypography="Body" Text="主题"></ui:TextBlock>
 
                         <ui:TextBlock Grid.Row="1" Foreground="{ui:ThemeResource ResourceKey=TextFillColorSecondaryBrush}"
-                                      Text="选择不同色彩的主题">
+                                      Text="选择不同颜色模式的主题">
                         </ui:TextBlock>
                     </Grid>
                 </ui:CardExpander.Header>
 
                 <StackPanel Orientation="Vertical">
-                    <RadioButton Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left">
-                        <StackPanel Orientation="Horizontal" MaxHeight="16">
-                            <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Margin="0,0,5,0" Width="16">
-                                <Rectangle>
-                                    <Rectangle.Fill>
-                                        <SolidColorBrush Color="#00FFFFFF"></SolidColorBrush>
-                                    </Rectangle.Fill>
-                                </Rectangle>
+                    <RadioButton Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Command="{Binding SwitchToLightThemeModeCommand}"
+                                 IsThreeState="False" IsChecked="{Binding IsLightThemeMode}">
+                        <!-- 当该 RadioButton 的状态发生变化时，都会执行保存设置的命令，下同 -->
+                        <!-- When the state of this RadioButton changes, the command to save the settings will be executed, and so on -->
+                        <!-- **可简化** -->
+                        <!-- **Can be simplified** -->
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+
+                            <i:EventTrigger EventName="Unchecked">
+                                <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        
+                        <StackPanel Orientation="Horizontal" MaxHeight="16" >
+                            <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Margin="0,0,8,0" Width="16">
+                                <Border.Background>
+                                    <SolidColorBrush Color="#FAFAFA"></SolidColorBrush>
+                                </Border.Background>
                             </Border>
 
-                            <TextBlock Text="浅色（默认）"></TextBlock>
+                            <TextBlock Text="浅色模式（默认）"></TextBlock>
                         </StackPanel>
                     </RadioButton>
 
-                    <RadioButton Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left">
+                    <RadioButton Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Command="{Binding SwitchToDarkThemeModeCommand}"
+                                 IsThreeState="False" IsChecked="{Binding IsDarkThemeMode}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+
+                            <i:EventTrigger EventName="Unchecked">
+                                <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
                         <StackPanel Orientation="Horizontal" MaxHeight="16">
-                            <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Margin="0,0,5,0" Width="16">
-                                <Rectangle>
-                                    <Rectangle.Fill>
-                                        <SolidColorBrush Color="#000000"></SolidColorBrush>
-                                    </Rectangle.Fill>
-                                </Rectangle>
+                            <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Margin="0,0,8,0" Width="16">
+                                <Border.Background>
+                                    <SolidColorBrush Color="#202020"></SolidColorBrush>
+                                </Border.Background>
                             </Border>
 
-                            <TextBlock Text="深色"></TextBlock>
+                            <TextBlock Text="深色模式"></TextBlock>
                         </StackPanel>
                     </RadioButton>
-
-                    <!--<RadioButton Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left">
-                        <StackPanel Orientation="Horizontal" MaxHeight="16">
-                            <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Margin="0,0,5,0" Width="16">
-                                <Rectangle>
-                                    <Rectangle.Fill>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Color="#41A5EE" Offset="0"></GradientStop>
-                                            <GradientStop Color="#103F91" Offset="1"></GradientStop>
-                                        </LinearGradientBrush>
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                            </Border>
-
-                            <TextBlock Text="渐变蓝"></TextBlock>
-                        </StackPanel>
-                    </RadioButton>-->
                 </StackPanel>
             </ui:CardExpander>
         </StackPanel>

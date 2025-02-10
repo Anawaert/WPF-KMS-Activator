@@ -6,6 +6,8 @@
              StartupUri="/Sources/Views/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+            <!-- 引入 WPF UI 字典 -->
+            <!-- Import WPF UI dictionary -->
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemesDictionary/>
                 <ui:ControlsDictionary/>

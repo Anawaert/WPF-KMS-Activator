@@ -3,8 +3,16 @@ using System.Collections.Generic;
 
 namespace Activator
 {
+    /// <summary>
+    /// <para>本类用于存放一系列 Office 激活密钥的字典等内容</para>
+    /// <para>This class is used to store a series of dictionaries of Office activation keys and other content</para>
+    /// </summary>
     public class OfficeActivationKey
     {
+        /// <summary>
+        /// <para>支持的 Office 的专业增强版（即Pro Plus/LTSC 版）的批量在线激活密钥</para>
+        /// <para>Volume online activation key for supported Office Pro Plus/LTSC editions</para>
+        /// </summary>
         public static Dictionary<OfficeEditionName, string> OnlineActivationKey { get; } = new Dictionary<OfficeEditionName, string>()
         {
             { OfficeEditionName.Office_2021, "FXYTK-NJJ8C-GB6DW-3DYQT-6F7TH" },

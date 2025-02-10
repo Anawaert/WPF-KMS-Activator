@@ -1,25 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Activator.Views
 {
     /// <summary>
-    /// SettingsPage.xaml 的交互逻辑
+    /// <para>SettingsPage.xaml 的交互逻辑</para>
+    /// <para>Interaction logic for SettingsPage.xaml</para>
     /// </summary>
     public partial class SettingsPage : Page
     {
+        /// <summary>
+        /// <para>设置页的无参构造函数</para>
+        /// <para>Non-parameter constructor of SettingsPage</para>
+        /// </summary>
         public SettingsPage()
         {
             InitializeComponent();

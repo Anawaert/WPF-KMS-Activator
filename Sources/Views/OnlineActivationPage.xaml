@@ -11,14 +11,18 @@
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       mc:Ignorable="d" 
       d:DesignHeight="540" d:DesignWidth="960"
-      d:DataContext="{d:DesignInstance Type=vm:OnlineActivationViewModel, IsDesignTimeCreatable=True}"
+      d:DataContext="{d:DesignInstance Type=vm:OnlineActivationViewModel, IsDesignTimeCreatable=False}"
       Title="OnlineActivationPage">
+    
+    <!-- 基本完工，等待未来加入对多语言的支持即可 -->
 
     <Page.Resources>
         <cvter:BoolToVisibilityCvter x:Key="BooleanToVisibilityConverter"></cvter:BoolToVisibilityCvter>
         <cvter:IsRunningToIsEnabledMultiValueCvter x:Key="IsRunningToIsEnabledMultiValueCvter"></cvter:IsRunningToIsEnabledMultiValueCvter>
     </Page.Resources>
-
+    
+    <!-- 在页面加载时执行加载设置的命令 -->
+    <!-- Execute the command to load settings when the page is loaded -->
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadSettingsCommand}"></i:InvokeCommandAction>
@@ -44,8 +48,10 @@
                 </ui:CardExpander.Header>
 
                 <StackPanel Orientation="Vertical">
-                    <RadioButton x:Name="activateWindowsRadioButton" Content="激活 Microsoft Windows" Grid.Column="0" Grid.Row="1" 
+                    <RadioButton x:Name="activateWindowsRadioButton" Content="激活 Microsoft Windows"
                                  IsChecked="{Binding IsWindowsActivationMode, Mode=TwoWay}" HorizontalAlignment="Left">
+                        <!-- 在选中时执行保存设置的命令，下同 -->
+                        <!-- Execute the command to save settings when checked, and so on -->
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Checked">
                                 <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
@@ -53,7 +59,7 @@
                         </i:Interaction.Triggers>
                     </RadioButton>
 
-                    <RadioButton x:Name="activateOfficeRadioButton" Content="激活 Microsoft Office" Grid.Column="1" Grid.Row="1"
+                    <RadioButton x:Name="activateOfficeRadioButton" Content="激活 Microsoft Office"
                                  IsChecked="{Binding IsOfficeActivationMode, Mode=TwoWay}" HorizontalAlignment="Left">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Checked">
@@ -81,9 +87,12 @@
                 </ui:CardControl.Header>
 
                 <StackPanel Orientation="Vertical">
-                    <ComboBox x:Name="selectServerComboBox" Background="Transparent" ItemsSource="{Binding Servers, Mode=TwoWay}" 
-                              SelectedIndex="{Binding SelectedServerIndex, Mode=TwoWay}" 
-                              SelectedItem="{Binding SelectedServerContentString, Mode=OneWayToSource}">
+                    <!-- 所有服务器列表的 ComboBox，需要将更新源触发器设置为 PropertyChanged以避免出现数据源更新问题 -->
+                    <!-- ComboBox for all server lists, need to set the update source trigger to PropertyChanged to avoid data source update issues -->
+                    <ComboBox x:Name="selectServerComboBox" Background="Transparent"
+                              ItemsSource="{Binding Servers, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                              SelectedIndex="{Binding SelectedServerIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                              SelectedItem="{Binding SelectedServerContentString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
                                 <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
@@ -92,7 +101,9 @@
                     </ComboBox>
                 </StackPanel>
             </ui:CardControl>
-
+            
+            <!-- 暂时删去：手动续签功能 -->
+            <!-- Temporarily removed: manual renewal function -->
             <!--<ui:CardControl Margin="0,0,0,10">
                 <ui:CardControl.Header>
                     <Grid>
@@ -122,7 +133,7 @@
                     </ui:ToggleSwitch>
                 </StackPanel>
             </ui:CardControl>-->
-
+            
             <ui:CardExpander Margin="0,0,0,10" ContentPadding="0" IsExpanded="True">
                 <ui:CardExpander.Header>
                     <Grid>
@@ -156,6 +167,10 @@
                             <ui:Button x:Name="onlineActivationButton" Grid.Column="1" Content="执行联机 KMS 激活" Cursor="Hand"
                                        HorizontalAlignment="Right" VerticalAlignment="Center" Appearance="Primary"
                                        Command="{Binding ActivateCommand}">
+                                <!-- 多绑定，当某一个命令正在运行时，所有的按钮都应该禁用 -->
+                                <!-- Multi-binding, when one command is running, all buttons should be disabled -->
+                                <!-- 暂未考虑加入命令取消功能，未来可能会加入，但 KMS 过程本身不可逆 -->
+                                <!-- Command cancellation is not considered yet, may be added in the future, but the KMS process itself is irreversible -->
                                 <Button.IsEnabled>
                                     <MultiBinding Converter="{StaticResource IsRunningToIsEnabledMultiValueCvter}">
                                         <Binding Path="ActivateCommand.IsRunning"></Binding>
@@ -174,9 +189,8 @@
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
 
-                            <ProgressBar Grid.Column="0" IsIndeterminate="True"
-                                         Visibility="{Binding DeActivateCommand.IsRunning
-                                , Converter={StaticResource BooleanToVisibilityConverter}}"
+                            <ProgressBar Grid.Column="0" IsIndeterminate="True" 
+                                         Visibility="{Binding DeActivateCommand.IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"
                                          VerticalAlignment="Center" Margin="0,0,16,0">
                             </ProgressBar>
 

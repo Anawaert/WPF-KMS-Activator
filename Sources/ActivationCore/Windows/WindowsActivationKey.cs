@@ -3,8 +3,16 @@ using System.Collections.Generic;
 
 namespace Activator
 {
+    /// <summary>
+    /// <para>存放 Windows 激活密钥</para>
+    /// <para>Stores Windows activation keys</para>
+    /// </summary>
     public class WindowsActivationKey
     {
+        /// <summary>
+        /// <para>存放 Windows 在线激活密钥，使用 <see cref="WindowsProductName"/> 枚举作为键</para>
+        /// <para>Stores Windows online activation keys, using <see cref="WindowsProductName"/> enumeration as the key</para>
+        /// </summary>
         public static Dictionary<WindowsProductName, string> OnlineActivationKey { get; } = new Dictionary<WindowsProductName, string>()
         {
             { WindowsProductName.Windows_11_Pro, "W269N-WFGWX-YVC9B-4J6C9-T83GX" },
@@ -74,7 +82,5 @@ namespace Activator
             { WindowsProductName.Windows_Server_2008_R2_Datacenter, "74YFP-3QFB3-KQT8W-PMXWJ-7M648" },
             { WindowsProductName.Windows_Server_2008_R2_Enterprise, "489J6-VHDMP-X63PK-3K798-CPX3Y" }
         };
-
-        public static Dictionary<WindowsProductName, string> MultipleActivationKey { get; }
     }
 }

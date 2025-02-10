@@ -13,6 +13,8 @@
       d:DesignHeight="540" d:DesignWidth="960"
       Title="HomePage">
 
+    <!--本页内容尚未完成-->
+
     <Grid>
         <StackPanel Orientation="Vertical">
             <Grid Height="300">
@@ -26,6 +28,8 @@
 
                 <Border BorderThickness="0" BorderBrush="Transparent" CornerRadius="8" Grid.RowSpan="5" VerticalAlignment="Top">
                     <ui:Image Source="/Sources/Images/WindowsFluentDesignUICropped.png" Stretch="UniformToFill" MaxHeight="270">
+                        <!-- 透明度蒙版，从 60% 到 100% 底部产生渐变 -->
+                        <!-- Opacity mask, gradient from 60% to 100% at the bottom -->
                         <ui:Image.OpacityMask>
                             <LinearGradientBrush StartPoint="0,0.6" EndPoint="0,1">
                                 <GradientStop Color="#FFFFFFFF" Offset="0" />
@@ -35,7 +39,6 @@
                     </ui:Image>
                 </Border>
             </Grid>
-
         </StackPanel>
     </Grid>
 </Page>

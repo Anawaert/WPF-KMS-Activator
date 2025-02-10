@@ -5,22 +5,58 @@ using Microsoft.Win32;
 
 namespace Activator
 {
+    /// <summary>
+    /// <para>存放与实现所有与 Office 安装与配置相关信息的类</para>
+    /// <para>Class that stores and implements all information related to Office installation and configuration</para>
+    /// </summary>
     public class OfficeInfo
     {
+        /// <summary>
+        /// <para>已安装的 Office 版本名称，未安装或无法识别时默认为 <see cref="OfficeEditionName.Unsupported"/></para>
+        /// <para>Installed Office edition name, default to <see cref="OfficeEditionName.Unsupported"/> when not installed or cannot be recognized</para>
+        /// </summary>
         public static OfficeEditionName OfficeEdition { get; private set; }
 
+        /// <summary>
+        /// <para>已安装的 Visio 版本名称，未安装或无法识别时默认为 <see cref="VisioEditionName.Unsupported"/></para>
+        /// <para>Installed Visio edition name, default to <see cref="VisioEditionName.Unsupported"/> when not installed or cannot be recognized</para>
+        /// </summary>
         public static VisioEditionName VisioEdition { get; private set; }
 
+        /// <summary>
+        /// <para>指示程序是否已找到 Office 的安装核心目录</para>
+        /// <para>Indicates whether the program has found the installation core directory of Office</para>
+        /// </summary>
         public static bool IsOfficeCoreFound { get; private set; }
 
+        /// <summary>
+        /// <para>指示是否已检测到当前 Office 已处于激活状态</para>
+        /// <para>Indicates whether the current Office has been detected to be activated</para>
+        /// </summary>
         public static bool IsOfficeActivated { get; private set; }
-        
+
+        /// <summary>
+        /// <para>指示当前 Office 是否仍未安装任何密钥</para>
+        /// <para>Indicates whether the current Office has not yet installed any keys</para>
+        /// </summary>
         public static bool IsOfficeNoKeys { get; private set; }
 
+        /// <summary>
+        /// <para>Office Software Protection Platform (ospp.vbs) 文件所在目录，未找到时为 <see langword="null"/></para>
+        /// <para>Directory where the Office Software Protection Platform (ospp.vbs) file is located, <see langword="null"/> when not found</para>
+        /// </summary>
         public static string? OsppDirectory { get; private set; }
 
+        /// <summary>
+        /// <para>存放批量授权证书的目录，未找到时为 <see langword="null"/></para>
+        /// <para>Directory where the volume licensing certificate is stored, <see langword="null"/> when not found</para>
+        /// </summary>
         public static string? LicenseDirectory { get; private set; }
 
+        /// <summary>
+        /// <para>当 Office 版本发生变化时应当触发的事件，便于向外部传递变化消息</para>
+        /// <para>Event that should be triggered when the Office version changes, making it easier to pass change messages to the outside</para>
+        /// </summary>
         public static event Action<OfficeEditionName>? OfficeEditionChanged;
 
         private static void FindOfficeCoreDirectory()
@@ -249,6 +285,10 @@ namespace Activator
             }
         }
 
+        /// <summary>
+        /// <para>初始化 Office 信息以获取当前的 Office 状态</para>
+        /// <para>Initialize Office information to get the current Office status</para>
+        /// </summary>
         public static void InitializeOfficeInfo()
         {
             FindOfficeCoreDirectory();
@@ -259,6 +299,10 @@ namespace Activator
             OfficeEditionChanged?.Invoke(OfficeEdition);
         }
 
+        /// <summary>
+        /// <para>刷新 Office 信息以获取最新的 Office 状态</para>
+        /// <para>Refresh Office information to get the latest Office status</para>
+        /// </summary>
         public static void RefreshOfficeInfo() => InitializeOfficeInfo();
     }
 }

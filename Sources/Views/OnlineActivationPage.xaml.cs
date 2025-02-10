@@ -1,35 +1,38 @@
-﻿using Activator.ServiceInterfaces;
-using Activator.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Wpf.Ui;
+using Microsoft.Extensions.DependencyInjection;
+using Activator.ViewModels;
 
 namespace Activator.Views
 {
     /// <summary>
-    /// OnlineActivationPage.xaml 的交互逻辑
+    /// <para>OnlineActivationPage.xaml 的交互逻辑</para>
+    /// <para>OnlineActivationPage.xaml's interaction logic</para>
     /// </summary>
     public partial class OnlineActivationPage : Page
     {
+        /// <summary>
+        /// <para>（自动）在线激活页的构造函数，需要传入一个 <see cref="OnlineActivationViewModel"/> 实例 </para>
+        /// <para>Constructor of (auto) online activation page, need to pass a <see cref="OnlineActivationViewModel"/> instance</para>
+        /// </summary>
+        /// <param name="onlineActivationViewModel">
+        /// <para>一个 <see cref="OnlineActivationViewModel"/> 实例，用作 DataContext</para>
+        /// <para>A <see cref="OnlineActivationViewModel"/> instance, used as DataContext</para>
+        /// </param>
         public OnlineActivationPage(OnlineActivationViewModel onlineActivationViewModel)
         {
-            InitializeComponent();
+            // 应在初始化组件前设置 DataContext
+            // DataContext should be set before initializing components
             this.DataContext = onlineActivationViewModel;
+            InitializeComponent();
         }
 
-        public OnlineActivationPage() : this(App.ServiceProvider.GetRequiredService<OnlineActivationViewModel>()) { }
+        /// <summary>
+        /// <para>主窗口的无参构造函数，但会自动获取 <see cref="OnlineActivationViewModel"/> 的实例</para>
+        /// <para>Constructor of MainWindow without parameters, but will automatically get the instance of <see cref="OnlineActivationViewModel"/></para>
+        /// <para>由于服务一定存在且被注册，因此直接使用 <see cref="App.ServiceProvider"/> 获取服务</para>
+        /// <para>Since the service must exist and be registered, use <see cref="App.ServiceProvider"/> to get the service directly</para>
+        /// </summary>
+        public OnlineActivationPage() : this(App.ServiceProvider!.GetRequiredService<OnlineActivationViewModel>()) { }
     }
 }
