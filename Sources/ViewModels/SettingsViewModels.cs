@@ -35,7 +35,7 @@ namespace Activator.ViewModels
         /// <para>Activator version (string)</para>
         /// </summary>
         [ObservableProperty]
-        private string _activatorVersion = "Dev 2025.0202";
+        private string _activatorVersion = "3.0.0.0 Alpha";
 
         /// <summary>
         /// <para>是否启用更新检查</para>
