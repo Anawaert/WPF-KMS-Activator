@@ -1,0 +1,238 @@
+﻿<Page x:Class="Activator.Views.ManualOnlineActivationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:v="clr-namespace:Activator.Views"
+      xmlns:vm="clr-namespace:Activator.ViewModels"
+      xmlns:cvter="clr-namespace:Activator.Converters"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      mc:Ignorable="d" 
+      d:DesignHeight="540" d:DesignWidth="960"
+      d:DataContext="{d:DesignInstance Type=vm:ManualOnlineActivationViewModels, IsDesignTimeCreatable=False}"
+      Title="ManualOnlineActivationPage">
+    
+    <!-- 此页中的激活 Windows/Office 切换仍未做完，未来应实现完全的手动化，所以 View 仍需修改 -->
+
+    <Page.Resources>
+        <cvter:BoolToVisibilityCvter x:Key="BooleanToVisibilityConverter"></cvter:BoolToVisibilityCvter>
+        <cvter:IsRunningToIsEnabledMultiValueCvter x:Key="IsRunningToIsEnabledMultiValueCvter"></cvter:IsRunningToIsEnabledMultiValueCvter>
+    </Page.Resources>
+    
+    <!-- 在页面加载时执行加载设置的命令 -->
+    <!-- Execute the command to load settings when the page is loaded -->
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadSettingsCommand}"></i:InvokeCommandAction>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <ui:CardExpander Margin="0,0,0,10" IsExpanded="True">
+                <ui:CardExpander.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <ui:TextBlock Grid.Row="0" FontTypography="Body" Text="激活模式"></ui:TextBlock>
+
+                        <ui:TextBlock Grid.Row="1" Foreground="{ui:ThemeResource ResourceKey=TextFillColorSecondaryBrush}"
+                                      Text="选择激活 Windows 或 Office 产品">
+                        </ui:TextBlock>
+                    </Grid>
+                </ui:CardExpander.Header>
+
+                <StackPanel Orientation="Vertical">
+                    <RadioButton x:Name="activateWindowsRadioButton" Content="激活 Microsoft Windows"
+                                 IsChecked="{Binding IsWindowsActivationMode, Mode=TwoWay}" HorizontalAlignment="Left">
+                        <!-- 在选中时执行保存设置的命令，下同 -->
+                        <!-- Execute the command to save settings when checked, and so on -->
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </RadioButton>
+
+                    <RadioButton x:Name="activateOfficeRadioButton" Content="激活 Microsoft Office"
+                                 IsChecked="{Binding IsOfficeActivationMode, Mode=TwoWay}" HorizontalAlignment="Left">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </RadioButton>
+                </StackPanel>
+            </ui:CardExpander>
+
+            <ui:CardControl Margin="0,0,0,10">
+                <ui:CardControl.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <ui:TextBlock Grid.Row="0" FontTypography="Body" Text="产品名称或版本"></ui:TextBlock>
+
+                        <ui:TextBlock Grid.Row="1" Foreground="{ui:ThemeResource ResourceKey=TextFillColorSecondaryBrush}"
+                                      Text="选择或手动填写 Windows 产品名称或 Office 版本">
+                        </ui:TextBlock>
+                    </Grid>
+                </ui:CardControl.Header>
+
+                <StackPanel Orientation="Vertical">
+                    <!-- 需要将所有的绑定更新设置为 PropertyChanged，以便在输入时立即更新，否则可能会在初始时显示空值 -->
+                    <!-- Need to set all bindings to PropertyChanged to update immediately when input, otherwise it may show empty value at the beginning -->
+                    <ComboBox x:Name="selectWindowsProductOrOfficeVersionComboBox" HorizontalAlignment="Right"
+                              IsEditable="True" Text="{Binding SelectedProductNameOrEditionString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              ItemsSource="{Binding SelectiveWindowsProductNamesCollection, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedIndex="{Binding SelectedProductNameOrEditionIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding SelectedProductNameOrEditionString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
+                </StackPanel>
+            </ui:CardControl>
+
+            <ui:CardControl Margin="0,0,0,10">
+                <ui:CardControl.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <ui:TextBlock Grid.Row="0" FontTypography="Body" Text="服务器"></ui:TextBlock>
+
+                        <ui:TextBlock Grid.Row="1" Foreground="{ui:ThemeResource ResourceKey=TextFillColorSecondaryBrush}"
+                                      Text="填写激活所使用的服务器地址">
+                        </ui:TextBlock>
+                    </Grid>
+                </ui:CardControl.Header>
+
+                <StackPanel Orientation="Vertical">
+                    <ui:TextBox PlaceholderEnabled="True" PlaceholderText="例如：www.anawaert.tech"
+                                Text="{Binding ServerAddress, UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ui:TextBox>
+                </StackPanel>
+            </ui:CardControl>
+
+            <ui:CardControl Margin="0,0,0,10">
+                <ui:CardControl.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <ui:TextBlock Grid.Row="0" FontTypography="Body" Text="密钥"></ui:TextBlock>
+
+                        <ui:TextBlock Grid.Row="1" Foreground="{ui:ThemeResource ResourceKey=TextFillColorSecondaryBrush}"
+                                      Text="填写激活所使用的批量产品密钥">
+                        </ui:TextBlock>
+                    </Grid>
+                </ui:CardControl.Header>
+
+                <StackPanel Orientation="Vertical">
+                    <ui:TextBox PlaceholderEnabled="True" PlaceholderText="形如：XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"
+                                Text="{Binding ActivationKey, UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding SaveSettingsCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ui:TextBox>
+                </StackPanel>
+            </ui:CardControl>
+
+            <ui:CardExpander Margin="0,0,0,10" ContentPadding="0" IsExpanded="True">
+                <ui:CardExpander.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <ui:TextBlock Grid.Row="0" FontTypography="Body" Text="激活"></ui:TextBlock>
+
+                        <ui:TextBlock Grid.Row="1" Foreground="{ui:ThemeResource ResourceKey=TextFillColorSecondaryBrush}"
+                                      Text="点击按钮以执行或卸载 KMS 激活">
+                        </ui:TextBlock>
+                    </Grid>
+                </ui:CardExpander.Header>
+
+                <StackPanel Orientation="Vertical">
+                    <ui:Anchor Padding="16" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                               Background="Transparent" BorderThickness="0,0,0,0.5" CornerRadius="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <ProgressBar Grid.Column="0" IsIndeterminate="True" 
+                                         Visibility="{Binding ActivateCommand.IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         VerticalAlignment="Center" Margin="0,0,16,0">
+                            </ProgressBar>
+
+                            <ui:Button x:Name="onlineActivationButton" Grid.Column="1" Content="执行 KMS 激活" Cursor="Hand"
+                                       HorizontalAlignment="Right" VerticalAlignment="Center" Appearance="Primary"
+                                       Command="{Binding ActivateCommand}">
+                                <!-- 多绑定，当某一个命令正在运行时，所有的按钮都应该禁用 -->
+                                <!-- Multi-binding, when one command is running, all buttons should be disabled -->
+                                <!-- 暂未考虑加入命令取消功能，未来可能会加入，但 KMS 过程本身不可逆 -->
+                                <!-- Command cancellation is not considered yet, may be added in the future, but the KMS process itself is irreversible -->
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource IsRunningToIsEnabledMultiValueCvter}">
+                                        <Binding Path="ActivateCommand.IsRunning"></Binding>
+                                        <Binding Path="DeActivateCommand.IsRunning"></Binding>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                            </ui:Button>
+                        </Grid>
+                    </ui:Anchor>
+
+                    <ui:Anchor Padding="16" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                               Background="Transparent" BorderThickness="0" CornerRadius="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <ProgressBar Grid.Column="0" IsIndeterminate="True" 
+                                         Visibility="{Binding DeActivateCommand.IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         VerticalAlignment="Center" Margin="0,0,16,0">
+                            </ProgressBar>
+
+                            <ui:Button x:Name="removeKMSActivationButton" Grid.Column="1" Content="卸载 KMS 激活" Cursor="Hand" 
+                                       Width="{Binding ElementName=onlineActivationButton, Path=ActualWidth}"
+                                       HorizontalAlignment="Right" VerticalAlignment="Center" Command="{Binding DeActivateCommand}">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource IsRunningToIsEnabledMultiValueCvter}">
+                                        <Binding Path="ActivateCommand.IsRunning"></Binding>
+                                        <Binding Path="DeActivateCommand.IsRunning"></Binding>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                            </ui:Button>
+                        </Grid>
+                    </ui:Anchor>
+                </StackPanel>
+            </ui:CardExpander>
+        </StackPanel>
+    </Grid>
+</Page>

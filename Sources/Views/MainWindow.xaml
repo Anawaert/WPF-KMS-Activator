@@ -1,0 +1,92 @@
+﻿<ui:FluentWindow
+        x:Class="Activator.Views.MainWindow"
+        x:Name="ActivatorMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:v="clr-namespace:Activator.Views"
+        xmlns:vm="clr-namespace:Activator.ViewModels"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=False}"
+        Title="Anawaert KMS Activator" Height="720" Width="1280"
+        MinHeight="506" MinWidth="900"
+        Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Sources/Images/ActivatorLogoIco128.ico">
+
+    <!-- 使用行为在页面加载和关闭时分别读取和保存所有的设置信息至 Model 并存储到本地 -->
+    <!-- Use behaviors to read and save all settings information to Model and store them locally when the page is loaded and closed -->
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding ReadAllRequiredInfoCommand}"></i:InvokeCommandAction>
+            <i:InvokeCommandAction Command="{Binding UpdateCheckCommand}"></i:InvokeCommandAction>
+        </i:EventTrigger>
+
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding SaveAllSettingsCommand}"></i:InvokeCommandAction>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
+    <!-- 本页面仅一个 Grid 布局作为内容，包含一个标题栏和一个导航视图 -->
+    <!-- This page only contains a Grid layout as content, including a title bar and a navigation view -->
+    <Grid>
+        <ui:TitleBar x:Name="mainWindowTitleBar" Title="Anawaert KMS Activator" CloseWindowByDoubleClickOnIcon="True">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="pack://application:,,,/Sources/Images/ActivatorLogo.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+
+        <ui:NavigationView x:Name="mainWindowNavigationView" IsBackButtonVisible="Auto" Padding="36"
+                           BreadcrumbBar="{Binding ElementName=navigationViewBreadcrumbBar}" SelectionChanged="OnNavigationViewSelectionChanged"
+                           TitleBar="{Binding ElementName=mainWindowTitleBar}">
+            <ui:NavigationView.Header>
+                <StackPanel Orientation="Vertical">
+                    <!-- 该 InfoBar 用于提示用户正在读取 Windows 与 Office 信息，但采用了硬编码，未来需要更改 -->
+                    <!-- This InfoBar is used to prompt the user that Windows and Office information is being read, but it is hard-coded and needs to be changed in the future -->
+                    <ui:InfoBar x:Name="mainWindowReadingSystemInfoBar" Title="初始化读取 Windows 与 Office 信息中" IsClosable="False"
+                                IsOpen="{Binding ReadAllRequiredInfoCommand.IsRunning}" Severity="Warning">
+                        <ui:InfoBar.Message>
+                            请等待信息读取并初始化完毕后再执行任何操作
+                        </ui:InfoBar.Message>
+                    </ui:InfoBar>
+
+                    <!-- 本 BreadCrumbBar 用于显示导航视图的标题 -->
+                    <!-- This BreadCrumbBar is used to display the title of the navigation view -->
+                    <ui:BreadcrumbBar x:Name="navigationViewBreadcrumbBar" Margin="36,36,0,0" FontWeight="DemiBold"/>
+                </StackPanel>
+            </ui:NavigationView.Header>
+
+            <ui:NavigationView.AutoSuggestBox>
+                <ui:AutoSuggestBox Margin="10,0,10,10" PlaceholderText="搜索"/>
+            </ui:NavigationView.AutoSuggestBox>
+
+            <ui:NavigationView.MenuItems>
+                <!-- 所有 Icon 的 Symbol 使用 20-24 之间的大小 -->
+                <!-- All Icon's Symbol uses a size between 20 and 24 -->
+                <ui:NavigationViewItem Content="首页" Icon="{ui:SymbolIcon Symbol=Home24}" TargetPageType="{x:Type v:HomePage}">
+                </ui:NavigationViewItem>
+
+                <ui:NavigationViewItem Content="KMS 激活" Icon="{ui:SymbolIcon Symbol=KeyMultiple20}" IsExpanded="True">
+                    <ui:NavigationViewItem.MenuItems>
+                        <!--<ui:NavigationViewItem Content="KMS38 激活" Icon="{ui:SymbolIcon Symbol=Key32}" />-->
+
+                        <ui:NavigationViewItem Content="联机 KMS 激活" Icon="{ui:SymbolIcon Symbol=Globe24}"
+                                               TargetPageType="{x:Type v:OnlineActivationPage}"/>
+
+                        <ui:NavigationViewItem Content="手动 KMS 激活" Icon="{ui:SymbolIcon Symbol=HandLeft24}" 
+                                               TargetPageType="{x:Type v:ManualOnlineActivationPage}"/>
+                    </ui:NavigationViewItem.MenuItems>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.MenuItems>
+
+            <ui:NavigationView.FooterMenuItems>
+                <ui:NavigationViewItem Content="设置" Icon="{ui:SymbolIcon Symbol=Settings24}"
+                                       TargetPageType="{x:Type v:SettingsPage}">
+                </ui:NavigationViewItem>
+            </ui:NavigationView.FooterMenuItems>
+        </ui:NavigationView>
+    </Grid>
+</ui:FluentWindow>

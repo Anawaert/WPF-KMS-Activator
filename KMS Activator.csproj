@@ -3,40 +3,44 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
-    <RootNamespace>KMS_Activator</RootNamespace>
+    <RootNamespace>Activator</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>False</UseWindowsForms>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>Images\KMS_Activator_LOGO_ICO.ico</ApplicationIcon>
+    <ApplicationIcon>Sources\Images\NewActivatorLogo.ico</ApplicationIcon>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Title>Anawaert Activator</Title>
-    <PackageId>Anawaert Activator</PackageId>
-    <Version>2.0.0.0</Version>
+    <Title>Anawaert KMS Activator</Title>
+    <PackageId>Anawaert KMS Activator</PackageId>
+    <Version>3.0.0.0-alpha</Version>
     <Authors>Anawaert</Authors>
     <Company>Anawaert Studio</Company>
-    <Product>Anawaert Activator</Product>
-    <Copyright>Copyright (C) 2017-2024 Anawaert Studio</Copyright>
+    <Product>Anawaert KMS Activator</Product>
+    <Copyright>Copyright (C) 2017-2025 Anawaert Studio</Copyright>
     <PackageProjectUrl>https://github.com/Anawaert/WPF-KMS-Activator</PackageProjectUrl>
-    <PackageIcon>KMS_Activator_LOGO.png</PackageIcon>
+    <PackageIcon>NewActivatorLogo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <AssemblyName>Anawaert KMS Activator</AssemblyName>
     <NeutralLanguage>zh-CN</NeutralLanguage>
-    <PackageReleaseNotes>用于Windows与Office的激活工具</PackageReleaseNotes>
-    <Description>用于Windows与Office的激活工具</Description>
-    <FileVersion>2.0.0.0</FileVersion>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <PackageReleaseNotes>用于 Windows 与 Office 产品的开源激活工具</PackageReleaseNotes>
+    <Description>用于 Windows 与 Office 产品的开源激活工具</Description>
+    <FileVersion>3.0.0.0</FileVersion>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+	<InformationalVersion>3.0.0.0-alpha</InformationalVersion>
     <RepositoryUrl>https://github.com/Anawaert/WPF-KMS-Activator</RepositoryUrl>
     <SignAssembly>False</SignAssembly>
-    <AssemblyOriginatorKeyFile>C:\Users\Adam\Desktop\Release\kmscert.pfx</AssemblyOriginatorKeyFile>
+    <DocumentationFile>D:\Visual Studio 2022 Projects\CSharp\WPF KMS Activator\Documentation\API\Anawaert KMS Activator XML Docs.xml</DocumentationFile>
+    <DelaySign>False</DelaySign>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>embedded</DebugType>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>embedded</DebugType>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
   </PropertyGroup>
 
 	<ItemGroup>
@@ -45,35 +49,48 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <None Remove="Images\KMS_Activator_LOGO.png" />
-    <None Remove="Images\KMS_Activator_LOGO_ICO.ico" />
-    <None Remove="Images\KMS_Key_Icon.png" />
-    <None Remove="Images\Office19_Logo.png" />
-    <None Remove="Images\Remote_KMS_Icon.png" />
-    <None Remove="Images\Win10_Logo.png" />
+    <None Remove="Sources\Images\ActivatorLogoIco128.ico" />
+    <None Remove="Sources\Images\KeyIcon.png" />
+    <None Remove="Sources\Images\Office2019Logo.png" />
+    <None Remove="Sources\Images\OnlineKMSIcon.png" />
+    <None Remove="Sources\Images\Windows10Logo.png" />
+    <None Remove="Sources\Images\WindowsFluentDesignUICropped.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\KMS_Key_Icon.png">
+    <Content Include="Sources\Images\NewActivatorLogo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Sources\Images\WindowsFluentDesignUICropped.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="HandyControl" Version="3.5.1" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Include="Serilog" Version="4.2.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="WPF-UI" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\KMS_Activator_LOGO.png">
-      <Pack>True</Pack>
+    <Resource Include="Sources\Images\ActivatorLogo.png">
       <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
     </Resource>
-    <Resource Include="Images\KMS_Activator_LOGO_ICO.ico" />
-    <Resource Include="Images\Office19_Logo.png">
+    <Resource Include="Sources\Images\ActivatorLogoIco128.ico" />
+    <Resource Include="Sources\Images\KeyIcon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Sources\Images\Office2019Logo.png">
       <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Images\Remote_KMS_Icon.png" />
-    <Resource Include="Images\Win10_Logo.png" />
+    <Resource Include="Sources\Images\OnlineKMSIcon.png" />
+    <Resource Include="Sources\Images\Windows10Logo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -81,6 +98,19 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+    <None Update="Sources\Images\ActivatorLogo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="Sources\Images\NewActivatorLogo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Animations\" />
+    <Folder Include="Sources\Views\Dictionaries\" />
   </ItemGroup>
 
 </Project>

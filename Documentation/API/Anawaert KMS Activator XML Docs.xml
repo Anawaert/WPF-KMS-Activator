@@ -1,0 +1,2765 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Anawaert KMS Activator</name>
+    </assembly>
+    <members>
+        <member name="T:Activator.App">
+            <summary>
+            App.xaml 的交互逻辑
+            <br/>
+            Interaction logic for App.xaml
+            </summary>
+            <summary>
+            App
+            </summary>
+        </member>
+        <member name="P:Activator.App.ServiceProvider">
+            <summary>
+            获取或设置服务提供程序
+            <br/>
+            Get or set the service provider
+            </summary>
+        </member>
+        <member name="M:Activator.App.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            配置服务
+            <br/>
+            Configure services
+            </summary>
+            <param name="services">
+            服务集合
+            <br/>
+            Service collection
+            </param>
+        </member>
+        <member name="M:Activator.App.TryCreateActivatorDirectory">
+            <summary>
+            尝试创建 Activator 的程序保留目录
+            <br/>
+            Try to create the program reserved directory of Activator
+            </summary>
+            <returns>
+            一个 <see cref="T:System.Boolean"/> 值，表示是否创建成功
+            <br/>
+            A <see cref="T:System.Boolean"/> value, indicating whether the creation is successful
+            </returns>
+        </member>
+        <member name="M:Activator.App.SetAppTheme">
+            <summary>
+            设置应用程序主题
+            <br/>
+            Set the application theme
+            </summary>
+        </member>
+        <member name="M:Activator.App.OnStartup(System.Windows.StartupEventArgs)">
+            <summary>
+            重写启动事件，用于配置服务与程序预处理
+            <br/>
+            Override the startup event for configuring services and pre-processing of the program
+            </summary>
+            <param name="e">
+            启动事件参数，不得随意更改
+            <br/>
+            Startup event arguments, should not be changed arbitrarily
+            </param>
+        </member>
+        <member name="M:Activator.App.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Activator.IOfficeOnlineActivator">
+            <summary>
+            <para>所有在线 Office 激活后端类应当实现的接口，包含一系列在线激活必要的函数定义</para>
+            <para>All online Office activator classes should implement this interface, which contains a series of necessary functions for online activation</para>
+            </summary>
+        </member>
+        <member name="M:Activator.IOfficeOnlineActivator.SetOfficeActivationKey(System.String,System.String)">
+            <summary>
+            <para>设置 Office 激活密钥</para>
+            <para>Set Office activation key</para>
+            </summary>
+            <param name="key">
+            <para>Office 批量激活密钥</para>
+            <para>Office volume activation key</para>
+            </param>
+            <param name="osppDirectory">
+            <para>Office Software Protection Platform (ospp.vbs) 文件所在目录</para>
+            <para>Directory where Office Software Protection Platform (ospp.vbs) file is located</para>
+            </param>
+            <returns>
+            <para>指示设置密钥是否成功，若成功则返回 <see langword="true"/></para>
+            <para>Indicates whether the key is set successfully, return <see langword="true"/> if successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.IOfficeOnlineActivator.SetVisioActivationKey(System.String,System.String)">
+            <summary>
+            <para>设置 Visio 激活密钥</para>
+            <para>Set Visio activation key</para>
+            </summary>
+            <param name="key">
+            <para>Visio 批量激活密钥</para>
+            <para>Visio volume activation key</para>
+            </param>
+            <param name="osppDirectory">
+            <para>Office Software Protection Platform (ospp.vbs) 文件所在目录</para>
+            <para>Directory where Office Software Protection Platform (ospp.vbs) file is located</para>
+            </param>
+            <returns>
+            <para>指示设置密钥是否成功，若成功则返回 <see langword="true"/></para>
+            <para>Indicates whether the key is set successfully, return <see langword="true"/> if successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.IOfficeOnlineActivator.SetKMSServer(System.String,System.String)">
+            <summary>
+            <para>设置在线激活的服务器地址</para>
+            <para>Set the server address for online activation</para>
+            </summary>
+            <param name="serverName">
+            <para>KMS 服务器地址</para>
+            <para>KMS server address</para>
+            </param>
+            <param name="osppDirectory">
+            <para>Office Software Protection Platform (ospp.vbs) 文件所在目录</para>
+            <para>Directory where Office Software Protection Platform (ospp.vbs) file is located</para>
+            </param>
+            <returns>
+            <para>指示设置 KMS 服务器是否成功，若成功则返回 <see langword="true"/></para>
+            <para>Indicates whether the KMS server is set successfully, return <see langword="true"/> if successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.IOfficeOnlineActivator.ApplyActivation(System.String)">
+            <summary>
+            <para>对 Office/Visio 应用在线批量激活</para>
+            <para>Apply online volume activation to Office/Visio</para>
+            </summary>
+            <param name="osppDirectory">
+            <para>Office Software Protection Platform (ospp.vbs) 文件所在目录</para>
+            <para>Directory where Office Software Protection Platform (ospp.vbs) file is located</para>
+            </param>
+            <returns>
+            <para>指示激活是否成功，若成功则返回 <see langword="true"/></para>
+            <para>Indicates whether the activation is successful, return <see langword="true"/> if successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.IOfficeOnlineActivator.RemoveActivation(System.String)">
+            <summary>
+            <para>移除 Office/Visio 应用的激活状态</para>
+            <para>Remove the activation status of Office/Visio</para>
+            </summary>
+            <param name="osppDirectory">
+            <para>Office Software Protection Platform (ospp.vbs) 文件所在目录</para>
+            <para>Directory where Office Software Protection Platform (ospp.vbs) file is located</para>
+            </param>
+            <returns>
+            <para>指示移除激活是否成功，若成功则返回 <see langword="true"/></para>
+            <para>Indicates whether the removal of activation is successful, return <see langword="true"/> if successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.IOfficeOnlineActivator.RegisterManualRenewalTask">
+            <summary>
+            <para>注册手动续签任务</para>
+            <para>Register manual renewal task</para>
+            <para>* 请不要调用此函数</para>
+            <para>* Do not call this function</para>
+            </summary>
+            <returns>
+            <para>注册手动续签任务是否成功，若成功则返回 <see langword="true"/></para>
+            <para>Whether the manual renewal task is registered successfully, return <see langword="true"/> if successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.IOfficeOnlineActivator.RemoveManualRenewalTask">
+            <summary>
+            <para>移除手动续签任务</para>
+            <para>Remove manual renewal task</para>
+            <para>* 请不要调用此函数</para>
+            <para>* Do not call this function</para>
+            </summary>
+            <returns>
+            <para>移除手动续签任务是否成功，若成功则返回 <see langword="true"/></para>
+            <para>Whether the manual renewal task is removed successfully, return <see langword="true"/> if successful</para>
+            </returns>
+        </member>
+        <member name="T:Activator.IWindowsOnlineActivator">
+            <summary>
+            <para>所有在线 Windows 激活后端类应当实现的接口，包含一系列在线激活必要的函数定义</para>
+            <para>All Windows online activator classes should implement this interface, which contains a series of necessary functions for online activation</para>
+            </summary>
+        </member>
+        <member name="M:Activator.IWindowsOnlineActivator.SetActivationKey(System.String)">
+            <summary>
+            <para>设置 KMS 批量激活密钥</para>
+            <para>Set the KMS volume activation key</para>
+            </summary>
+            <param name="key">
+            <para>批量激活密钥</para>
+            <para>Volume activation key</para>
+            </param>
+            <returns>
+            <para>一个 <see langword="bool"/> 值，指示是否已成功设置</para>
+            <para>A <see langword="bool"/> value indicating whether the setting was successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.IWindowsOnlineActivator.SetKMSServer(System.String)">
+            <summary>
+            <para>设置 KMS 服务器地址</para>
+            <para>Set the KMS server address</para>
+            </summary>
+            <param name="serverName">
+            <para>KMS 服务器地址</para>
+            <para>KMS server address</para>
+            </param>
+            <returns>
+            <para>一个 <see langword="bool"/> 值，指示是否已成功设置</para>
+            <para>A <see langword="bool"/> value indicating whether the setting was successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.IWindowsOnlineActivator.ApplyActivation">
+            <summary>
+            <para>应用激活</para>
+            <para>Apply activation</para>
+            </summary>
+            <returns>
+            <para>一个 <see langword="bool"/> 值，指示是否已成功激活</para>
+            <para>A <see langword="bool"/> value indicating whether the activation was successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.IWindowsOnlineActivator.RemoveActivation">
+            <summary>
+            <para>移除激活</para>
+            <para>Remove activation</para>
+            </summary>
+            <returns>
+            <para>一个 <see langword="bool"/> 值，指示是否已成功移除</para>
+            <para>A <see langword="bool"/> value indicating whether the removal was successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.IWindowsOnlineActivator.RegisterManualRenewalTask">
+            <summary>
+            <para>注册手动续签任务</para>
+            <para>Register manual renewal task</para>
+            </summary>
+            <returns>
+            <para>一个 <see langword="bool"/> 值，指示是否已成功注册</para>
+            <para>A <see langword="bool"/> value indicating whether the registration was successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.IWindowsOnlineActivator.RemoveManualRenewalTask">
+            <summary>
+            <para>移除手动续签任务</para>
+            <para>Remove manual renewal task</para>
+            </summary>
+            <returns>
+            <para>一个 <see langword="bool"/> 值，指示是否已成功移除</para>
+            <para>A <see langword="bool"/> value indicating whether the removal was successful</para>
+            </returns>
+        </member>
+        <member name="T:Activator.Shared">
+            <summary>
+            <para>本类主要包含一些共享信息</para>
+            <para>This class mainly contains some shared information</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Shared.Cscript">
+            <summary>
+            <para>Windows 中 cscript.exe 的路径</para>
+            <para>Path of cscript.exe in Windows</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Shared.Dism">
+            <summary>
+            <para>Windows 中 dism.exe 的路径</para>
+            <para>Path of dism.exe in Windows</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Shared.AnawaertServerAddress">
+            <summary>
+            <para>Anawaert 服务器地址</para>
+            <para>Anawaert server address</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Shared.ApplicationCurrentDirectory">
+            <summary>
+            <para>应用程序当前运行目录</para>
+            <para>Current running directory of the application</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Shared.System32Path">
+            <summary>
+            <para>Windows 系统 System32 目录</para>
+            <para>System32 directory of Windows system</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Shared.UserDocumentsPath">
+            <summary>
+            <para>用户文档目录</para>
+            <para>User documents directory</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Shared.UserDocumentsActivatorPath">
+            <summary>
+            <para>用户文档目录下 Anawaert KMS Activator 目录</para>
+            <para>Anawaert KMS Activator directory under user documents directory</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Shared.JsonFilePath">
+            <summary>
+            <para>JSON 配置文件路径</para>
+            <para>Path of JSON configuration file</para>
+            </summary>
+        </member>
+        <member name="M:Activator.Shared.InitializeSharedInfo">
+            <summary>
+            <para>初始化共享信息</para>
+            <para>Initialize shared information</para>
+            </summary>
+        </member>
+        <member name="T:Activator.Utility">
+            <summary>
+            <para>本类主要实现了一些工具函数，以辅助激活工具与激活器内核的工作</para>
+            <para>This class mainly implements some utility functions to assist the work of activation tool and activator core</para>
+            </summary>
+        </member>
+        <member name="M:Activator.Utility.CheckUpdateAvailable">
+            <summary>
+            <para>检测是否有新版本可用</para>
+            <para>Check if there is a new version available</para>
+            </summary>
+            <returns>
+            <para>由 <see cref="T:System.Threading.Tasks.Task"/> 包装的 <see langword="bool"/> 类型，在更新可用的时候返回 <see langword="true"/></para>
+            <para><see langword="bool"/> type wrapped by <see cref="T:System.Threading.Tasks.Task"/>, return <see langword="true"/> when an update is available</para>
+            </returns>
+        </member>
+        <member name="M:Activator.Utility.ConvertWindowsProductNameToString(Activator.WindowsProductName)">
+            <summary>
+            <para>将 <see cref="T:Activator.WindowsProductName"/> 枚举转换为对应的 <see langword="string"/> 字符串</para>
+            <para>Convert <see cref="T:Activator.WindowsProductName"/> enum to corresponding <see langword="string"/></para>
+            </summary>
+            <param name="productName">
+            <para>需要转换的 <see cref="T:Activator.WindowsProductName"/> 枚举</para>
+            <para><see cref="T:Activator.WindowsProductName"/> enum to convert</para>
+            </param>
+            <returns>
+            <para>转换后的 <see langword="string"/> 字符串</para>
+            <para>Converted <see langword="string"/></para>
+            </returns>
+        </member>
+        <member name="M:Activator.Utility.ConvertWindowsProductNameToEnum(System.String)">
+            <summary>
+            <para>将 <see langword="string"/> 字符串转换为对应的 <see cref="T:Activator.WindowsProductName"/> 枚举</para>
+            <para>Convert <see langword="string"/> to corresponding <see cref="T:Activator.WindowsProductName"/> enum</para>
+            </summary>
+            <param name="productName">
+            <para>需要转换的 <see langword="string"/> 字符串</para>
+            <para><see langword="string"/> to convert</para>
+            </param>
+            <returns>
+            <para>转换后的 <see cref="T:Activator.WindowsProductName"/> 枚举，若传入的 <see langword="string"/> 字符串没有对应的产品名称，则返回 <see cref="F:Activator.WindowsProductName.Unsupported"/></para>
+            <para>Converted <see cref="T:Activator.WindowsProductName"/> enum, if the <see langword="string"/> does not have a corresponding product name, return <see cref="F:Activator.WindowsProductName.Unsupported"/></para>
+            </returns>
+        </member>
+        <member name="M:Activator.Utility.ConvertOfficeEditionToString(Activator.OfficeEditionName)">
+            <summary>
+            <para>将 <see cref="T:Activator.OfficeEditionName"/> 枚举转换为对应的 <see langword="string"/> 字符串</para>
+            <para>Convert <see cref="T:Activator.OfficeEditionName"/> enum to corresponding <see langword="string"/></para>
+            </summary>
+            <param name="edition">
+            <para>需要转换的 <see cref="T:Activator.OfficeEditionName"/> 枚举</para>
+            <para><see cref="T:Activator.OfficeEditionName"/> enum to convert</para>
+            </param>
+            <returns>
+            <para>转换后的 <see langword="string"/> 字符串</para>
+            <para>Converted <see langword="string"/></para>
+            </returns>
+        </member>
+        <member name="M:Activator.Utility.ConvertOfficeEditionToEnum(System.String)">
+            <summary>
+            <para>将 <see langword="string"/> 字符串转换为对应的 <see cref="T:Activator.OfficeEditionName"/> 枚举</para>
+            <para>Convert <see langword="string"/> to corresponding <see cref="T:Activator.OfficeEditionName"/> enum</para>
+            </summary>
+            <param name="edition">
+            <para>需要转换的 <see langword="string"/> 字符串</para>
+            <para><see langword="string"/> to convert</para>
+            </param>
+            <returns>
+            <para>转换后的 <see cref="T:Activator.OfficeEditionName"/> 枚举，若传入的 <see langword="string"/> 字符串没有对应的产品名称，则返回 <see cref="F:Activator.OfficeEditionName.Unsupported"/></para>
+            <para>Converted <see cref="T:Activator.OfficeEditionName"/> enum, if the <see langword="string"/> does not have a corresponding product name, return <see cref="F:Activator.OfficeEditionName.Unsupported"/></para>
+            </returns>
+        </member>
+        <member name="M:Activator.Utility.RunProcess(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            <para>以指定的参数运行一个进程</para>
+            <para>Run a process with specified parameters</para>
+            </summary>
+            <param name="execName">
+            <para>要执行的进程的名称，如 "cmd.exe"</para>
+            <para>Name of the process to be executed, such as "cmd.exe"</para>
+            </param>
+            <param name="execParams">
+            <para>要传递给进程的参数，如 "/c echo Hello World"，可为空</para>
+            <para>Parameters to be passed to the process, such as "/c echo Hello World", can be null</para>
+            </param>
+            <param name="workingDirectory">
+            <para>进程的工作目录，如 "D:\"，若为空则默认为 "C:\Windows\System32"</para>
+            <para>Working directory of the process, such as "D:\", if null then default to "C:\Windows\System32"</para>
+            </param>
+            <param name="isSilent">
+            <para>是否以静默模式运行进程，即不显示进程的窗口</para>
+            <para>Whether to run the process in silent mode, that is, without displaying the window of the process</para>
+            </param>
+            <returns>
+            <para>进程的标准输出</para>
+            <para>Standard output of the process</para>
+            </returns>
+        </member>
+        <member name="T:Activator.OfficeActivationKey">
+            <summary>
+            <para>本类用于存放一系列 Office 激活密钥的字典等内容</para>
+            <para>This class is used to store a series of dictionaries of Office activation keys and other content</para>
+            </summary>
+        </member>
+        <member name="P:Activator.OfficeActivationKey.OnlineActivationKey">
+            <summary>
+            <para>支持的 Office 的专业增强版（即Pro Plus/LTSC 版）的批量在线激活密钥</para>
+            <para>Volume online activation key for supported Office Pro Plus/LTSC editions</para>
+            </summary>
+        </member>
+        <member name="T:Activator.OfficeEditionName">
+            <summary>
+            <para>所有支持的 Office 版本名称枚举</para>
+            <para>Enumeration of all supported Office edition names</para>
+            </summary>
+        </member>
+        <member name="F:Activator.OfficeEditionName.Unsupported">
+            <summary>
+            <para>不支持的 Office 版本</para>
+            <para>Unsupported versions of Office</para>
+            </summary>
+        </member>
+        <member name="F:Activator.OfficeEditionName.Office_2010">
+            <summary>
+            <para>Office 2010 版本</para>
+            <para>Office 2010 edition</para>
+            </summary>
+        </member>
+        <member name="F:Activator.OfficeEditionName.Office_2013">
+            <summary>
+            <para>Office 2013 版本</para>
+            <para>Office 2013 edition</para>
+            </summary>
+        </member>
+        <member name="F:Activator.OfficeEditionName.Office_2016">
+            <summary>
+            <para>Office 2016 版本</para>
+            <para>Office 2016 edition</para>
+            </summary>
+        </member>
+        <member name="F:Activator.OfficeEditionName.Office_2019">
+            <summary>
+            <para>Office 2019 版本</para>
+            <para>Office 2019 edition</para>
+            </summary>
+        </member>
+        <member name="F:Activator.OfficeEditionName.Office_2021">
+            <summary>
+            <para>Office 2021 版本</para>
+            <para>Office 2021 edition</para>
+            </summary>
+        </member>
+        <member name="T:Activator.VisioEditionName">
+            <summary>
+            <para>Visio 版本名称枚举</para>
+            <para>Enumeration of Visio edition names</para>
+            </summary>
+        </member>
+        <member name="F:Activator.VisioEditionName.Unsupported">
+            <summary>
+            <para>不支持的 Visio 版本</para>
+            <para>Unsupported versions of Visio</para>
+            </summary>
+        </member>
+        <member name="F:Activator.VisioEditionName.Visio_2010">
+            <summary>
+            <para>Visio 2010 版本</para>
+            <para>Visio 2010 edition</para>
+            </summary>
+        </member>
+        <member name="F:Activator.VisioEditionName.Visio_2013">
+            <summary>
+            <para>Visio 2013 版本</para>
+            <para>Visio 2013 edition</para>
+            </summary>
+        </member>
+        <member name="F:Activator.VisioEditionName.Visio_2016">
+            <summary>
+            <para>Visio 2016 版本</para>
+            <para>Visio 2016 edition</para>
+            </summary>
+        </member>
+        <member name="F:Activator.VisioEditionName.Visio_2019">
+            <summary>
+            <para>Visio 2019 版本</para>
+            <para>Visio 2019 edition</para>
+            </summary>
+        </member>
+        <member name="F:Activator.VisioEditionName.Visio_2021">
+            <summary>
+            <para>Visio 2021 版本</para>
+            <para>Visio 2021 edition</para>
+            </summary>
+        </member>
+        <member name="T:Activator.OfficeInfo">
+            <summary>
+            <para>存放与实现所有与 Office 安装与配置相关信息的类</para>
+            <para>Class that stores and implements all information related to Office installation and configuration</para>
+            </summary>
+        </member>
+        <member name="P:Activator.OfficeInfo.OfficeEdition">
+            <summary>
+            <para>已安装的 Office 版本名称，未安装或无法识别时默认为 <see cref="F:Activator.OfficeEditionName.Unsupported"/></para>
+            <para>Installed Office edition name, default to <see cref="F:Activator.OfficeEditionName.Unsupported"/> when not installed or cannot be recognized</para>
+            </summary>
+        </member>
+        <member name="P:Activator.OfficeInfo.VisioEdition">
+            <summary>
+            <para>已安装的 Visio 版本名称，未安装或无法识别时默认为 <see cref="F:Activator.VisioEditionName.Unsupported"/></para>
+            <para>Installed Visio edition name, default to <see cref="F:Activator.VisioEditionName.Unsupported"/> when not installed or cannot be recognized</para>
+            </summary>
+        </member>
+        <member name="P:Activator.OfficeInfo.IsOfficeCoreFound">
+            <summary>
+            <para>指示程序是否已找到 Office 的安装核心目录</para>
+            <para>Indicates whether the program has found the installation core directory of Office</para>
+            </summary>
+        </member>
+        <member name="P:Activator.OfficeInfo.IsOfficeActivated">
+            <summary>
+            <para>指示是否已检测到当前 Office 已处于激活状态</para>
+            <para>Indicates whether the current Office has been detected to be activated</para>
+            </summary>
+        </member>
+        <member name="P:Activator.OfficeInfo.IsOfficeNoKeys">
+            <summary>
+            <para>指示当前 Office 是否仍未安装任何密钥</para>
+            <para>Indicates whether the current Office has not yet installed any keys</para>
+            </summary>
+        </member>
+        <member name="P:Activator.OfficeInfo.OsppDirectory">
+            <summary>
+            <para>Office Software Protection Platform (ospp.vbs) 文件所在目录，未找到时为 <see langword="null"/></para>
+            <para>Directory where the Office Software Protection Platform (ospp.vbs) file is located, <see langword="null"/> when not found</para>
+            </summary>
+        </member>
+        <member name="P:Activator.OfficeInfo.LicenseDirectory">
+            <summary>
+            <para>存放批量授权证书的目录，未找到时为 <see langword="null"/></para>
+            <para>Directory where the volume licensing certificate is stored, <see langword="null"/> when not found</para>
+            </summary>
+        </member>
+        <member name="E:Activator.OfficeInfo.OfficeEditionChanged">
+            <summary>
+            <para>当 Office 版本发生变化时应当触发的事件，便于向外部传递变化消息</para>
+            <para>Event that should be triggered when the Office version changes, making it easier to pass change messages to the outside</para>
+            </summary>
+        </member>
+        <member name="M:Activator.OfficeInfo.InitializeOfficeInfo">
+            <summary>
+            <para>初始化 Office 信息以获取当前的 Office 状态</para>
+            <para>Initialize Office information to get the current Office status</para>
+            </summary>
+        </member>
+        <member name="M:Activator.OfficeInfo.RefreshOfficeInfo">
+            <summary>
+            <para>刷新 Office 信息以获取最新的 Office 状态</para>
+            <para>Refresh Office information to get the latest Office status</para>
+            </summary>
+        </member>
+        <member name="T:Activator.OfficeOnlineActivator">
+            <summary>
+            <para>Office 在线激活对象</para>
+            <para>Office online activator object</para>
+            </summary>
+        </member>
+        <member name="M:Activator.OfficeOnlineActivator.InstallVolumeLicense(System.String,System.String,Activator.OfficeEditionName)">
+            <summary>
+            <para>为指定版本的 Office 安装批量授权证书</para>
+            <para>Install volume license certificate for the specified version of Office</para>
+            </summary>
+            <param name="licenseDirectory">
+            <para>存放批量授权证书的目录</para>
+            <para>Directory where the volume license certificate is stored</para>
+            </param>
+            <param name="osppDirectory">
+            <para>Office Software Protection Platform (ospp.vbs) 文件所在目录</para>
+            <para>Directory where Office Software Protection Platform (ospp.vbs) file is located</para>
+            </param>
+            <param name="officeEdition">
+            <para>需要安装证书的 Office 版本</para>
+            <para>Office edition to install the certificate</para>
+            </param>
+            <returns>
+            <para>指示是否安装成功，若安装成功，则返回 <see langword="true"/></para>
+            <para>Indicates whether the installation is successful, return <see langword="true"/> if successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.OfficeOnlineActivator.ConvertToVolumeLicense(System.String,System.String,Activator.OfficeEditionName,Activator.VisioEditionName)">
+            <summary>
+            <para>将指定的 Office 版本转换为批量授权版本</para>
+            </summary>
+            <param name="licenseDirectory">
+            <para>存放批量授权证书的目录</para>
+            <para>Directory where the volume license certificate is stored</para>
+            </param>
+            <param name="osppDirectory">
+            <para>Office Software Protection Platform (ospp.vbs) 文件所在目录</para>
+            <para>Directory where Office Software Protection Platform (ospp.vbs) file is located</para>
+            </param>
+            <param name="officeEdition">
+            <para>需要转换的 Office 版本</para>
+            <para>Office edition to convert</para>
+            </param>
+            <param name="visioEdition">
+            <para>需要转换的 Visio 版本</para>
+            <para>Visio edition to convert</para>
+            </param>
+            <returns>
+            <para>指示是否转换成功，若转换成功，则返回 <see langword="true"/></para>
+            <para>Indicates whether the conversion is successful, return <see langword="true"/> if successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.OfficeOnlineActivator.GetOfficeActivationKey(Activator.OfficeEditionName)">
+            <summary>
+            <para>获取指定 Office 版本的在线激活密钥</para>
+            <para>Get the online activation key of the specified Office edition</para>
+            </summary>
+            <param name="officeEdition">
+            <para>需要获取激活密钥的 Office 版本</para>
+            <para>Office edition to get the activation key</para>
+            </param>
+            <returns>
+            <para>Office 激活密钥，可能为空</para>
+            <para>Office activation key, may be null</para>
+            </returns>
+        </member>
+        <member name="M:Activator.OfficeOnlineActivator.GetVisioActivationKey(Activator.VisioEditionName)">
+            <summary>
+            <para>获取指定 Visio 版本的在线激活密钥</para>
+            <para>Get the online activation key of the specified Visio edition</para>
+            </summary>
+            <param name="visioEdition">
+            <para>需要获取激活密钥的 Visio 版本</para>
+            <para>Visio edition to get the activation key</para>
+            </param>
+            <returns>
+            <para>Visio 激活密钥，可能为空</para>
+            <para>Visio activation key, may be null</para>
+            </returns>
+        </member>
+        <member name="M:Activator.OfficeOnlineActivator.SetOfficeActivationKey(System.String,System.String)">
+            <summary>
+            <para>设置 Office 激活密钥</para>
+            <para>Set Office activation key</para>
+            </summary>
+            <param name="key">
+            <para>Office 批量激活密钥</para>
+            <para>Office volume activation key</para>
+            </param>
+            <param name="osppDirectory">
+            <para>Office Software Protection Platform (ospp.vbs) 文件所在目录</para>
+            <para>Directory where Office Software Protection Platform (ospp.vbs) file is located</para>
+            </param>
+            <returns>
+            <para>指示设置密钥是否成功，若成功则返回 <see langword="true"/></para>
+            <para>Indicates whether the key is set successfully, return <see langword="true"/> if successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.OfficeOnlineActivator.SetVisioActivationKey(System.String,System.String)">
+            <summary>
+            <para>设置 Visio 激活密钥</para>
+            <para>Set Visio activation key</para>
+            </summary>
+            <param name="key">
+            <para>Visio 批量激活密钥</para>
+            <para>Visio volume activation key</para>
+            </param>
+            <param name="osppDirectory">
+            <para>Office Software Protection Platform (ospp.vbs) 文件所在目录</para>
+            <para>Directory where Office Software Protection Platform (ospp.vbs) file is located</para>
+            </param>
+            <returns>
+            <para>指示设置密钥是否成功，若成功则返回 <see langword="true"/></para>
+            <para>Indicates whether the key is set successfully, return <see langword="true"/> if successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.OfficeOnlineActivator.SetKMSServer(System.String,System.String)">
+            <summary>
+            <para>设置在线激活的服务器地址</para>
+            <para>Set the server address for online activation</para>
+            </summary>
+            <param name="serverName">
+            <para>KMS 服务器地址</para>
+            <para>KMS server address</para>
+            </param>
+            <param name="osppDirectory">
+            <para>Office Software Protection Platform (ospp.vbs) 文件所在目录</para>
+            <para>Directory where Office Software Protection Platform (ospp.vbs) file is located</para>
+            </param>
+            <returns>
+            <para>指示设置 KMS 服务器是否成功，若成功则返回 <see langword="true"/></para>
+            <para>Indicates whether the KMS server is set successfully, return <see langword="true"/> if successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.OfficeOnlineActivator.ApplyActivation(System.String)">
+            <summary>
+            <para>对 Office/Visio 应用在线批量激活</para>
+            <para>Apply online volume activation to Office/Visio</para>
+            </summary>
+            <param name="osppDirectory">
+            <para>Office Software Protection Platform (ospp.vbs) 文件所在目录</para>
+            <para>Directory where Office Software Protection Platform (ospp.vbs) file is located</para>
+            </param>
+            <returns>
+            <para>指示激活是否成功，若成功则返回 <see langword="true"/></para>
+            <para>Indicates whether the activation is successful, return <see langword="true"/> if successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.OfficeOnlineActivator.RemoveActivation(System.String)">
+            <summary>
+            <para>移除 Office/Visio 应用的激活状态</para>
+            <para>Remove the activation status of Office/Visio</para>
+            </summary>
+            <param name="osppDirectory">
+            <para>Office Software Protection Platform (ospp.vbs) 文件所在目录</para>
+            <para>Directory where Office Software Protection Platform (ospp.vbs) file is located</para>
+            </param>
+            <returns>
+            <para>指示移除激活是否成功，若成功则返回 <see langword="true"/></para>
+            <para>Indicates whether the removal of activation is successful, return <see langword="true"/> if successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.OfficeOnlineActivator.RegisterManualRenewalTask">
+            <summary>
+            <para>注册手动续签任务</para>
+            <para>Register manual renewal task</para>
+            <para>* 请不要调用此函数</para>
+            <para>* Do not call this function</para>
+            </summary>
+            <returns>
+            <para>注册手动续签任务是否成功，若成功则返回 <see langword="true"/></para>
+            <para>Whether the manual renewal task is registered successfully, return <see langword="true"/> if successful</para>
+            </returns>
+            <exception cref="T:System.NotImplementedException">
+            <para>请不要调用此函数，因为函数尚未实现</para>
+            <para>Do not call this function because it is not implemented yet</para>
+            </exception>
+        </member>
+        <member name="M:Activator.OfficeOnlineActivator.RemoveManualRenewalTask">
+            <summary>
+            <para>移除手动续签任务</para>
+            <para>Remove manual renewal task</para>
+            <para>* 请不要调用此函数</para>
+            <para>* Do not call this function</para>
+            </summary>
+            <returns>
+            <para>移除手动续签任务是否成功，若成功则返回 <see langword="true"/></para>
+            <para>Whether the manual renewal task is removed successfully, return <see langword="true"/> if successful</para>
+            </returns>
+            <exception cref="T:System.NotImplementedException">
+            <para>请不要调用此函数，因为函数尚未实现</para>
+            <para>Do not call this function because it is not implemented yet</para>
+            </exception>
+        </member>
+        <member name="M:Activator.OfficeOnlineActivator.#ctor">
+            <summary>
+            <para>在线 Office 激活对象的无参构造函数</para>
+            <para>Parameterless constructor of the online Office activator object</para>
+            </summary>
+        </member>
+        <member name="T:Activator.VisioActivationKey">
+            <summary>
+            <para>本类用于存放一系列 Visio 激活密钥的字典等内容</para>
+            <para>This class is used to store a series of dictionaries of Visio activation keys and other content</para>
+            </summary>
+        </member>
+        <member name="P:Activator.VisioActivationKey.OnlineActivationKey">
+            <summary>
+            <para>支持的 Visio 的专业增强版（即Pro Plus/LTSC 版）的批量在线激活密钥</para>
+            <para>Volume online activation key for supported Visio Pro Plus/LTSC editions</para>
+            </summary>
+        </member>
+        <member name="T:Activator.WindowsActivationKey">
+            <summary>
+            <para>存放 Windows 激活密钥</para>
+            <para>Stores Windows activation keys</para>
+            </summary>
+        </member>
+        <member name="P:Activator.WindowsActivationKey.OnlineActivationKey">
+            <summary>
+            <para>存放 Windows 在线激活密钥，使用 <see cref="T:Activator.WindowsProductName"/> 枚举作为键</para>
+            <para>Stores Windows online activation keys, using <see cref="T:Activator.WindowsProductName"/> enumeration as the key</para>
+            </summary>
+        </member>
+        <member name="T:Activator.WindowsInfo">
+            <summary>
+            <para>该静态类包含了一系列与 Windows 系统信息相关的属性与方法</para>
+            <para>This static class contains a series of properties and methods related to Windows system information</para>
+            </summary>
+        </member>
+        <member name="P:Activator.WindowsInfo.WindowsProduct">
+            <summary>
+            <para>Windows 系统的产品名称</para>
+            <para>The product name of the Windows system</para>
+            </summary>
+        </member>
+        <member name="P:Activator.WindowsInfo.IsWindowsActivated">
+            <summary>
+            <para>Windows 系统是否已激活</para>
+            <para>Whether the Windows system is activated</para>
+            </summary>
+        </member>
+        <member name="P:Activator.WindowsInfo.IsReleaseVersion">
+            <summary>
+            <para>Windows 系统是否为正式版本而非评估版本（主要针对 Windows Server）</para>
+            <para>Whether the Windows system is a release version rather than an evaluation version (mainly for Windows Server)</para>
+            </summary>
+        </member>
+        <member name="E:Activator.WindowsInfo.WindowsProductChanged">
+            <summary>
+            <para>当 Windows 系统的产品名称发生变化时引发的事件</para>
+            <para>此事件主要用于在产品名称发生变化时通知其它对象获取更新</para>
+            <para>** 未来将逐步改为更加完善的事件机制 **</para> 
+            <para>The event that is raised when the product name of the Windows system changes</para>
+            <para>This event is mainly used to notify other objects to get updated when the product name changes</para>
+            <para>** Will gradually be replaced by a more complete event mechanism in the future **</para>
+            </summary>
+        </member>
+        <member name="M:Activator.WindowsInfo.CheckWindowsActivation">
+            <summary>
+            <para>检查 Windows 系统的激活状态</para>
+            <para>Check the activation status of the Windows system</para>
+            </summary>
+        </member>
+        <member name="M:Activator.WindowsInfo.GetWindowsVersion">
+            <summary>
+            <para>获取 Windows 系统的产品名称</para>
+            <para>Get the product name of the Windows system</para>
+            </summary>
+        </member>
+        <member name="M:Activator.WindowsInfo.CheckWindowsIsReleaseVersion">
+            <summary>
+            <para>检查 Windows 系统是否为正式版本而非评估版</para>
+            <para>Check whether the Windows system is a release version rather than an evaluation version</para>
+            </summary>
+        </member>
+        <member name="M:Activator.WindowsInfo.InitializeWindowsInfo">
+            <summary>
+            <para>初始化 Windows 系统信息</para>
+            <para>Initialize Windows system information</para>
+            </summary>
+        </member>
+        <member name="M:Activator.WindowsInfo.RefreshWindowsInfo">
+            <summary>
+            <para>刷新 Windows 系统信息，效果同初始化信息</para>
+            <para>Refresh Windows system information, the same effect as initializing information</para>
+            </summary>
+        </member>
+        <member name="T:Activator.WindowsOnlineActivator">
+            <summary>
+            <para>Windows 在线激活对象</para>
+            <para>Windows online activator object</para>
+            </summary>
+        </member>
+        <member name="M:Activator.WindowsOnlineActivator.GetActivationKey(Activator.WindowsProductName)">
+            <summary>
+            <para>获取 Windows 产品的对应批量激活密钥</para>
+            <para>Get the corresponding volume activation key of the Windows product</para>
+            </summary>
+            <param name="windowsProduct">
+            <para>需要激活的 Windows 产品名称</para>
+            <para>The name of the Windows product that needs to be activated</para>
+            </param>
+            <returns>
+            <para>返回对应的激活密钥</para>
+            <para>Return the corresponding activation key</para>
+            </returns>
+        </member>
+        <member name="M:Activator.WindowsOnlineActivator.ConvertToReleaseVersion(Activator.WindowsProductName,System.Boolean)">
+            <summary>
+            <para>将 Windows 产品转换为对应的批量激活版本，若当前系统已为正式版，则不会有任何动作</para>
+            <para>Convert the Windows product to the corresponding volume activation version, if the current system is already a release version, there will be no action</para>
+            </summary>
+            <param name="targetWindowsProduct">
+            <para>需要转换的目标 Windows 产品名称</para>
+            <para>The target Windows product name to be converted</para>
+            </param>
+            <param name="isReleaseVersionCurrent">
+            <para>当前系统的版本是否已经为正式版本</para>
+            <para>Whether the current version of the system is already a release version</para>
+            </param>
+            <returns>
+            <para>一个 <see langword="bool"/> 值，指示是否已成功转换，若系统已为正式版则直接返回 <see langword="true"/></para>
+            <para>A <see langword="bool"/> value indicating whether the conversion was successful, if the system is already a release version, it will return <see langword="true"/> directly</para>
+            </returns>
+        </member>
+        <member name="M:Activator.WindowsOnlineActivator.SetActivationKey(System.String)">
+            <summary>
+            <para>设置 KMS 批量激活密钥</para>
+            <para>Set the KMS volume activation key</para>
+            </summary>
+            <param name="key">
+            <para>批量激活密钥</para>
+            <para>Volume activation key</para>
+            </param>
+            <returns>
+            <para>一个 <see langword="bool"/> 值，指示是否已成功设置</para>
+            <para>A <see langword="bool"/> value indicating whether the setting was successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.WindowsOnlineActivator.SetKMSServer(System.String)">
+            <summary>
+            <para>设置 KMS 服务器地址</para>
+            <para>Set the KMS server address</para>
+            </summary>
+            <param name="serverName">
+            <para>KMS 服务器地址</para>
+            <para>KMS server address</para>
+            </param>
+            <returns>
+            <para>一个 <see langword="bool"/> 值，指示是否已成功设置</para>
+            <para>A <see langword="bool"/> value indicating whether the setting was successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.WindowsOnlineActivator.ApplyActivation">
+            <summary>
+            <para>应用激活</para>
+            <para>Apply activation</para>
+            </summary>
+            <returns>
+            <para>一个 <see langword="bool"/> 值，指示是否已成功激活</para>
+            <para>A <see langword="bool"/> value indicating whether the activation was successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.WindowsOnlineActivator.RemoveActivation">
+            <summary>
+            <para>移除激活</para>
+            <para>Remove activation</para>
+            </summary>
+            <returns>
+            <para>一个 <see langword="bool"/> 值，指示是否已成功移除</para>
+            <para>A <see langword="bool"/> value indicating whether the removal was successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.WindowsOnlineActivator.RegisterManualRenewalTask">
+            <summary>
+            <para>注册手动续签任务</para>
+            <para>Register manual renewal task</para>
+            </summary>
+            <returns>
+            <para>一个 <see langword="bool"/> 值，指示是否已成功注册</para>
+            <para>A <see langword="bool"/> value indicating whether the registration was successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.WindowsOnlineActivator.RemoveManualRenewalTask">
+            <summary>
+            <para>移除手动续签任务</para>
+            <para>Remove manual renewal task</para>
+            </summary>
+            <returns>
+            <para>一个 <see langword="bool"/> 值，指示是否已成功移除</para>
+            <para>A <see langword="bool"/> value indicating whether the removal was successful</para>
+            </returns>
+        </member>
+        <member name="M:Activator.WindowsOnlineActivator.#ctor">
+            <summary>
+            <para>在线 Windows 激活对象的无参构造函数</para>
+            <para>Parameterless constructor of the online Windows activator object</para>
+            </summary>
+        </member>
+        <member name="T:Activator.WindowsProductName">
+            <summary>
+            <para>Windows 产品名称枚举</para>
+            <para>Enumeration of Windows product names</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Unsupported">
+            <summary>
+            <para>不支持的 Windows 版本</para>
+            <para>Unsupported versions of Windows</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_11_Education">
+            <summary>
+            <para>Windows 11 教育版</para>
+            <para>Windows 11 Education</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_11_Education_N">
+            <summary>
+            <para>Windows 11 教育版 N</para>
+            <para>Windows 11 Education N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_11_Enterprise">
+            <summary>
+            <para>Windows 11 企业版</para>
+            <para>Windows 11 Enterprise</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_11_Enterprise_N">
+            <summary>
+            <para>Windows 11 企业版 N</para>
+            <para>Windows 11 Enterprise N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_11_Enterprise_G">
+            <summary>
+            <para>Windows 11 企业版 G</para>
+            <para>Windows 11 Enterprise G</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_11_Enterprise_G_N">
+            <summary>
+            <para>Windows 11 企业版 G N</para>
+            <para>Windows 11 Enterprise G N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_11_Enterprise_LTSC_2024">
+            <summary>
+            <para>Windows 11 企业版 LTSC 2024</para>
+            <para>Windows 11 Enterprise LTSC 2024</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_11_Enterprise_N_LTSC_2024">
+            <summary>
+            <para>Windows 11 企业版 N LTSC 2024</para>
+            <para>Windows 11 Enterprise N LTSC 2024</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_11_Pro">
+            <summary>
+            <para>Windows 11 专业版</para>
+            <para>Windows 11 Pro</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_11_Pro_N">
+            <summary>
+            <para>Windows 11 专业版 N</para>
+            <para>Windows 11 Pro N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_11_Pro_Education">
+            <summary>
+            <para>Windows 11 专业教育版</para>
+            <para>Windows 11 Pro Education</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_11_Pro_Education_N">
+            <summary>
+            <para>Windows 11 专业教育版 N</para>
+            <para>Windows 11 Pro Education N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_11_Pro_for_Workstations">
+            <summary>
+            <para>Windows 11 专业工作站版</para>
+            <para>Windows 11 Pro for Workstations</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_11_Pro_for_Workstations_N">
+            <summary>
+            <para>Windows 11 专业工作站版 N</para>
+            <para>Windows 11 Pro for Workstations N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Education">
+            <summary>
+            <para>Windows 10 教育版</para>
+            <para>Windows 10 Education</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Education_N">
+            <summary>
+            <para>Windows 10 教育版 N</para>
+            <para>Windows 10 Education N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Enterprise">
+            <summary>
+            <para>Windows 10 企业版</para>
+            <para>Windows 10 Enterprise</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Enterprise_N">
+            <summary>
+            <para>Windows 10 企业版 N</para>
+            <para>Windows 10 Enterprise N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Enterprise_G">
+            <summary>
+            <para>Windows 10 企业版 G</para>
+            <para>Windows 10 Enterprise G</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Enterprise_G_N">
+            <summary>
+            <para>Windows 10 企业版 G N</para>
+            <para>Windows 10 Enterprise G N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Enterprise_LTSC_2024">
+            <summary>
+            <para>Windows 10 企业版 LTSC 2024</para>
+            <para>Windows 10 Enterprise LTSC 2024</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Enterprise_LTSC_2021">
+            <summary>
+            <para>Windows 10 企业版 LTSC 2021</para>
+            <para>Windows 10 Enterprise LTSC 2021</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Enterprise_LTSC_2019">
+            <summary>
+            <para>Windows 10 企业版 LTSC 2019</para>
+            <para>Windows 10 Enterprise LTSC 2019</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Enterprise_LTSB_2016">
+            <summary>
+            <para>Windows 10 企业版 LTSB 2016</para>
+            <para>Windows 10 Enterprise LTSB 2016</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Enterprise_LTSB_2015">
+            <summary>
+            <para>Windows 10 企业版 LTSB 2015</para>
+            <para>Windows 10 Enterprise LTSB 2015</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Enterprise_N_LTSC_2024">
+            <summary>
+            <para>Windows 10 企业版 N LTSC 2024</para>
+            <para>Windows 10 Enterprise N LTSC 2024</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Enterprise_N_LTSC_2021">
+            <summary>
+            <para>Windows 10 企业版 N LTSC 2021</para>
+            <para>Windows 10 Enterprise N LTSC 2021</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Enterprise_N_LTSC_2019">
+            <summary>
+            <para>Windows 10 企业版 N LTSC 2019</para>
+            <para>Windows 10 Enterprise N LTSC 2019</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Enterprise_N_LTSB_2016">
+            <summary>
+            <para>Windows 10 企业版 N LTSB 2016</para>
+            <para>Windows 10 Enterprise N LTSB 2016</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Enterprise_N_LTSB_2015">
+            <summary>
+            <para>Windows 10 企业版 N LTSB 2015</para>
+            <para>Windows 10 Enterprise N LTSB 2015</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Pro">
+            <summary>
+            <para>Windows 10 专业版</para>
+            <para>Windows 10 Pro</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Pro_N">
+            <summary>
+            <para>Windows 10 专业版 N</para>
+            <para>Windows 10 Pro N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Pro_Education">
+            <summary>
+            <para>Windows 10 专业教育版</para>
+            <para>Windows 10 Pro Education</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Pro_Education_N">
+            <summary>
+            <para>Windows 10 专业教育版 N</para>
+            <para>Windows 10 Pro Education N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Pro_for_Workstations">
+            <summary>
+            <para>Windows 10 专业工作站版</para>
+            <para>Windows 10 Pro for Workstations</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_10_Pro_for_Workstations_N">
+            <summary>
+            <para>Windows 10 专业工作站版 N</para>
+            <para>Windows 10 Pro for Workstations N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_8_Point_1_Enterprise">
+            <summary>
+            <para>Windows 8.1 企业版</para>
+            <para>Windows 8.1 Enterprise</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_8_Point_1_Enterprise_N">
+            <summary>
+            <para>Windows 8.1 企业版 N</para>
+            <para>Windows 8.1 Enterprise N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_8_Point_1_Pro">
+            <summary>
+            <para>Windows 8.1 专业版</para>
+            <para>Windows 8.1 Pro</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_8_Point_1_Pro_N">
+            <summary>
+            <para>Windows 8.1 专业版 N</para>
+            <para>Windows 8.1 Pro N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_8_Enterprise">
+            <summary>
+            <para>Windows 8 企业版</para>
+            <para>Windows 8 Enterprise</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_8_Enterprise_N">
+            <summary>
+            <para>Windows 8 企业版 N</para>
+            <para>Windows 8 Enterprise N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_8_Pro">
+            <summary>
+            <para>Windows 8 专业版</para>
+            <para>Windows 8 Pro</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_8_Pro_N">
+            <summary>
+            <para>Windows 8 专业版 N</para>
+            <para>Windows 8 Pro N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_7_Enterprise">
+            <summary>
+            <para>Windows 7 企业版</para>
+            <para>Windows 7 Enterprise</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_7_Enterprise_E">
+            <summary>
+            <para>Windows 7 企业版 E</para>
+            <para>Windows 7 Enterprise E</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_7_Enterprise_N">
+            <summary>
+            <para>Windows 7 企业版 N</para>
+            <para>Windows 7 Enterprise N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_7_Professional">
+            <summary>
+            <para>Windows 7 专业版</para>
+            <para>Windows 7 Professional</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_7_Professional_E">
+            <summary>
+            <para>Windows 7 专业版 E</para>
+            <para>Windows 7 Professional E</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_7_Professional_N">
+            <summary>
+            <para>Windows 7 专业版 N</para>
+            <para>Windows 7 Professional N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Vista_Business">
+            <summary>
+            <para>Windows Vista 商业版</para>
+            <para>Windows Vista Business</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Vista_Business_N">
+            <summary>
+            <para>Windows Vista 商业版 N</para>
+            <para>Windows Vista Business N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Vista_Enterprise">
+            <summary>
+            <para>Windows Vista 企业版</para>
+            <para>Windows Vista Enterprise</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Vista_Enterprise_N">
+            <summary>
+            <para>Windows Vista 企业版 N</para>
+            <para>Windows Vista Enterprise N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2008_Standard">
+            <summary>
+            <para>Windows Server 2008 标准版</para>
+            <para>Windows Server 2008 Standard</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2008_Enterprise">
+            <summary>
+            <para>Windows Server 2008 企业版</para>
+            <para>Windows Server 2008 Enterprise</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2008_Datacenter">
+            <summary>
+            <para>Windows Server 2008 数据中心版</para>
+            <para>Windows Server 2008 Datacenter</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2008_R2_Standard">
+            <summary>
+            <para>Windows Server 2008 R2 标准版</para>
+            <para>Windows Server 2008 R2 Standard</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2008_R2_Enterprise">
+            <summary>
+            <para>Windows Server 2008 R2 企业版</para>
+            <para>Windows Server 2008 R2 Enterprise</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2008_R2_Datacenter">
+            <summary>
+            <para>Windows Server 2008 R2 数据中心版</para>
+            <para>Windows Server 2008 R2 Datacenter</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2012">
+            <summary>
+            <para>Windows Server 2012</para>
+            <para>Windows Server 2012</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2012_N">
+            <summary>
+            <para>Windows Server 2012 N</para>
+            <para>Windows Server 2012 N</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2012_Single_Language">
+            <summary>
+            <para>Windows Server 2012 单语言版</para>
+            <para>Windows Server 2012 Single Language</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2012_Country_Specific">
+            <summary>
+            <para>Windows Server 2012 国家特定版</para>
+            <para>Windows Server 2012 Country Specific</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2012_Standard">
+            <summary>
+            <para>Windows Server 2012 标准版</para>
+            <para>Windows Server 2012 Standard</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2012_Datacenter">
+            <summary>
+            <para>Windows Server 2012 数据中心版</para>
+            <para>Windows Server 2012 Datacenter</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2012_MultiPoint_Standard">
+            <summary>
+            <para>Windows Server 2012 多点标准版</para>
+            <para>Windows Server 2012 MultiPoint Standard</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2012_MultiPoint_Premium">
+            <summary>
+            <para>Windows Server 2012 多点高级版</para>
+            <para>Windows Server 2012 MultiPoint Premium</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2012_Essentials">
+            <summary>
+            <para>Windows Server 2012 Essentials</para>
+            <para>Windows Server 2012 Essentials</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2012_R2_Standard">
+            <summary>
+            <para>Windows Server 2012 R2 标准版</para>
+            <para>Windows Server 2012 R2 Standard</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2012_R2_Datacenter">
+            <summary>
+            <para>Windows Server 2012 R2 数据中心版</para>
+            <para>Windows Server 2012 R2 Datacenter</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2012_R2_Essentials">
+            <summary>
+            <para>Windows Server 2012 R2 Essentials</para>
+            <para>Windows Server 2012 R2 Essentials</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2016_Standard">
+            <summary>
+            <para>Windows Server 2016 标准版</para>
+            <para>Windows Server 2016 Standard</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2016_Datacenter">
+            <summary>
+            <para>Windows Server 2016 数据中心版</para>
+            <para>Windows Server 2016 Datacenter</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2016_Essentials">
+            <summary>
+            <para>Windows Server 2016 Essentials</para>
+            <para>Windows Server 2016 Essentials</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2019_Standard">
+            <summary>
+            <para>Windows Server 2019 标准版</para>
+            <para>Windows Server 2019 Standard</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2019_Datacenter">
+            <summary>
+            <para>Windows Server 2019 数据中心版</para>
+            <para>Windows Server 2019 Datacenter</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2019_Essentials">
+            <summary>
+            <para>Windows Server 2019 Essentials</para>
+            <para>Windows Server 2019 Essentials</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2022_Standard">
+            <summary>
+            <para>Windows Server 2022 标准版</para>
+            <para>Windows Server 2022 Standard</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2022_Datacenter">
+            <summary>
+            <para>Windows Server 2022 数据中心版</para>
+            <para>Windows Server 2022 Datacenter</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2025_Standard">
+            <summary>
+            <para>Windows Server 2025 标准版</para>
+            <para>Windows Server 2025 Standard</para>
+            </summary>
+        </member>
+        <member name="F:Activator.WindowsProductName.Windows_Server_2025_Datacenter">
+            <summary>
+            <para>Windows Server 2025 数据中心版</para>
+            <para>Windows Server 2025 Datacenter</para>
+            </summary>
+        </member>
+        <member name="T:Activator.Converters.BoolToVisibilityCvter">
+            <summary>
+            <para><see langword="bool"/> 值到 <see cref="T:System.Windows.Visibility"/> 值的转换器，加入了对 Markup 语法的支持，且支持调整 Hidden 和 Collapsed</para>
+            <para>借鉴自 十月的寒流 ，原文地址：<see href="https://blog.coldwind.top/posts/valueconverter-tips-and-tricks/"/></para>
+            <para>Converts a <see langword="bool"/> value to a <see cref="T:System.Windows.Visibility"/> value, with support for Markup syntax and Hidden and Collapsed</para>
+            <para>Inspired by Dr.ColdWind, original address: <see href="https://blog.coldwind.top/posts/valueconverter-tips-and-tricks/"/></para>
+            </summary>
+        </member>
+        <member name="P:Activator.Converters.BoolToVisibilityCvter.IsReversed">
+            <summary>
+            <para>是否启用反向转换</para>
+            <para>Whether to enable reverse conversion</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Converters.BoolToVisibilityCvter.IsHiddenInsteadOfCollapsed">
+            <summary>
+            <para>是否使用 Hidden 而不是 Collapsed</para>
+            <para>Whether to use Hidden instead of Collapsed</para>
+            </summary>
+        </member>
+        <member name="M:Activator.Converters.BoolToVisibilityCvter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            <para>从 <see langword="bool"/> 值转换为 <see cref="T:System.Windows.Visibility"/> 值</para>
+            <para>Converts from <see langword="bool"/> value to <see cref="T:System.Windows.Visibility"/> value</para>
+            </summary>
+            <param name="value">
+            <para>要转换的 <see langword="bool"/> 值</para>
+            <para>The <see langword="bool"/> value to convert</para>
+            </param>
+            <param name="targetType">
+            <para>要转换到的类型</para>
+            <para>The type to convert to</para>
+            </param>
+            <param name="parameter">
+            <para>可选的转换参数</para>
+            <para>Optional conversion parameter</para>
+            </param>
+            <param name="culture">
+            <para>转换的区域性信息</para>
+            <para>Cultural information for conversion</para>
+            </param>
+            <returns>
+            <para>转换后的 <see cref="T:System.Windows.Visibility"/> 值</para>
+            <para>The converted <see cref="T:System.Windows.Visibility"/> value</para>
+            </returns>
+        </member>
+        <member name="M:Activator.Converters.BoolToVisibilityCvter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            <para>从 <see cref="T:System.Windows.Visibility"/> 值转换为 <see langword="bool"/> 值</para>
+            <para>Converts from <see cref="T:System.Windows.Visibility"/> value to <see langword="bool"/> value</para>
+            </summary>
+            <param name="value">
+            <para>要转换的 <see cref="T:System.Windows.Visibility"/> 值</para>
+            <para>The <see cref="T:System.Windows.Visibility"/> value to convert</para>
+            </param>
+            <param name="targetType">
+            <para>要转换到的类型</para>
+            <para>The type to convert to</para>
+            </param>
+            <param name="parameter">
+            <para>可选的转换参数</para>
+            <para>Optional conversion parameter</para>
+            </param>
+            <param name="culture">
+            <para>转换的区域性信息</para>
+            <para>Cultural information for conversion</para>
+            </param>
+            <returns>
+            <para>转换后的 <see langword="bool"/> 值</para>
+            <para>The converted <see langword="bool"/> value</para>
+            </returns>
+        </member>
+        <member name="M:Activator.Converters.BoolToVisibilityCvter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            <para>提供服务</para>
+            </summary>
+            <param name="serviceProvider">
+            <para>服务提供者</para>
+            <para>Service provider</para>
+            </param>
+            <returns>
+            <para>返回 <see cref="T:Activator.Converters.BoolToVisibilityCvter"/> 自身实例</para>
+            <para>Returns the instance of <see cref="T:Activator.Converters.BoolToVisibilityCvter"/> itself</para>
+            </returns>
+        </member>
+        <member name="T:Activator.Converters.IsRunningToIsEnabledMultiValueCvter">
+            <summary>
+            <para>将多个 <see langword="bool"/> 值转为一个 <see langword="bool"/> 值，当其中任意一个值为 <see langword="true"/> 时，返回 <see langword="false"/></para>
+            <para>该转换器主要用于当执行一个或多个异步命令时，可以控制多个按钮的可用性</para>
+            <para>Convert multiple <see langword="bool"/> values to a single <see langword="bool"/> value. When any of them is <see langword="true"/>, return <see langword="false"/></para>
+            <para>This converter is mainly used to control the availability of multiple buttons when executing one or more asynchronous commands</para>
+            </summary>
+        </member>
+        <member name="M:Activator.Converters.IsRunningToIsEnabledMultiValueCvter.Convert(System.Object[],System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            <para>将多个 <see langword="bool"/> 值转为一个 <see langword="bool"/> 值，当其中任意一个值为 <see langword="true"/> 时，返回 <see langword="false"/></para>
+            <para>Convert multiple <see langword="bool"/> values to a single <see langword="bool"/> value. When any of them is <see langword="true"/>, return <see langword="false"/></para>
+            </summary>
+            <param name="values">
+            <para>要转换的值的数组，元素应该是 <see langword="bool"/> 类型</para>
+            <para>An array of values to convert, the elements should be of type <see langword="bool"/></para>
+            </param>
+            <param name="targetType">
+            <para>要转换的值的类型</para>
+            <para>The type of value to convert</para>
+            </param>
+            <param name="parameter">
+            <para>可选的参数</para>
+            <para>Optional parameter</para>
+            </param>
+            <param name="culture">
+            <para>要用于转换的区域性</para>
+            <para>The culture to use in the conversion</para>
+            </param>
+            <returns>
+            <para>一个 <see langword="true"/> 值，对应可用性</para>
+            <para>A <see langword="true"/> value, corresponding to availability</para>
+            </returns>
+        </member>
+        <member name="M:Activator.Converters.IsRunningToIsEnabledMultiValueCvter.ConvertBack(System.Object,System.Type[],System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            <para>将 <see langword="bool"/> 值转为多个 <see langword="bool"/> 值，不支持此操作</para>
+            <para>Convert <see langword="bool"/> value to multiple <see langword="bool"/> values, this operation is not supported</para>
+            </summary>
+            <param name="value">
+            <para>要转换的 <see langword="bool"/> 类型值</para>
+            <para>The <see langword="bool"/> type value to convert</para>
+            </param>
+            <param name="targetTypes">
+            <para>要转换的值的类型数组</para>
+            <para>An array of types to convert</para>
+            </param>
+            <param name="parameter">
+            <para>可选的参数</para>
+            <para>Optional parameter</para>
+            </param>
+            <param name="culture">
+            <para>要用于转换的区域性</para>
+            <para>The culture to use in the conversion</para>
+            </param>
+            <returns>
+            <para>一个 <see langword="true"/> 值数组，对应多个源 <see langword="bool"/> 类型值</para>
+            <para>An array of <see langword="true"/> values, corresponding to multiple source <see langword="bool"/> type values</para>
+            </returns>
+            <exception cref="T:System.NotImplementedException">
+            <para>暂未实现此方法</para>
+            <para>This method is not implemented yet</para>
+            </exception>
+        </member>
+        <member name="T:Activator.Models.AllSettingsModel">
+            <summary>
+            <para>程序所有设置对应的 Model</para>
+            <para>Model for all settings of the program</para>
+            <para>本类允许在外部被实例化，但并不推荐。相反，推荐使用 <see cref="P:Activator.Models.AllSettingsModel.Instance"/> 来获取实例</para>
+            <para>This class allows to be instantiated from outside, but it is not recommended. Instead, it is recommended to use <see cref="P:Activator.Models.AllSettingsModel.Instance"/> to get the instance</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Models.AllSettingsModel.Instance">
+            <summary>
+            <para><see cref="T:Activator.Models.AllSettingsModel"/> 的实例</para>
+            <para>Instance of <see cref="T:Activator.Models.AllSettingsModel"/></para>
+            </summary>
+        </member>
+        <member name="P:Activator.Models.AllSettingsModel.IsWindowsActivationMode">
+            <summary>
+            <para>是否选择了 Windows 激活模式</para>
+            <para>Whether Windows activation mode is selected</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Models.AllSettingsModel.IsOfficeActivationMode">
+            <summary>
+            <para>是否选择了 Office 激活模式</para>
+            <para>Whether Office activation mode is selected</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Models.AllSettingsModel.SelectedServerIndex">
+            <summary>
+            <para>（在线激活中）选择的服务器索引</para>
+            <para>(Online activation) Selected server index</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Models.AllSettingsModel.IsUpdateCheckEnabled">
+            <summary>
+            <para>是否开启自动检查更新</para>
+            <para>Whether to enable automatic update check</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Models.AllSettingsModel.IsLightThemeMode">
+            <summary>
+            <para>（在上一次退出程序时）是否是浅色主题模式</para>
+            <para>(When the program exited last time) Whether it is in light theme mode</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Models.AllSettingsModel.SelectedProductNameOrEditionIndex">
+            <summary>
+            <para>（手动在线激活中）选择的产品名称或版本索引</para>
+            <para>(During manual online activation) Selected product name or edition index</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Models.AllSettingsModel.ManualActivationServerAddress">
+            <summary>
+            <para>手动在线激活中的 KMS 激活服务器地址</para>
+            <para>KMS activation server address during manual online activation</para>
+            </summary>
+        </member>
+        <member name="P:Activator.Models.AllSettingsModel.ManualActivationVolumeKey">
+            <summary>
+            <para>手动在线激活中的批量激活密钥</para>
+            <para>Volume activation key during manual online activation</para>
+            </summary>
+        </member>
+        <member name="T:Activator.Models.ModelOperation">
+            <summary>
+            <para>对所有模型的操作工具类</para>
+            <para>Utility class for all model operations</para>
+            </summary>
+        </member>
+        <member name="M:Activator.Models.ModelOperation.GetConfig``1(System.String)">
+            <summary>
+            <para>从指定的配置文件中获取配置信息</para>
+            <para>Get configuration information from the specified configuration file</para>
+            </summary>
+            <typeparam name="T">
+            <para>需要指定反序列化的 Model 的类型，支持 <see langword="class"/> 和 <see langword="new"/>() 类型的泛型</para>
+            <para>Need to specify the type of Model to be deserialized, supports generics of type <see langword="class"/> and <see langword="new"/>()</para>
+            </typeparam>
+            <param name="configFilePath">
+            <para>配置文件的路径</para>
+            <para>Path to the configuration file</para>
+            </param>
+            <returns>
+            <para>返回反序列化后的 Model 对象 <typeparamref name="T"/>，如果反序列化过程产生错误，则返回一个新的 Model 对象 <typeparamref name="T"/></para>
+            <para>Returns the deserialized Model object <typeparamref name="T"/>, if an error occurs during deserialization, a new Model object <typeparamref name="T"/> is returned</para>
+            </returns>
+        </member>
+        <member name="M:Activator.Models.ModelOperation.GetConfigAsync``1(System.String)">
+            <summary>
+            <para>异步地从指定的配置文件中获取配置信息</para>
+            <para>Asynchronously get configuration information from the specified configuration file</para>
+            </summary>
+            <typeparam name="T">
+            <para>需要指定反序列化的 Model 的类型，支持 <see langword="class"/> 和 <see langword="new"/>() 类型的泛型</para>
+            <para>Need to specify the type of Model to be deserialized, supports generics of type <see langword="class"/> and <see langword="new"/>()</para>
+            </typeparam>
+            <param name="configFilePath">
+            <para>配置文件的路径</para>
+            <para>Path to the configuration file</para>
+            </param>
+            <returns>
+            <para>返回反序列化后的 <see cref="T:System.Threading.Tasks.Task`1"/> 包装的 Model 对象 <typeparamref name="T"/></para>
+            <para>如果反序列化过程产生错误，则返回一个新的 Model 对象 <typeparamref name="T"/></para>
+            <para>Returns the deserialized <see cref="T:System.Threading.Tasks.Task`1"/> wrapped Model object <typeparamref name="T"/></para>
+            <para>If an error occurs during deserialization, a new Model object <typeparamref name="T"/> is returned</para>
+            </returns>
+        </member>
+        <member name="M:Activator.Models.ModelOperation.SaveConfig``1(``0,System.String)">
+            <summary>
+            <para>保存配置信息到指定的配置文件中</para>
+            <para>Save configuration information to the specified configuration file</para>
+            </summary>
+            <typeparam name="T">
+            <para>需要指定序列化的 Model 的类型，支持 <see langword="class"/> 和 <see langword="new"/>() 类型的泛型</para>
+            <para>Need to specify the type of Model to be serialized, supports generics of type <see langword="class"/> and <see langword="new"/>()</para>
+            </typeparam>
+            <param name="model">
+            <para>需要保存的 Model 对象 <typeparamref name="T"/></para>
+            <para>Model object <typeparamref name="T"/> to be saved</para>
+            </param>
+            <param name="configFilePath">
+            <para>配置文件的路径</para>
+            <para>Path to the configuration file</para>
+            </param>
+            <returns>
+            <para>一个 <see langword="bool"/> 值，表示是否成功保存配置信息</para>
+            <para>A <see langword="bool"/> value indicating whether the configuration information was saved successfully</para>
+            </returns>
+        </member>
+        <member name="M:Activator.Models.ModelOperation.SaveConfigAsync``1(``0,System.String)">
+            <summary>
+            <para>异步地保存配置信息到指定的配置文件中</para>
+            <para>Asynchronously save configuration information to the specified configuration file</para>
+            </summary>
+            <typeparam name="T">
+            <para>需要指定序列化的 Model 的类型，支持 <see langword="class"/> 和 <see langword="new"/>() 类型的泛型</para>
+            <para>Need to specify the type of Model to be serialized, supports generics of type <see langword="class"/> and <see langword="new"/>()</para>
+            </typeparam>
+            <param name="model">
+            <para>需要保存的 Model 对象 <typeparamref name="T"/></para>
+            <para>Model object <typeparamref name="T"/> to be saved</para>
+            </param>
+            <param name="configFilePath">
+            <para>配置文件的路径</para>
+            <para>Path to the configuration file</para>
+            </param>
+            <returns>
+            <para>返回一个 <see cref="T:System.Threading.Tasks.Task`1"/> 包装的 <see langword="bool"/> 值，表示是否成功保存配置信息</para>
+            <para>Returns a <see cref="T:System.Threading.Tasks.Task`1"/> wrapped <see langword="bool"/> value indicating whether the configuration information was saved successfully</para>
+            </returns>
+        </member>
+        <member name="T:Activator.ServiceInterfaces.IShowInformationMessageBoxService">
+            <summary>
+            <para>展示 Information 图标类型的 MessageBox 的服务接口</para>
+            <para>Service interface for showing MessageBox with Information icon</para>
+            </summary>
+        </member>
+        <member name="M:Activator.ServiceInterfaces.IShowInformationMessageBoxService.ShowMessageBox(System.String,System.String)">
+            <summary>
+            <para>展示 Information 图标类型的 MessageBox</para>
+            <para>Show MessageBox with Information icon</para>
+            </summary>
+            <param name="msgBoxText">
+            <para>要显示的消息文本</para>
+            <para>Message text to display</para>
+            </param>
+            <param name="caption">
+            <para>MessageBox 标题</para>
+            <para>MessageBox title</para>
+            </param>
+            <returns>
+            <para>用户点击后接收的 <see cref="T:System.Windows.MessageBoxResult"/> 类型的选择</para>
+            <para><see cref="T:System.Windows.MessageBoxResult"/> choice received after user click</para>
+            </returns>
+        </member>
+        <member name="T:Activator.ServiceInterfaces.IShowErrorMessageBoxService">
+            <summary>
+            <para>展示 Error 图标类型的 MessageBox 的服务接口</para>
+            <para>Service interface for showing MessageBox with Error icon</para>
+            </summary>
+        </member>
+        <member name="M:Activator.ServiceInterfaces.IShowErrorMessageBoxService.ShowMessageBox(System.String,System.String)">
+            <summary>
+            <para>展示 Error 图标类型的 MessageBox</para>
+            <para>Show MessageBox with Error icon</para>
+            </summary>
+            <param name="msgBoxText">
+            <para>要显示的消息文本</para>
+            <para>Message text to display</para>
+            </param>
+            <param name="caption">
+            <para>MessageBox 标题</para>
+            <para>MessageBox title</para>
+            </param>
+            <returns>
+            <para>用户点击后接收的 <see cref="T:System.Windows.MessageBoxResult"/> 类型的选择</para>
+            <para><see cref="T:System.Windows.MessageBoxResult"/> choice received after user click</para>
+            </returns>
+        </member>
+        <member name="T:Activator.Services.ShowInformationMessageBoxService">
+            <summary>
+            <para>展示 Information 图标类型的 MessageBox 的服务实现</para>
+            <para>Service implementation for showing MessageBox with Information icon</para>
+            </summary>
+        </member>
+        <member name="M:Activator.Services.ShowInformationMessageBoxService.ShowMessageBox(System.String,System.String)">
+            <summary>
+            <para>展示 Information 图标类型的 MessageBox</para>
+            <para>Show MessageBox with Information icon</para>
+            </summary>
+            <param name="msgBoxText">
+            <para>要显示的消息文本</para>
+            <para>Message text to display</para>
+            </param>
+            <param name="caption">
+            <para>MessageBox 标题</para>
+            <para>MessageBox title</para>
+            </param>
+            <returns>
+            <para>用户点击后接收的 <see cref="T:System.Windows.MessageBoxResult"/> 类型的选择</para>
+            <para><see cref="T:System.Windows.MessageBoxResult"/> choice received after user click</para>
+            </returns>
+        </member>
+        <member name="T:Activator.Services.ShowErrorMessageBoxService">
+            <summary>
+            <para>展示 Error 图标类型的 MessageBox 的服务实现</para>
+            <para>Service implementation for showing MessageBox with Error icon</para>
+            </summary>
+        </member>
+        <member name="M:Activator.Services.ShowErrorMessageBoxService.ShowMessageBox(System.String,System.String)">
+            <summary>
+            <para>展示 Error 图标类型的 MessageBox</para>
+            <para>Show MessageBox with Error icon</para>
+            </summary>
+            <param name="msgBoxText">
+            <para>要显示的消息文本</para>
+            <para>Message text to display</para>
+            </param>
+            <param name="caption">
+            <para>MessageBox 标题</para>
+            <para>MessageBox title</para>
+            </param>
+            <returns>
+            <para>用户点击后接收的 <see cref="T:System.Windows.MessageBoxResult"/> 类型的选择</para>
+            <para><see cref="T:System.Windows.MessageBoxResult"/> choice received after user click</para>
+            </returns>
+        </member>
+        <member name="T:Activator.ViewModels.MainWindowViewModel">
+            <summary>
+            <para><see cref="T:Activator.Views.MainWindow"/> 的 ViewModel</para>
+            <para>ViewModel for <see cref="T:Activator.Views.MainWindow"/></para>
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="M:Activator.ViewModels.MainWindowViewModel.ReadAllRequiredInfo">
+            <summary>
+            <para>读取所有必要的系统信息</para>
+            <para>Read all required system information</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步操作</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, represents an asynchronous operation</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.MainWindowViewModel.UpdateCheck">
+            <summary>
+            <para>用于检查版本更新</para>
+            <para>Used to check for updates</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步操作</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, represents an asynchronous operation</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.MainWindowViewModel.SaveAllSettings">
+            <summary>
+            <para>用于保存所有设置</para>
+            <para>Used to save all settings</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步操作</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, represents an asynchronous operation</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.MainWindowViewModel.#ctor(Activator.ServiceInterfaces.IShowInformationMessageBoxService,Activator.ServiceInterfaces.IShowErrorMessageBoxService)">
+            <summary>
+            <para>主窗口 ViewModel 主构造函数，通过 IoC 传递两个用于展示 MessageBox 的函数参数</para>
+            <para>Main constructor of MainWindow ViewModel, passing two functions for showing MessageBox through IoC</para>
+            </summary>
+            <param name="showInformationMessageBoxService">
+            <para>用于展示 Information 类型 MessageBox 的函数</para>
+            <para>Function for showing Information type MessageBox</para>
+            </param>
+            <param name="showErrorMessageBoxService">
+            <para>用于展示 Error 类型 MessageBox 的函数</para>
+            <para>Function for showing Error type MessageBox</para>
+            </param>
+        </member>
+        <member name="M:Activator.ViewModels.MainWindowViewModel.#ctor">
+            <summary>
+            <para>主窗口 ViewModel 的无参构造函数，用于构造设计时实例</para>
+            <para>Parameterless constructor of MainWindow ViewModel, used to construct design-time instance</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.MainWindowViewModel.readAllRequiredInfoCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.MainWindowViewModel.ReadAllRequiredInfoCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.MainWindowViewModel.ReadAllRequiredInfoCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.MainWindowViewModel.ReadAllRequiredInfo"/>.</summary>
+        </member>
+        <member name="F:Activator.ViewModels.MainWindowViewModel.updateCheckCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.MainWindowViewModel.UpdateCheckCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.MainWindowViewModel.UpdateCheckCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.MainWindowViewModel.UpdateCheck"/>.</summary>
+        </member>
+        <member name="F:Activator.ViewModels.MainWindowViewModel.saveAllSettingsCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.MainWindowViewModel.SaveAllSettingsCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.MainWindowViewModel.SaveAllSettingsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.MainWindowViewModel.SaveAllSettings"/>.</summary>
+        </member>
+        <member name="T:Activator.ViewModels.ManualOnlineActivationViewModels">
+            <summary>
+            <para>手动在线激活的 ViewModel</para>
+            <para>Manual online activation ViewModel</para>
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="F:Activator.ViewModels.ManualOnlineActivationViewModels._showInformationMessageBoxService">
+            <summary>
+            <para>显示 Information 图标类型的服务</para>
+            <para>Service to show Information type message box</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.ManualOnlineActivationViewModels._showErrorMessageBoxService">
+            <summary>
+            <para>显示 Error 图标类型的服务</para>
+            <para>Service to show Error type message box</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.ManualOnlineActivationViewModels._isWindowsActivationMode">
+            <summary>
+            <para>用户是否选择为 Windows 激活模式</para>
+            <para>Whether user selects Windows activation mode</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.ManualOnlineActivationViewModels._isOfficeActivationMode">
+            <summary>
+            <para>用户是否选择为 Office 激活模式</para>
+            <para>Whether user selects Office activation mode</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.ManualOnlineActivationViewModels._selectiveWindowsProductNamesCollection">
+            <summary>
+            <para>支持的 Windows 产品名称集合</para>
+            <para>Supported Windows product names collection</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.ManualOnlineActivationViewModels._selectiveOfficeEditionsCollection">
+            <summary>
+            <para>支持的 Office 版本集合</para>
+            <para>Supported Office editions collection</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.ManualOnlineActivationViewModels._selectedProductNameOrEditionString">
+            <summary>
+            <para>用户选择的产品名称或版本（字符串）</para>
+            <para>Selected product name or edition (string) by user</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.ManualOnlineActivationViewModels._selectedProductNameOrEditionIndex">
+            <summary>
+            <para>用户选择的产品名称或版本索引</para>
+            <para>Selected product name or edition index by user</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.ManualOnlineActivationViewModels._serverAddress">
+            <summary>
+            <para>手动激活的服务器地址</para>
+            <para>Manual activation server address</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.ManualOnlineActivationViewModels._activationKey">
+            <summary>
+            <para>手动激活的批量密钥</para>
+            <para>Manual activation volume key</para>
+            </summary>
+        </member>
+        <member name="M:Activator.ViewModels.ManualOnlineActivationViewModels.ActivateOnWindowsMode">
+            <summary>
+            <para>当用户选择为 Windows 激活时执行的函数</para>
+            <para>Function to execute when user selects Windows activation</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步操作</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, represents asynchronous operation</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.ManualOnlineActivationViewModels.DeActivateOnWindowsMode">
+            <summary>
+            <para>当用户选择为 Windows 移除激活时执行的函数</para>
+            <para>Function to execute when user selects to deactivate Windows</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步操作</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, represents asynchronous operation</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.ManualOnlineActivationViewModels.ActivateAsync">
+            <summary>
+            <para>执行激活，异步命令</para>
+            <para>Execute activation, asynchronous command</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步操作</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, represents asynchronous operation</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.ManualOnlineActivationViewModels.DeActivateAsync">
+            <summary>
+            <para>执行移除激活，异步命令</para>
+            <para>Execute deactivation, asynchronous command</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步操作</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, represents asynchronous operation</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.ManualOnlineActivationViewModels.LoadSettings">
+            <summary>
+            <para>加载设置，同步命令</para>
+            <para>Load settings, synchronous command</para>
+            </summary>
+        </member>
+        <member name="M:Activator.ViewModels.ManualOnlineActivationViewModels.SaveSettings">
+            <summary>
+            <para>保存设置，异步命令</para>
+            <para>Save settings, asynchronous command</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步操作</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, represents asynchronous operation</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.ManualOnlineActivationViewModels.#ctor(Activator.ServiceInterfaces.IShowInformationMessageBoxService,Activator.ServiceInterfaces.IShowErrorMessageBoxService)">
+            <summary>
+            <para>手动在线激活页的 ViewModel 主构造函数，通过 IoC 容器注入两个 MessageBox 服务</para>
+            <para>Main constructor of Manual online activation page ViewModel, inject two MessageBox services through IoC container</para>
+            </summary>
+            <param name="showInformationMessageBoxService">
+            <para>显示 Information 图标类型的服务</para>
+            <para>Service to show Information type message box</para>
+            </param>
+            <param name="showErrorMessageBoxService">
+            <para>显示 Error 图标类型的服务</para>
+            <para>Service to show Error type message box</para>
+            </param>
+        </member>
+        <member name="M:Activator.ViewModels.ManualOnlineActivationViewModels.#ctor">
+            <summary>
+            <para>手动在线激活页的 ViewModel 无参构造函数，用于提供设计时实例</para>
+            <para>Manual online activation page ViewModel parameterless constructor, used to provide design-time instance</para>
+            </summary>
+        </member>
+        <member name="P:Activator.ViewModels.ManualOnlineActivationViewModels.IsWindowsActivationMode">
+            <inheritdoc cref="F:Activator.ViewModels.ManualOnlineActivationViewModels._isWindowsActivationMode"/>
+        </member>
+        <member name="P:Activator.ViewModels.ManualOnlineActivationViewModels.IsOfficeActivationMode">
+            <inheritdoc cref="F:Activator.ViewModels.ManualOnlineActivationViewModels._isOfficeActivationMode"/>
+        </member>
+        <member name="P:Activator.ViewModels.ManualOnlineActivationViewModels.SelectiveWindowsProductNamesCollection">
+            <inheritdoc cref="F:Activator.ViewModels.ManualOnlineActivationViewModels._selectiveWindowsProductNamesCollection"/>
+        </member>
+        <member name="P:Activator.ViewModels.ManualOnlineActivationViewModels.SelectiveOfficeEditionsCollection">
+            <inheritdoc cref="F:Activator.ViewModels.ManualOnlineActivationViewModels._selectiveOfficeEditionsCollection"/>
+        </member>
+        <member name="P:Activator.ViewModels.ManualOnlineActivationViewModels.SelectedProductNameOrEditionString">
+            <inheritdoc cref="F:Activator.ViewModels.ManualOnlineActivationViewModels._selectedProductNameOrEditionString"/>
+        </member>
+        <member name="P:Activator.ViewModels.ManualOnlineActivationViewModels.SelectedProductNameOrEditionIndex">
+            <inheritdoc cref="F:Activator.ViewModels.ManualOnlineActivationViewModels._selectedProductNameOrEditionIndex"/>
+        </member>
+        <member name="P:Activator.ViewModels.ManualOnlineActivationViewModels.ServerAddress">
+            <inheritdoc cref="F:Activator.ViewModels.ManualOnlineActivationViewModels._serverAddress"/>
+        </member>
+        <member name="P:Activator.ViewModels.ManualOnlineActivationViewModels.ActivationKey">
+            <inheritdoc cref="F:Activator.ViewModels.ManualOnlineActivationViewModels._activationKey"/>
+        </member>
+        <member name="F:Activator.ViewModels.ManualOnlineActivationViewModels.activateCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.ManualOnlineActivationViewModels.ActivateCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.ManualOnlineActivationViewModels.ActivateCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.ManualOnlineActivationViewModels.ActivateAsync"/>.</summary>
+        </member>
+        <member name="F:Activator.ViewModels.ManualOnlineActivationViewModels.deActivateCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.ManualOnlineActivationViewModels.DeActivateCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.ManualOnlineActivationViewModels.DeActivateCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.ManualOnlineActivationViewModels.DeActivateAsync"/>.</summary>
+        </member>
+        <member name="F:Activator.ViewModels.ManualOnlineActivationViewModels.loadSettingsCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.ManualOnlineActivationViewModels.LoadSettingsCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.ManualOnlineActivationViewModels.LoadSettingsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.ManualOnlineActivationViewModels.LoadSettings"/>.</summary>
+        </member>
+        <member name="F:Activator.ViewModels.ManualOnlineActivationViewModels.saveSettingsCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.ManualOnlineActivationViewModels.SaveSettingsCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.ManualOnlineActivationViewModels.SaveSettingsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.ManualOnlineActivationViewModels.SaveSettings"/>.</summary>
+        </member>
+        <member name="T:Activator.ViewModels.OnlineActivationViewModel">
+            <summary>
+            <para>在线激活页的 ViewModel</para>
+            <para>Online activation page ViewModel</para>
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="F:Activator.ViewModels.OnlineActivationViewModel._showInformationMessageBoxService">
+            <summary>
+            <para>显示 Information 图标类型的 MessageBox 服务</para>
+            <para>Service for showing MessageBox with Information button type</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.OnlineActivationViewModel._showErrorMessageBoxService">
+            <summary>
+            <para>显示 Error 图标类型的 MessageBox 服务</para>
+            <para>Service for showing MessageBox with Error button type</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.OnlineActivationViewModel._isWindowsActivationMode">
+            <summary>
+            <para>是否为 Windows 激活模式</para>
+            <para>Whether it is Windows activation mode</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.OnlineActivationViewModel._isOfficeActivationMode">
+            <summary>
+            <para>是否为 Office 激活模式</para>
+            <para>Whether it is Office activation mode</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.OnlineActivationViewModel._servers">
+            <summary>
+            <para>激活服务器列表，集合内容为 <see langword="string"/> 类型</para>
+            <para>Activation server list, collection content is of type <see langword="string"/></para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.OnlineActivationViewModel._selectedServerContentString">
+            <summary>
+            <para>选定的激活服务器内容（字符串）</para>
+            <para>Selected activation server content (string)</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.OnlineActivationViewModel._selectedServerIndex">
+            <summary>
+            <para>选定的激活服务器索引</para>
+            <para>Selected activation server index</para>
+            </summary>
+        </member>
+        <member name="M:Activator.ViewModels.OnlineActivationViewModel.ActivateOnWindowsMode">
+            <summary>
+            <para>当选择为 Windows 激活时执行的函数</para>
+            <para>Function executed when Windows activation is selected</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步任务</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, representing an asynchronous task</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.OnlineActivationViewModel.DeActivateOnWindowsMode">
+            <summary>
+            <para>当选择为 Windows 激活时执行的卸载激活函数</para>
+            <para>Uninstall activation function executed when Windows activation is selected</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步任务</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, representing an asynchronous task</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.OnlineActivationViewModel.ActivateAsync">
+            <summary>
+            <para>执行激活，异步命令</para>
+            <para>Execute activation, asynchronous command</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步任务</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, representing an asynchronous task</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.OnlineActivationViewModel.DeActivateAsync">
+            <summary>
+            <para>执行卸载激活，异步命令</para>
+            <para>Execute uninstall activation, asynchronous command</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步任务</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, representing an asynchronous task</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.OnlineActivationViewModel.LoadSettings">
+            <summary>
+            <para>加载设置，同步命令</para>
+            <para>Load settings, synchronous command</para>
+            </summary>
+        </member>
+        <member name="M:Activator.ViewModels.OnlineActivationViewModel.SaveSettings">
+            <summary>
+            <para>保存设置，异步命令</para>
+            <para>Save settings, asynchronous command</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步任务</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, representing an asynchronous task</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.OnlineActivationViewModel.#ctor(Activator.ServiceInterfaces.IShowInformationMessageBoxService,Activator.ServiceInterfaces.IShowErrorMessageBoxService)">
+            <summary>
+            <para>在线激活页的 ViewModel 的主构造函数，使用 IoC 容器注入两个 MessageBox 服务</para>
+            <para>Main constructor of the ViewModel of the online activation page, using IoC container to inject two MessageBox services</para>
+            </summary>
+            <param name="showInformationMessageBoxService">
+            <para>显示 Information 图标类型的 MessageBox 服务</para>
+            <para>Service for showing MessageBox with Information button type</para>
+            </param>
+            <param name="showErrorMessageBoxService">
+            <para>显示 Error 图标类型的 MessageBox 服务</para>
+            <para>Service for showing MessageBox with Error button type</para>
+            </param>
+        </member>
+        <member name="M:Activator.ViewModels.OnlineActivationViewModel.#ctor">
+            <summary>
+            <para>在线激活页的 ViewModel 的无参构造函数，用于产生设计时实例</para>
+            <para>Parameterless constructor of the ViewModel of the online activation page, used to generate design-time instances</para>
+            </summary>
+        </member>
+        <member name="P:Activator.ViewModels.OnlineActivationViewModel.IsWindowsActivationMode">
+            <inheritdoc cref="F:Activator.ViewModels.OnlineActivationViewModel._isWindowsActivationMode"/>
+        </member>
+        <member name="P:Activator.ViewModels.OnlineActivationViewModel.IsOfficeActivationMode">
+            <inheritdoc cref="F:Activator.ViewModels.OnlineActivationViewModel._isOfficeActivationMode"/>
+        </member>
+        <member name="P:Activator.ViewModels.OnlineActivationViewModel.Servers">
+            <inheritdoc cref="F:Activator.ViewModels.OnlineActivationViewModel._servers"/>
+        </member>
+        <member name="P:Activator.ViewModels.OnlineActivationViewModel.SelectedServerContentString">
+            <inheritdoc cref="F:Activator.ViewModels.OnlineActivationViewModel._selectedServerContentString"/>
+        </member>
+        <member name="P:Activator.ViewModels.OnlineActivationViewModel.SelectedServerIndex">
+            <inheritdoc cref="F:Activator.ViewModels.OnlineActivationViewModel._selectedServerIndex"/>
+        </member>
+        <member name="F:Activator.ViewModels.OnlineActivationViewModel.activateCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.OnlineActivationViewModel.ActivateCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.OnlineActivationViewModel.ActivateCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.OnlineActivationViewModel.ActivateAsync"/>.</summary>
+        </member>
+        <member name="F:Activator.ViewModels.OnlineActivationViewModel.deActivateCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.OnlineActivationViewModel.DeActivateCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.OnlineActivationViewModel.DeActivateCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.OnlineActivationViewModel.DeActivateAsync"/>.</summary>
+        </member>
+        <member name="F:Activator.ViewModels.OnlineActivationViewModel.loadSettingsCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.OnlineActivationViewModel.LoadSettingsCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.OnlineActivationViewModel.LoadSettingsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.OnlineActivationViewModel.LoadSettings"/>.</summary>
+        </member>
+        <member name="F:Activator.ViewModels.OnlineActivationViewModel.saveSettingsCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.OnlineActivationViewModel.SaveSettingsCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.OnlineActivationViewModel.SaveSettingsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.OnlineActivationViewModel.SaveSettings"/>.</summary>
+        </member>
+        <member name="T:Activator.ViewModels.SettingsViewModels">
+            <summary>
+            <para>设置页的 ViewModel</para>
+            <para>ViewModel for the settings page</para>
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="F:Activator.ViewModels.SettingsViewModels._windowsProduct">
+            <summary>
+            <para>Windows 产品名称（字符串）</para>
+            <para>Windows product name (string)</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.SettingsViewModels._officeEdition">
+            <summary>
+            <para>Office 版本（字符串）</para>
+            <para>Office edition (string)</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.SettingsViewModels._activatorVersion">
+            <summary>
+            <para>激活器版本（字符串）</para>
+            <para>Activator version (string)</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.SettingsViewModels._isUpdateCheckEnabled">
+            <summary>
+            <para>是否启用更新检查</para>
+            <para>Whether to enable update check</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.SettingsViewModels._isLightThemeMode">
+            <summary>
+            <para>是否为浅色主题模式</para>
+            <para>Whether it is light theme mode</para>
+            </summary>
+        </member>
+        <member name="F:Activator.ViewModels.SettingsViewModels._isDarkThemeMode">
+            <summary>
+            <para>是否为深色主题模式</para>
+            <para>Whether it is dark theme mode</para>
+            </summary>
+        </member>
+        <member name="M:Activator.ViewModels.SettingsViewModels.UpdateWindowsProduct(Activator.WindowsProductName)">
+            <summary>
+            <para>更新 Windows 产品名称</para>
+            <para>Update Windows product name</para>
+            </summary>
+            <param name="sender">
+            <para>Windows 产品名称，也可能是回调触发者对象</para>
+            <para>Windows product name, may also be the callback trigger object</para>
+            </param>
+        </member>
+        <member name="M:Activator.ViewModels.SettingsViewModels.UpdateOfficeEdition(Activator.OfficeEditionName)">
+            <summary>
+            <para>更新 Office 版本</para>
+            <para>Update Office edition</para>
+            </summary>
+            <param name="sender">
+            <para>Office 版本，也可能是回调触发者对象</para>
+            <para>Office edition, may also be the callback trigger object</para>
+            </param>
+        </member>
+        <member name="M:Activator.ViewModels.SettingsViewModels.UpdateInfoToSettings">
+            <summary>
+            <para>更新页面中的所有信息，To Settings 指本 ViewModel，异步命令</para>
+            <para>Update all information on the page, To Settings refers to this ViewModel, asynchronous command</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步操作</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, representing the task of asynchronous operation</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.SettingsViewModels.LoadSettings">
+            <summary>
+            <para>加载设置，同步命令</para>
+            <para>Load settings, synchronous command</para>
+            </summary>
+        </member>
+        <member name="M:Activator.ViewModels.SettingsViewModels.SaveSettings">
+            <summary>
+            <para>保存设置，异步命令</para>
+            <para>Save settings, asynchronous command</para>
+            </summary>
+            <returns>
+            <para><see cref="T:System.Threading.Tasks.Task"/> 类型，表示异步操作</para>
+            <para><see cref="T:System.Threading.Tasks.Task"/> type, representing the task of asynchronous operation</para>
+            </returns>
+        </member>
+        <member name="M:Activator.ViewModels.SettingsViewModels.SwitchToLightThemeMode">
+            <summary>
+            <para>切换到浅色主题模式，同步命令</para>
+            <para>Switch to light theme mode, synchronous command</para>
+            </summary>
+        </member>
+        <member name="M:Activator.ViewModels.SettingsViewModels.SwitchToDarkThemeMode">
+            <summary>
+            <para>切换到深色主题模式，同步命令</para>
+            <para>Switch to dark theme mode, synchronous command</para>
+            </summary>
+        </member>
+        <member name="M:Activator.ViewModels.SettingsViewModels.#ctor">
+            <summary>
+            <para>设置页的 ViewModel 主构造函数，暂无使用 IoC 容器进行依赖注入</para>
+            <para>Main constructor of the ViewModel for the settings page, no use of IoC container for dependency injection</para>
+            </summary>
+        </member>
+        <member name="M:Activator.ViewModels.SettingsViewModels.Finalize">
+            <summary>
+            <para>设置页的 ViewModel 析构函数，释放事件订阅</para>
+            <para>Destructor of the ViewModel for the settings page, release event subscription</para>
+            </summary>
+        </member>
+        <member name="P:Activator.ViewModels.SettingsViewModels.WindowsProduct">
+            <inheritdoc cref="F:Activator.ViewModels.SettingsViewModels._windowsProduct"/>
+        </member>
+        <member name="P:Activator.ViewModels.SettingsViewModels.OfficeEdition">
+            <inheritdoc cref="F:Activator.ViewModels.SettingsViewModels._officeEdition"/>
+        </member>
+        <member name="P:Activator.ViewModels.SettingsViewModels.ActivatorVersion">
+            <inheritdoc cref="F:Activator.ViewModels.SettingsViewModels._activatorVersion"/>
+        </member>
+        <member name="P:Activator.ViewModels.SettingsViewModels.IsUpdateCheckEnabled">
+            <inheritdoc cref="F:Activator.ViewModels.SettingsViewModels._isUpdateCheckEnabled"/>
+        </member>
+        <member name="P:Activator.ViewModels.SettingsViewModels.IsLightThemeMode">
+            <inheritdoc cref="F:Activator.ViewModels.SettingsViewModels._isLightThemeMode"/>
+        </member>
+        <member name="P:Activator.ViewModels.SettingsViewModels.IsDarkThemeMode">
+            <inheritdoc cref="F:Activator.ViewModels.SettingsViewModels._isDarkThemeMode"/>
+        </member>
+        <member name="F:Activator.ViewModels.SettingsViewModels.updateInfoToSettingsCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.SettingsViewModels.UpdateInfoToSettingsCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.SettingsViewModels.UpdateInfoToSettingsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.SettingsViewModels.UpdateInfoToSettings"/>.</summary>
+        </member>
+        <member name="F:Activator.ViewModels.SettingsViewModels.loadSettingsCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.SettingsViewModels.LoadSettingsCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.SettingsViewModels.LoadSettingsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.SettingsViewModels.LoadSettings"/>.</summary>
+        </member>
+        <member name="F:Activator.ViewModels.SettingsViewModels.saveSettingsCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.SettingsViewModels.SaveSettingsCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.SettingsViewModels.SaveSettingsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.SettingsViewModels.SaveSettings"/>.</summary>
+        </member>
+        <member name="F:Activator.ViewModels.SettingsViewModels.switchToLightThemeModeCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.SettingsViewModels.SwitchToLightThemeModeCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.SettingsViewModels.SwitchToLightThemeModeCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.SettingsViewModels.SwitchToLightThemeMode"/>.</summary>
+        </member>
+        <member name="F:Activator.ViewModels.SettingsViewModels.switchToDarkThemeModeCommand">
+            <summary>The backing field for <see cref="P:Activator.ViewModels.SettingsViewModels.SwitchToDarkThemeModeCommand"/>.</summary>
+        </member>
+        <member name="P:Activator.ViewModels.SettingsViewModels.SwitchToDarkThemeModeCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Activator.ViewModels.SettingsViewModels.SwitchToDarkThemeMode"/>.</summary>
+        </member>
+        <member name="T:Activator.ViewModels.ViewModelBase">
+            <summary>
+            <para>所有 ViewModel 基类，但暂无写任何通用逻辑，未来根据情况进行修改</para>
+            <para>Base class for all ViewModels, but no common logic is written yet, and will be modified according to the situation in the future</para>
+            </summary>
+        </member>
+        <member name="T:Activator.Views.HomePage">
+            <summary>
+            <para>HomePage.xaml 的交互逻辑</para>
+            <para>Interaction logic of HomePage.xaml</para>
+            </summary>
+            <summary>
+            HomePage
+            </summary>
+        </member>
+        <member name="M:Activator.Views.HomePage.#ctor">
+            <summary>
+            <para>程序主页 View 的构造函数</para>
+            <para>Construct function of the main page View</para>
+            </summary>
+        </member>
+        <member name="M:Activator.Views.HomePage.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Activator.Views.MainWindow">
+            <summary>
+            <para>MainWindow.xaml 的交互逻辑</para>
+            <para>Interaction logic for MainWindow.xaml</para>
+            </summary>
+            <summary>
+            MainWindow
+            </summary>
+        </member>
+        <member name="M:Activator.Views.MainWindow.#ctor(Activator.ViewModels.MainWindowViewModel)">
+            <summary>
+            <para>主窗口类构造函数，需要传入 <see cref="T:Activator.Views.MainWindow"/> 的 ViewModel</para>
+            <para>Constructor of MainWindow class, need to pass the ViewModel of <see cref="T:Activator.Views.MainWindow"/></para>
+            </summary>
+        </member>
+        <member name="M:Activator.Views.MainWindow.#ctor">
+            <summary>
+            <para>主窗口的无参构造函数，但会自动获取 <see cref="T:Activator.ViewModels.MainWindowViewModel"/> 的实例</para>
+            <para>Constructor of MainWindow without parameters, but will automatically get the instance of <see cref="T:Activator.ViewModels.MainWindowViewModel"/></para>
+            <para>由于服务一定存在且被注册，因此直接使用 <see cref="P:Activator.App.ServiceProvider"/> 获取服务</para>
+            <para>Since the service must exist and be registered, use <see cref="P:Activator.App.ServiceProvider"/> to get the service directly</para>
+            </summary>
+        </member>
+        <member name="M:Activator.Views.MainWindow.Window_Loaded(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            <para>主窗口载入后的事件处理</para>
+            <para>Event handling after the main window is loaded</para>
+            </summary>
+            <param name="sender">
+            <para>事件触发者</para>
+            <para>Event trigger</para>
+            </param>
+            <param name="e">
+            <para>路由事件参数</para>
+            <para>Routed event arguments</para>
+            </param>
+        </member>
+        <member name="M:Activator.Views.MainWindow.OnNavigationViewSelectionChanged(Wpf.Ui.Controls.NavigationView,System.Windows.RoutedEventArgs)">
+            <summary>
+            <para>当导航页发生改变时的事件处理</para>
+            <para>Event handling when the navigation page changes</para>
+            </summary>
+            <param name="sender">
+            <para>事件触发者</para>
+            <para>Event trigger</para>
+            </param>
+            <param name="args">
+            <para>路由事件参数</para>
+            <para>Routed event arguments</para>
+            </param>
+        </member>
+        <member name="M:Activator.Views.MainWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Activator.Views.ManualOnlineActivationPage">
+            <summary>
+            <para>ManualOnlineActivationPage.xaml 的交互逻辑</para>
+            <para>ManualOnlineActivationPage.xaml's interaction logic</para>
+            </summary>
+            <summary>
+            ManualOnlineActivationPage
+            </summary>
+        </member>
+        <member name="M:Activator.Views.ManualOnlineActivationPage.#ctor(Activator.ViewModels.ManualOnlineActivationViewModels)">
+            <summary>
+            <para>手动在线激活页面的构造函数，需要传入 <see cref="T:Activator.ViewModels.ManualOnlineActivationViewModels"/> 实例</para>
+            <para>Constructor of ManualOnlineActivationPage, need to pass the instance of <see cref="T:Activator.ViewModels.ManualOnlineActivationViewModels"/></para>
+            </summary>
+            <param name="manualOnlineActivationViewModels">
+            <para>一个 <see cref="T:Activator.ViewModels.ManualOnlineActivationViewModels"/> 实例，<see cref="T:Activator.Views.ManualOnlineActivationPage"/> 的 DataContext</para>
+            <para>A <see cref="T:Activator.ViewModels.ManualOnlineActivationViewModels"/> instance, DataContext of <see cref="T:Activator.Views.ManualOnlineActivationPage"/></para>
+            </param>
+        </member>
+        <member name="M:Activator.Views.ManualOnlineActivationPage.#ctor">
+            <summary>
+            <para>手动在线激活页的无参构造函数，但会自动获取 <see cref="T:Activator.ViewModels.ManualOnlineActivationViewModels"/> 的实例</para>
+            <para>Constructor of ManualOnlineActivationPage without parameters, but will automatically get the instance of <see cref="T:Activator.ViewModels.ManualOnlineActivationViewModels"/></para>
+            <para>由于服务一定存在且被注册，因此直接使用 <see cref="P:Activator.App.ServiceProvider"/> 获取服务</para>
+            <para>Since the service must exist and be registered, use <see cref="P:Activator.App.ServiceProvider"/> to get the service directly</para>
+            </summary>
+        </member>
+        <member name="M:Activator.Views.ManualOnlineActivationPage.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Activator.Views.OnlineActivationPage">
+            <summary>
+            <para>OnlineActivationPage.xaml 的交互逻辑</para>
+            <para>OnlineActivationPage.xaml's interaction logic</para>
+            </summary>
+            <summary>
+            OnlineActivationPage
+            </summary>
+        </member>
+        <member name="M:Activator.Views.OnlineActivationPage.#ctor(Activator.ViewModels.OnlineActivationViewModel)">
+            <summary>
+            <para>（自动）在线激活页的构造函数，需要传入一个 <see cref="T:Activator.ViewModels.OnlineActivationViewModel"/> 实例 </para>
+            <para>Constructor of (auto) online activation page, need to pass a <see cref="T:Activator.ViewModels.OnlineActivationViewModel"/> instance</para>
+            </summary>
+            <param name="onlineActivationViewModel">
+            <para>一个 <see cref="T:Activator.ViewModels.OnlineActivationViewModel"/> 实例，用作 DataContext</para>
+            <para>A <see cref="T:Activator.ViewModels.OnlineActivationViewModel"/> instance, used as DataContext</para>
+            </param>
+        </member>
+        <member name="M:Activator.Views.OnlineActivationPage.#ctor">
+            <summary>
+            <para>主窗口的无参构造函数，但会自动获取 <see cref="T:Activator.ViewModels.OnlineActivationViewModel"/> 的实例</para>
+            <para>Constructor of MainWindow without parameters, but will automatically get the instance of <see cref="T:Activator.ViewModels.OnlineActivationViewModel"/></para>
+            <para>由于服务一定存在且被注册，因此直接使用 <see cref="P:Activator.App.ServiceProvider"/> 获取服务</para>
+            <para>Since the service must exist and be registered, use <see cref="P:Activator.App.ServiceProvider"/> to get the service directly</para>
+            </summary>
+        </member>
+        <member name="M:Activator.Views.OnlineActivationPage.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Activator.Views.SettingsPage">
+            <summary>
+            <para>SettingsPage.xaml 的交互逻辑</para>
+            <para>Interaction logic for SettingsPage.xaml</para>
+            </summary>
+            <summary>
+            SettingsPage
+            </summary>
+        </member>
+        <member name="M:Activator.Views.SettingsPage.#ctor">
+            <summary>
+            <para>设置页的无参构造函数</para>
+            <para>Non-parameter constructor of SettingsPage</para>
+            </summary>
+        </member>
+        <member name="M:Activator.Views.SettingsPage.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsWindowsActivationMode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsWindowsActivationMode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsOfficeActivationMode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsOfficeActivationMode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectiveWindowsProductNamesCollection">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectiveWindowsProductNamesCollection" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectiveOfficeEditionsCollection">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectiveOfficeEditionsCollection" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedProductNameOrEditionString">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedProductNameOrEditionString" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedProductNameOrEditionIndex">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedProductNameOrEditionIndex" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ServerAddress">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ServerAddress" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ActivationKey">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ActivationKey" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Servers">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Servers" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedServerContentString">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedServerContentString" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedServerIndex">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedServerIndex" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.WindowsProduct">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "WindowsProduct" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.OfficeEdition">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "OfficeEdition" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ActivatorVersion">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ActivatorVersion" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsUpdateCheckEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsUpdateCheckEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsLightThemeMode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsLightThemeMode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsDarkThemeMode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsDarkThemeMode" generated properties.</summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsWindowsActivationMode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsWindowsActivationMode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsOfficeActivationMode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsOfficeActivationMode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectiveWindowsProductNamesCollection">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectiveWindowsProductNamesCollection" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectiveOfficeEditionsCollection">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectiveOfficeEditionsCollection" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedProductNameOrEditionString">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedProductNameOrEditionString" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedProductNameOrEditionIndex">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedProductNameOrEditionIndex" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ServerAddress">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ServerAddress" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ActivationKey">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ActivationKey" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Servers">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Servers" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedServerContentString">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedServerContentString" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedServerIndex">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedServerIndex" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.WindowsProduct">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "WindowsProduct" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.OfficeEdition">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "OfficeEdition" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ActivatorVersion">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ActivatorVersion" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsUpdateCheckEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsUpdateCheckEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsLightThemeMode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsLightThemeMode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsDarkThemeMode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsDarkThemeMode" generated properties.</summary>
+        </member>
+    </members>
+</doc>
