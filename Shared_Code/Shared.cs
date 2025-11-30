@@ -42,7 +42,7 @@ namespace KMS_Activator
         ///         This value is the address of Anawaert KMS server
         ///     </para>
         /// </summary>
-        public const string AW_KMS_SERVER_ADDR = "www.anawaert.tech";
+        public const string AW_KMS_SERVER_ADDR = "anawaert.com";
         /// <summary>
         ///     <para>
         ///         该静态变量指示当前应用程序运行时所在的目录
