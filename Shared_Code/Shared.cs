@@ -42,7 +42,7 @@ namespace KMS_Activator
         ///         This value is the address of Anawaert KMS server
         ///     </para>
         /// </summary>
-        public const string AW_KMS_SERVER_ADDR = "www.anawaert.tech";
+        public const string AW_KMS_SERVER_ADDR = "anawaert.com";
         /// <summary>
         ///     <para>
         ///         该静态变量指示当前应用程序运行时所在的目录
@@ -359,7 +359,7 @@ namespace KMS_Activator
 
                 // 再从<a></a>组成的“小”字符串中匹配版本号，第一个匹配就是最新版本的版本号
                 Match versionNumsMatch = getVersionNumsRegex.Match(a_tags_string_builder.ToString());
-                if (versionNumsMatch.Value != "2.0.0.0" && versionNumsMatch.Success)
+                if (versionNumsMatch.Value != "2.0.0.1" && versionNumsMatch.Success)
                 {
                     MessageBoxResult result = MessageBox.Show
                     (
